@@ -34,3 +34,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Commit the artifacts.
+      # (5)
+      - name: Hit a webhook
+        run: |
+          curl -X POST -d {} "https://webhooks.amplify.eu-central-1.amazonaws.com/prod/webhooks?id=fa5761b9-8739-44a1-8d1d-bce8b29002b4&token=qWdxvCMPonOGYYzu4jpMZHcJVhpItzwlDBnxhsbwLrc&operation=startbuild" -H "Content-Type:application/json"
