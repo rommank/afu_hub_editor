@@ -1,4 +1,6 @@
 import 'package:afu_hub_editor/ui/screens/home_screen.dart';
+import 'package:afu_hub_editor/ui/screens/topic_screen/edit_topic_screen.dart';
+import 'package:afu_hub_editor/ui/screens/topic_screen/new_topic_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -20,12 +22,12 @@ final appRouter = GoRouter(
       ScreenPaths.newTopic,
       'new-topic',
       useFade: true,
-      (s) => const HomeScreen(), //NewTopicScreen(),
+      (s) => NewTopicScreen(),
     ),
     AppRoute(
       ScreenPaths.topic,
       'topic',
-      (s) => const HomeScreen(), //EditTopicScreen(topicId: s.params['id']!),
+      (s) => EditTopicScreen(topicId: s.params['id']!),
     ),
   ],
 );

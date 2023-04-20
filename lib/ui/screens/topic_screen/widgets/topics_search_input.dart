@@ -1,0 +1,75 @@
+import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../../../../hooks/listenable_value.dart';
+import '../../../../logic/notifiers/new_topic_screen_notifiers.dart';
+import '../../../../logic/section/repository/sections_repository.dart';
+import '../../../../models/SectionData.dart';
+import '../../../../strings.dart';
+
+class SectionsSearchInput extends HookConsumerWidget {
+  const SectionsSearchInput({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dropdownValueController = useListenableState(SingleValueDropDownController());
+    final itemsForTopic = ref.watch(addedSectionsProvider);
+
+    final itemsList = ref.watch(sectionsProvider);
+
+    return itemsList.when(
+      error: (_, __) => const Text($Strings.errorOccurred),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      data: (items) => Column(
+        children: [
+          DropDownTextField(
+            readOnly: true,
+            enableSearch: true,
+            clearOption: false,
+            dropdownRadius: 10,
+            dropDownItemCount: 5,
+            controller: dropdownValueController,
+            textFieldDecoration: const InputDecoration(hintText: $Strings.sections),
+            dropdownColor: Theme.of(context).colorScheme.surface,
+            onChanged: (newValue) {
+              dropdownValueController.clearDropDown();
+              String name = (newValue as DropDownValueModel).name;
+              SectionData section = items.firstWhere((element) => element.name.uk == name);
+              ref.read(addedSectionsProvider.notifier).addValue(section);
+            },
+            dropDownList: List.from(
+              items.where((element) => !ref.read(addedSectionsProvider).contains(element)).map(
+                    (items) => DropDownValueModel(
+                      name: items.name.uk.toString(),
+                      value: items.name.uk.toString(),
+                    ),
+                  ),
+            ),
+          ),
+          const Gap(5),
+          Column(
+            children: [
+              Wrap(
+                spacing: 4,
+                children: List.generate(
+                  itemsForTopic.length,
+                  (index) => InputChip(
+                    label: Text((itemsForTopic[index]).name.uk.toString()),
+                    deleteIcon: const Icon(Icons.cancel_rounded),
+                    onDeleted: () {
+                      ref.read(addedSectionsProvider.notifier).removeValueAtIndex(index);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

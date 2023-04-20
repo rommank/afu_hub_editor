@@ -1,8 +1,12 @@
+import 'package:afu_hub_editor/ui/screens/sections_screen/sections_screen.dart';
+import 'package:afu_hub_editor/ui/screens/topics_screen/topics_screen.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import '../../router.dart';
 import '../../strings.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+
+import 'events_screen/events_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -61,15 +65,12 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: TabBarView(
+        body: const TabBarView(
           physics: kIsWeb ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
           children: [
-            Placeholder(),
-            Placeholder(),
-            Placeholder(),
-            // TopicsScreen(),
-            // SectionsScreen(),
-            // EventsScreen(),
+            TopicsScreen(),
+            SectionsScreen(),
+            EventsScreen(),
           ],
         ),
         floatingActionButtonLocation: kIsWeb
