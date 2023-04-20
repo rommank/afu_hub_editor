@@ -24,9 +24,7 @@ class FabExample extends StatelessWidget {
       ),
       body: const Center(child: Text('Press the button below!')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed code here!
-        },
+        onPressed: () {},
         backgroundColor: Colors.green,
         child: const Icon(Icons.navigation),
       ),
