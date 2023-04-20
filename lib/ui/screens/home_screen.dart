@@ -52,8 +52,7 @@ class HomeScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Hello Karolina")
-          scrolledUnderElevation: 4.0,
+          title: Text("Hello Karolina"),
           shadowColor: Theme.of(context).shadowColor,
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           bottom: TabBar(
