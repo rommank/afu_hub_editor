@@ -1,0 +1,562 @@
+
+type EventData @aws_cognito_user_pools @aws_iam {
+  id: ID!
+  date: AWSDate!
+  title: LocalizedText!
+  text: LocalizedText
+  topicdataID: ID!
+  icon: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type LocalizedText @aws_cognito_user_pools @aws_iam {
+  uk: String
+  en: String
+}
+
+type ImageData @aws_cognito_user_pools @aws_iam {
+  id: ID!
+  key: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+enum Topic {
+  MODERN_ARMY
+  POKROVA
+}
+
+type TopicData @aws_cognito_user_pools @aws_iam {
+  id: ID!
+  title: LocalizedText!
+  sections(filter: ModelSectionDataFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelSectionDataConnection
+  type: Topic!
+  events(filter: ModelEventDataFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEventDataConnection
+  startDate: AWSDate!
+  endDate: AWSDate!
+  titleImageKey: String
+  titleImageUrl: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Quote @aws_cognito_user_pools @aws_iam {
+  text: LocalizedText
+  author: LocalizedText
+}
+
+type TermToExplain @aws_cognito_user_pools @aws_iam {
+  term: LocalizedText
+  meaning: LocalizedText
+}
+
+type SectionData @aws_cognito_user_pools @aws_iam {
+  id: ID!
+  name: LocalizedText!
+  text1: LocalizedText!
+  text2: LocalizedText
+  quote1: Quote
+  callout1: LocalizedText
+  callout2: LocalizedText
+  photo2: String
+  photo3: String
+  icon: String
+  topicDataID: ID!
+  imageData: ImageData
+  order: Int!
+  termToExplain1: TermToExplain
+  photo1: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  sectionDataImageDataId: ID
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+input LocalizedTextInput {
+  uk: String
+  en: String
+}
+
+type ModelEventDataConnection @aws_iam @aws_cognito_user_pools {
+  items: [EventData]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelEventDataFilterInput {
+  id: ModelIDInput
+  date: ModelStringInput
+  topicdataID: ModelIDInput
+  icon: ModelStringInput
+  and: [ModelEventDataFilterInput]
+  or: [ModelEventDataFilterInput]
+  not: ModelEventDataFilterInput
+}
+
+type Query {
+  getEventData(id: ID!): EventData @aws_iam @aws_cognito_user_pools
+  listEventData(filter: ModelEventDataFilterInput, limit: Int, nextToken: String): ModelEventDataConnection @aws_iam @aws_cognito_user_pools
+  syncEventData(filter: ModelEventDataFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelEventDataConnection @aws_iam @aws_cognito_user_pools
+  eventDataByTopicdataID(topicdataID: ID!, sortDirection: ModelSortDirection, filter: ModelEventDataFilterInput, limit: Int, nextToken: String): ModelEventDataConnection @aws_iam @aws_cognito_user_pools
+  getImageData(id: ID!): ImageData @aws_iam @aws_cognito_user_pools
+  listImageData(filter: ModelImageDataFilterInput, limit: Int, nextToken: String): ModelImageDataConnection @aws_iam @aws_cognito_user_pools
+  syncImageData(filter: ModelImageDataFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelImageDataConnection @aws_iam @aws_cognito_user_pools
+  getTopicData(id: ID!): TopicData @aws_iam @aws_cognito_user_pools
+  listTopicData(filter: ModelTopicDataFilterInput, limit: Int, nextToken: String): ModelTopicDataConnection @aws_iam @aws_cognito_user_pools
+  syncTopicData(filter: ModelTopicDataFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelTopicDataConnection @aws_iam @aws_cognito_user_pools
+  getSectionData(id: ID!): SectionData @aws_iam @aws_cognito_user_pools
+  listSectionData(filter: ModelSectionDataFilterInput, limit: Int, nextToken: String): ModelSectionDataConnection @aws_iam @aws_cognito_user_pools
+  syncSectionData(filter: ModelSectionDataFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelSectionDataConnection @aws_iam @aws_cognito_user_pools
+  sectionDataByTopicDataID(topicDataID: ID!, sortDirection: ModelSortDirection, filter: ModelSectionDataFilterInput, limit: Int, nextToken: String): ModelSectionDataConnection @aws_iam @aws_cognito_user_pools
+}
+
+input ModelEventDataConditionInput {
+  date: ModelStringInput
+  topicdataID: ModelIDInput
+  icon: ModelStringInput
+  and: [ModelEventDataConditionInput]
+  or: [ModelEventDataConditionInput]
+  not: ModelEventDataConditionInput
+}
+
+input CreateEventDataInput {
+  id: ID
+  date: AWSDate!
+  title: LocalizedTextInput!
+  text: LocalizedTextInput
+  topicdataID: ID!
+  icon: String
+  _version: Int
+}
+
+input UpdateEventDataInput {
+  id: ID!
+  date: AWSDate
+  title: LocalizedTextInput
+  text: LocalizedTextInput
+  topicdataID: ID
+  icon: String
+  _version: Int
+}
+
+input DeleteEventDataInput {
+  id: ID!
+  _version: Int
+}
+
+type Mutation {
+  createEventData(input: CreateEventDataInput!, condition: ModelEventDataConditionInput): EventData @aws_iam @aws_cognito_user_pools
+  updateEventData(input: UpdateEventDataInput!, condition: ModelEventDataConditionInput): EventData @aws_iam @aws_cognito_user_pools
+  deleteEventData(input: DeleteEventDataInput!, condition: ModelEventDataConditionInput): EventData @aws_iam @aws_cognito_user_pools
+  createImageData(input: CreateImageDataInput!, condition: ModelImageDataConditionInput): ImageData @aws_iam @aws_cognito_user_pools
+  updateImageData(input: UpdateImageDataInput!, condition: ModelImageDataConditionInput): ImageData @aws_iam @aws_cognito_user_pools
+  deleteImageData(input: DeleteImageDataInput!, condition: ModelImageDataConditionInput): ImageData @aws_iam @aws_cognito_user_pools
+  createTopicData(input: CreateTopicDataInput!, condition: ModelTopicDataConditionInput): TopicData @aws_iam @aws_cognito_user_pools
+  updateTopicData(input: UpdateTopicDataInput!, condition: ModelTopicDataConditionInput): TopicData @aws_iam @aws_cognito_user_pools
+  deleteTopicData(input: DeleteTopicDataInput!, condition: ModelTopicDataConditionInput): TopicData @aws_iam @aws_cognito_user_pools
+  createSectionData(input: CreateSectionDataInput!, condition: ModelSectionDataConditionInput): SectionData @aws_iam @aws_cognito_user_pools
+  updateSectionData(input: UpdateSectionDataInput!, condition: ModelSectionDataConditionInput): SectionData @aws_iam @aws_cognito_user_pools
+  deleteSectionData(input: DeleteSectionDataInput!, condition: ModelSectionDataConditionInput): SectionData @aws_iam @aws_cognito_user_pools
+}
+
+input ModelSubscriptionEventDataFilterInput {
+  id: ModelSubscriptionIDInput
+  date: ModelSubscriptionStringInput
+  topicdataID: ModelSubscriptionIDInput
+  icon: ModelSubscriptionStringInput
+  and: [ModelSubscriptionEventDataFilterInput]
+  or: [ModelSubscriptionEventDataFilterInput]
+}
+
+type Subscription {
+  onCreateEventData(filter: ModelSubscriptionEventDataFilterInput): EventData @aws_subscribe(mutations: ["createEventData"]) @aws_iam @aws_cognito_user_pools
+  onUpdateEventData(filter: ModelSubscriptionEventDataFilterInput): EventData @aws_subscribe(mutations: ["updateEventData"]) @aws_iam @aws_cognito_user_pools
+  onDeleteEventData(filter: ModelSubscriptionEventDataFilterInput): EventData @aws_subscribe(mutations: ["deleteEventData"]) @aws_iam @aws_cognito_user_pools
+  onCreateImageData(filter: ModelSubscriptionImageDataFilterInput): ImageData @aws_subscribe(mutations: ["createImageData"]) @aws_iam @aws_cognito_user_pools
+  onUpdateImageData(filter: ModelSubscriptionImageDataFilterInput): ImageData @aws_subscribe(mutations: ["updateImageData"]) @aws_iam @aws_cognito_user_pools
+  onDeleteImageData(filter: ModelSubscriptionImageDataFilterInput): ImageData @aws_subscribe(mutations: ["deleteImageData"]) @aws_iam @aws_cognito_user_pools
+  onCreateTopicData(filter: ModelSubscriptionTopicDataFilterInput): TopicData @aws_subscribe(mutations: ["createTopicData"]) @aws_iam @aws_cognito_user_pools
+  onUpdateTopicData(filter: ModelSubscriptionTopicDataFilterInput): TopicData @aws_subscribe(mutations: ["updateTopicData"]) @aws_iam @aws_cognito_user_pools
+  onDeleteTopicData(filter: ModelSubscriptionTopicDataFilterInput): TopicData @aws_subscribe(mutations: ["deleteTopicData"]) @aws_iam @aws_cognito_user_pools
+  onCreateSectionData(filter: ModelSubscriptionSectionDataFilterInput): SectionData @aws_subscribe(mutations: ["createSectionData"]) @aws_iam @aws_cognito_user_pools
+  onUpdateSectionData(filter: ModelSubscriptionSectionDataFilterInput): SectionData @aws_subscribe(mutations: ["updateSectionData"]) @aws_iam @aws_cognito_user_pools
+  onDeleteSectionData(filter: ModelSubscriptionSectionDataFilterInput): SectionData @aws_subscribe(mutations: ["deleteSectionData"]) @aws_iam @aws_cognito_user_pools
+}
+
+type ModelImageDataConnection @aws_iam @aws_cognito_user_pools {
+  items: [ImageData]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelImageDataFilterInput {
+  id: ModelIDInput
+  key: ModelStringInput
+  and: [ModelImageDataFilterInput]
+  or: [ModelImageDataFilterInput]
+  not: ModelImageDataFilterInput
+}
+
+input ModelImageDataConditionInput {
+  key: ModelStringInput
+  and: [ModelImageDataConditionInput]
+  or: [ModelImageDataConditionInput]
+  not: ModelImageDataConditionInput
+}
+
+input CreateImageDataInput {
+  id: ID
+  key: String
+  _version: Int
+}
+
+input UpdateImageDataInput {
+  id: ID!
+  key: String
+  _version: Int
+}
+
+input DeleteImageDataInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionImageDataFilterInput {
+  id: ModelSubscriptionIDInput
+  key: ModelSubscriptionStringInput
+  and: [ModelSubscriptionImageDataFilterInput]
+  or: [ModelSubscriptionImageDataFilterInput]
+}
+
+type ModelTopicDataConnection @aws_iam @aws_cognito_user_pools {
+  items: [TopicData]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelTopicInput {
+  eq: Topic
+  ne: Topic
+}
+
+input ModelTopicDataFilterInput {
+  id: ModelIDInput
+  type: ModelTopicInput
+  startDate: ModelStringInput
+  endDate: ModelStringInput
+  titleImageKey: ModelStringInput
+  titleImageUrl: ModelStringInput
+  and: [ModelTopicDataFilterInput]
+  or: [ModelTopicDataFilterInput]
+  not: ModelTopicDataFilterInput
+}
+
+input ModelTopicDataConditionInput {
+  type: ModelTopicInput
+  startDate: ModelStringInput
+  endDate: ModelStringInput
+  titleImageKey: ModelStringInput
+  titleImageUrl: ModelStringInput
+  and: [ModelTopicDataConditionInput]
+  or: [ModelTopicDataConditionInput]
+  not: ModelTopicDataConditionInput
+}
+
+input CreateTopicDataInput {
+  id: ID
+  title: LocalizedTextInput!
+  type: Topic!
+  startDate: AWSDate!
+  endDate: AWSDate!
+  titleImageKey: String
+  titleImageUrl: String
+  _version: Int
+}
+
+input UpdateTopicDataInput {
+  id: ID!
+  title: LocalizedTextInput
+  type: Topic
+  startDate: AWSDate
+  endDate: AWSDate
+  titleImageKey: String
+  titleImageUrl: String
+  _version: Int
+}
+
+input DeleteTopicDataInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionTopicDataFilterInput {
+  id: ModelSubscriptionIDInput
+  type: ModelSubscriptionStringInput
+  startDate: ModelSubscriptionStringInput
+  endDate: ModelSubscriptionStringInput
+  titleImageKey: ModelSubscriptionStringInput
+  titleImageUrl: ModelSubscriptionStringInput
+  and: [ModelSubscriptionTopicDataFilterInput]
+  or: [ModelSubscriptionTopicDataFilterInput]
+}
+
+input QuoteInput {
+  text: LocalizedTextInput
+  author: LocalizedTextInput
+}
+
+input TermToExplainInput {
+  term: LocalizedTextInput
+  meaning: LocalizedTextInput
+}
+
+type ModelSectionDataConnection @aws_cognito_user_pools @aws_iam {
+  items: [SectionData]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelSectionDataFilterInput {
+  id: ModelIDInput
+  photo2: ModelStringInput
+  photo3: ModelStringInput
+  icon: ModelStringInput
+  topicDataID: ModelIDInput
+  order: ModelIntInput
+  photo1: ModelStringInput
+  and: [ModelSectionDataFilterInput]
+  or: [ModelSectionDataFilterInput]
+  not: ModelSectionDataFilterInput
+  sectionDataImageDataId: ModelIDInput
+}
+
+input ModelSectionDataConditionInput {
+  photo2: ModelStringInput
+  photo3: ModelStringInput
+  icon: ModelStringInput
+  topicDataID: ModelIDInput
+  order: ModelIntInput
+  photo1: ModelStringInput
+  and: [ModelSectionDataConditionInput]
+  or: [ModelSectionDataConditionInput]
+  not: ModelSectionDataConditionInput
+  sectionDataImageDataId: ModelIDInput
+}
+
+input CreateSectionDataInput {
+  id: ID
+  name: LocalizedTextInput!
+  text1: LocalizedTextInput!
+  text2: LocalizedTextInput
+  quote1: QuoteInput
+  callout1: LocalizedTextInput
+  callout2: LocalizedTextInput
+  photo2: String
+  photo3: String
+  icon: String
+  topicDataID: ID!
+  order: Int!
+  termToExplain1: TermToExplainInput
+  photo1: String
+  _version: Int
+  sectionDataImageDataId: ID
+}
+
+input UpdateSectionDataInput {
+  id: ID!
+  name: LocalizedTextInput
+  text1: LocalizedTextInput
+  text2: LocalizedTextInput
+  quote1: QuoteInput
+  callout1: LocalizedTextInput
+  callout2: LocalizedTextInput
+  photo2: String
+  photo3: String
+  icon: String
+  topicDataID: ID
+  order: Int
+  termToExplain1: TermToExplainInput
+  photo1: String
+  _version: Int
+  sectionDataImageDataId: ID
+}
+
+input DeleteSectionDataInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionSectionDataFilterInput {
+  id: ModelSubscriptionIDInput
+  photo2: ModelSubscriptionStringInput
+  photo3: ModelSubscriptionStringInput
+  icon: ModelSubscriptionStringInput
+  topicDataID: ModelSubscriptionIDInput
+  order: ModelSubscriptionIntInput
+  photo1: ModelSubscriptionStringInput
+  and: [ModelSubscriptionSectionDataFilterInput]
+  or: [ModelSubscriptionSectionDataFilterInput]
+}
+

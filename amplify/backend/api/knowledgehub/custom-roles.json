@@ -1,0 +1,4 @@
+
+{
+  "adminRoleNames": ["arn:aws:sts::770229061112:assumed-role/ImageMetaDataToDynamoDBLambda-role-1srngw19"]
+}
