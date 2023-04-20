@@ -54,7 +54,7 @@ const darkColorScheme = ColorScheme(
   onErrorContainer: Color(0xFFFFDAD6),
   background: Color(0xFF191C19),
   onBackground: Color(0xFFE1E3DE),
-  surface: Color(0xFF191C19),
+  surface: Color(0xFF93000A), //Color(0xFF191C19),
   onSurface: Color(0xFFE1E3DE),
   surfaceVariant: Color(0xFF414942),
   onSurfaceVariant: Color(0xFFC1C9BF),
