@@ -11,10 +11,10 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../../hooks/listenable_value.dart';
+import '../../../hooks/drop_down_controller_hook.dart';
 import '../../../logic/event/repository/events_repository.dart';
 import '../../../logic/notifiers/new_topic_screen_notifiers.dart';
-import '../../../logic/section/repository/sections_repository.dart';
+import '../../../logic/section/repository/sections_datastore_repository.dart';
 import '../../../logic/topic/controller/topic_controller.dart';
 import '../../../logic/topic/repository/topics_repository.dart';
 import '../../../models/LocalizedText.dart';
@@ -71,8 +71,6 @@ class EditTopicScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<SectionData>> sectionsForTopicAsync =
-        ref.watch(sectionsForTopicProvider(id: topicId));
     final topicAsync = ref.watch(singleTopicProvider(id: topicId));
     final ukTitleController = useTextEditingController();
     final enTitleController = useTextEditingController();
@@ -80,7 +78,7 @@ class EditTopicScreen extends HookConsumerWidget {
     final endDateController = useTextEditingController();
     final coverImageValue = ref.watch(coverImageProvider);
     final isLoading = ref.watch(loadingStateProvider);
-    final topicTypeController = useListenableState(SingleValueDropDownController());
+    final topicTypeController = useDropDownController();
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(

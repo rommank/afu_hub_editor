@@ -9,6 +9,7 @@ import '../../../models/SectionData.dart';
 import '../../../models/Topic.dart';
 import '../../../models/TopicData.dart';
 import 'dart:io' as io;
+import '../../section/repository/sections_datastore_repository.dart';
 import '../../section/repository/sections_repository.dart';
 import '../repository/topics_repository.dart';
 
@@ -54,7 +55,10 @@ class TopicController {
 
   Future<void> updateTopicIdForSections(
       {required String topicId, required List<SectionData> sections}) async {
-    await ref.read(sectionsRepositoryProvider).updateTopicId(topicId: topicId, sections: sections);
+    for (var section in sections) {
+      final updatedSection = section.copyWith(topicDataID: topicId);
+      await ref.read(sectionsRepositoryProvider).update(updatedSection);
+    }
   }
 
   Future<void> addTopic({
@@ -65,12 +69,12 @@ class TopicController {
     required String startDate,
     required String endDate,
   }) async {
-    DateTime tempStartDate = DateFormat("dd/MM/yyyy").parse(startDate);
-    DateTime tempEndDate = DateFormat("dd/MM/yyyy").parse(endDate);
+    DateTime tempStartDate = DateFormat("dd/MM/yyyy").parse(startDate.trim());
+    DateTime tempEndDate = DateFormat("dd/MM/yyyy").parse(endDate.trim());
     final topic = TopicData(
-        id: id,
-        title: LocalizedText(uk: titleUk, en: titleEn),
-        type: Topic.values.byName(type ?? ''),
+        id: id.trim(),
+        title: LocalizedText(uk: titleUk.trim(), en: titleEn.trim()),
+        type: Topic.values.byName(type.trim() ?? ''),
         startDate: TemporalDate(tempStartDate.copyWith(day: tempStartDate.day + 1)),
         endDate: TemporalDate(tempEndDate.copyWith(day: tempEndDate.day + 1)));
     ref.read(topicsRepositoryProvider).add(topic);

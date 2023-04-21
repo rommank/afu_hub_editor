@@ -41,7 +41,6 @@ class TopicsDataStoreService {
     }
   }
 
-  @override
   Future<void> update(TopicData topic) async {
     try {
       final topicsWithId =
@@ -63,13 +62,11 @@ class TopicsDataStoreService {
     }
   }
 
-  @override
   Stream<TopicData> listenToId(String topicId) {
     return Amplify.DataStore.observeQuery(TopicData.classType, where: TopicData.ID.eq(topicId))
         .map((event) => event.items.toList().first);
   }
 
-  @override
   Future<TopicData?> queryById(String topicId) async {
     try {
       final topicsWithId =

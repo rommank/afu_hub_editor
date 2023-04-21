@@ -33,7 +33,8 @@ class EventData extends Model {
   final LocalizedText? _title;
   final LocalizedText? _text;
   final String? _topicdataID;
-  final String? _icon;
+  final String? _iconKey;
+  final String? _iconUrl;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -93,8 +94,12 @@ class EventData extends Model {
     }
   }
   
-  String? get icon {
-    return _icon;
+  String? get iconKey {
+    return _iconKey;
+  }
+  
+  String? get iconUrl {
+    return _iconUrl;
   }
   
   TemporalDateTime? get createdAt {
@@ -105,16 +110,17 @@ class EventData extends Model {
     return _updatedAt;
   }
   
-  const EventData._internal({required this.id, required date, required title, text, required topicdataID, icon, createdAt, updatedAt}): _date = date, _title = title, _text = text, _topicdataID = topicdataID, _icon = icon, _createdAt = createdAt, _updatedAt = updatedAt;
+  const EventData._internal({required this.id, required date, required title, text, required topicdataID, iconKey, iconUrl, createdAt, updatedAt}): _date = date, _title = title, _text = text, _topicdataID = topicdataID, _iconKey = iconKey, _iconUrl = iconUrl, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory EventData({String? id, required TemporalDate date, required LocalizedText title, LocalizedText? text, required String topicdataID, String? icon}) {
+  factory EventData({String? id, required TemporalDate date, required LocalizedText title, LocalizedText? text, required String topicdataID, String? iconKey, String? iconUrl}) {
     return EventData._internal(
       id: id == null ? UUID.getUUID() : id,
       date: date,
       title: title,
       text: text,
       topicdataID: topicdataID,
-      icon: icon);
+      iconKey: iconKey,
+      iconUrl: iconUrl);
   }
   
   bool equals(Object other) {
@@ -130,7 +136,8 @@ class EventData extends Model {
       _title == other._title &&
       _text == other._text &&
       _topicdataID == other._topicdataID &&
-      _icon == other._icon;
+      _iconKey == other._iconKey &&
+      _iconUrl == other._iconUrl;
   }
   
   @override
@@ -146,7 +153,8 @@ class EventData extends Model {
     buffer.write("title=" + (_title != null ? _title!.toString() : "null") + ", ");
     buffer.write("text=" + (_text != null ? _text!.toString() : "null") + ", ");
     buffer.write("topicdataID=" + "$_topicdataID" + ", ");
-    buffer.write("icon=" + "$_icon" + ", ");
+    buffer.write("iconKey=" + "$_iconKey" + ", ");
+    buffer.write("iconUrl=" + "$_iconUrl" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -154,14 +162,15 @@ class EventData extends Model {
     return buffer.toString();
   }
   
-  EventData copyWith({TemporalDate? date, LocalizedText? title, LocalizedText? text, String? topicdataID, String? icon}) {
+  EventData copyWith({TemporalDate? date, LocalizedText? title, LocalizedText? text, String? topicdataID, String? iconKey, String? iconUrl}) {
     return EventData._internal(
       id: id,
       date: date ?? this.date,
       title: title ?? this.title,
       text: text ?? this.text,
       topicdataID: topicdataID ?? this.topicdataID,
-      icon: icon ?? this.icon);
+      iconKey: iconKey ?? this.iconKey,
+      iconUrl: iconUrl ?? this.iconUrl);
   }
   
   EventData.fromJson(Map<String, dynamic> json)  
@@ -174,16 +183,17 @@ class EventData extends Model {
         ? LocalizedText.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
         : null,
       _topicdataID = json['topicdataID'],
-      _icon = json['icon'],
+      _iconKey = json['iconKey'],
+      _iconUrl = json['iconUrl'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'date': _date?.format(), 'title': _title?.toJson(), 'text': _text?.toJson(), 'topicdataID': _topicdataID, 'icon': _icon, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'date': _date?.format(), 'title': _title?.toJson(), 'text': _text?.toJson(), 'topicdataID': _topicdataID, 'iconKey': _iconKey, 'iconUrl': _iconUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'date': _date, 'title': _title, 'text': _text, 'topicdataID': _topicdataID, 'icon': _icon, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'date': _date, 'title': _title, 'text': _text, 'topicdataID': _topicdataID, 'iconKey': _iconKey, 'iconUrl': _iconUrl, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryModelIdentifier<EventDataModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<EventDataModelIdentifier>();
@@ -192,7 +202,8 @@ class EventData extends Model {
   static final QueryField TITLE = QueryField(fieldName: "title");
   static final QueryField TEXT = QueryField(fieldName: "text");
   static final QueryField TOPICDATAID = QueryField(fieldName: "topicdataID");
-  static final QueryField ICON = QueryField(fieldName: "icon");
+  static final QueryField ICONKEY = QueryField(fieldName: "iconKey");
+  static final QueryField ICONURL = QueryField(fieldName: "iconUrl");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "EventData";
     modelSchemaDefinition.pluralName = "EventData";
@@ -249,7 +260,13 @@ class EventData extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: EventData.ICON,
+      key: EventData.ICONKEY,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: EventData.ICONURL,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

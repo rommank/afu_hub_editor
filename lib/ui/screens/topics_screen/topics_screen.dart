@@ -11,8 +11,8 @@ class TopicsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final topics = ref.watch(topicsStreamProvider);
-    return topics.when(
+    final topicsAsync = ref.watch(topicsStreamProvider);
+    return topicsAsync.when(
       error: (e, st) => Text("${$Strings.errorOccurred}: $e"),
       loading: () => const Center(child: CircularProgressIndicator()),
       data: (topics) => topics.isEmpty

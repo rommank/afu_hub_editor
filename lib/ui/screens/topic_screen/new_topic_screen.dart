@@ -10,7 +10,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../hooks/listenable_value.dart';
+import '../../../hooks/drop_down_controller_hook.dart';
 import '../../../logic/event/repository/events_repository.dart';
 import '../../../logic/notifiers/new_topic_screen_notifiers.dart';
 import '../../../logic/topic/controller/topic_controller.dart';
@@ -44,7 +44,7 @@ class NewTopicScreen extends HookConsumerWidget {
     final startDateController = useTextEditingController();
     final endDateController = useTextEditingController();
     final coverImage = ref.watch(coverImageProvider);
-    final topicTypeController = useListenableState(SingleValueDropDownController());
+    final topicTypeController = useDropDownController();
     final isLoading = ref.watch(loadingStateProvider);
     return Scaffold(
       appBar: AppBar(

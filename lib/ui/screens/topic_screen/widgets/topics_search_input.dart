@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../../hooks/listenable_value.dart';
+import '../../../../hooks/drop_down_controller_hook.dart';
 import '../../../../logic/notifiers/new_topic_screen_notifiers.dart';
+import '../../../../logic/section/repository/sections_datastore_repository.dart';
 import '../../../../logic/section/repository/sections_repository.dart';
 import '../../../../models/SectionData.dart';
 import '../../../../strings.dart';
@@ -16,7 +17,7 @@ class SectionsSearchInput extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dropdownValueController = useListenableState(SingleValueDropDownController());
+    final dropdownValueController = useDropDownController();
     final itemsForTopic = ref.watch(addedSectionsProvider);
 
     final itemsList = ref.watch(sectionsProvider);
@@ -38,13 +39,13 @@ class SectionsSearchInput extends HookConsumerWidget {
             onChanged: (newValue) {
               dropdownValueController.clearDropDown();
               String name = (newValue as DropDownValueModel).name;
-              SectionData section = items.firstWhere((element) => element.name.uk == name);
-              ref.read(addedSectionsProvider.notifier).addValue(section);
+              SectionData? section = items.firstWhere((element) => element?.name.uk == name);
+              ref.read(addedSectionsProvider.notifier).addValue(section!);
             },
             dropDownList: List.from(
               items.where((element) => !ref.read(addedSectionsProvider).contains(element)).map(
                     (items) => DropDownValueModel(
-                      name: items.name.uk.toString(),
+                      name: items!.name.uk.toString(),
                       value: items.name.uk.toString(),
                     ),
                   ),

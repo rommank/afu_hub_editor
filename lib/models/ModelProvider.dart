@@ -39,7 +39,7 @@ export 'TopicData.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "20bee04477a23521c2aaf7f49ee3adb3";
+  String version = "afb6280526d0b7913e33c0600ef052ad";
   @override
   List<ModelSchema> modelSchemas = [EventData.schema, ImageData.schema, SectionData.schema, TopicData.schema];
   static final ModelProvider _instance = ModelProvider();

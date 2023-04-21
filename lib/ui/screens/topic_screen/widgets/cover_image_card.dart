@@ -1,4 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
@@ -30,15 +31,37 @@ class CoverImageCard extends ConsumerWidget {
     }
   }
 
+  Widget? pickImageWidget(
+      {io.File? pickedImage, String? existingImageUrl, required WidgetRef ref}) {
+    if (pickedImage != null) {
+      Future(() {
+        ref.read(containerHeightProvider.notifier).state = 150;
+      });
+
+      return Image.file(pickedImage);
+    }
+    if (existingImageUrl != null) {
+      Future(() {
+        ref.read(containerHeightProvider.notifier).state = 150;
+      });
+      return CachedNetworkImage(imageUrl: existingImageUrl, cacheKey: imageKey);
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final coverImage = ref.watch(coverImageProvider);
+    //final coverImage = ref.watch(coverImageProvider);
     final containerHeight = ref.watch(containerHeightProvider);
     return InkWell(
       splashColor: Theme.of(context).primaryColor,
       onTap: () => pickImageFromGallery(ref),
       borderRadius: BorderRadius.circular(15),
-      child: AnimatedContainer(
+      child:
+          // (imageUrl != null && ref.read(coverImageProvider) == null)
+          //  ? pickImageWidget(ref: ref, existingImageUrl: imageUrl) :
+          AnimatedContainer(
         curve: Curves.easeIn,
         duration: 200.milliseconds,
         height: containerHeight,
@@ -56,7 +79,10 @@ class CoverImageCard extends ConsumerWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(15),
                   color: Theme.of(context).colorScheme.secondaryContainer,
-                  child: (coverImage != null) ? Image.file(coverImage) : const SizedBox.shrink(),
+                  child: pickImageWidget(
+                      existingImageUrl: imageUrl,
+                      pickedImage: ref.read(coverImageProvider),
+                      ref: ref),
                 ),
               ),
               Padding(

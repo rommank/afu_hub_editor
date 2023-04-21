@@ -2,15 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../models/TopicData.dart';
+import '../../../models/SectionData.dart';
 
-class TopicCard extends ConsumerWidget {
-  const TopicCard({
-    required this.topic,
+class SectionCard extends ConsumerWidget {
+  const SectionCard({
+    required this.section,
     super.key,
   });
 
-  final TopicData topic;
+  final SectionData section;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,7 +18,7 @@ class TopicCard extends ConsumerWidget {
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
         onTap: () {
-          context.goNamed('topic', params: {'id': topic.id});
+          context.goNamed('topic', params: {'id': section.id});
         },
         child: Card(
           clipBehavior: Clip.antiAlias,
@@ -35,14 +35,14 @@ class TopicCard extends ConsumerWidget {
                   child: Stack(
                     children: [
                       Positioned.fill(
-                        child: topic.titleImageKey != null
+                        child: section.iconKey != null
                             ? Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: CachedNetworkImage(
                                   errorWidget: (context, url, dynamic error) =>
                                       const Icon(Icons.error_outline_outlined),
-                                  imageUrl: topic.titleImageUrl.toString(),
-                                  cacheKey: topic.titleImageKey,
+                                  imageUrl: section.iconUrl.toString(),
+                                  cacheKey: section.iconKey,
                                   width: double.maxFinite,
                                   alignment: Alignment.topCenter,
                                   fit: BoxFit.scaleDown,
@@ -72,7 +72,7 @@ class TopicCard extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        topic.title.uk.toString(),
+                        section.name.uk.toString(),
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],

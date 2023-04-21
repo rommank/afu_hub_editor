@@ -7,7 +7,7 @@ part of 'sections_repository.dart';
 // **************************************************************************
 
 String _$sectionsRepositoryHash() =>
-    r'6cbd9531842bd138d14cfc91842b2356a17ca5c1';
+    r'4b020d75e3d08811d7fca6e32ab2ca9f3fc64568';
 
 /// See also [sectionsRepository].
 @ProviderFor(sectionsRepository)
@@ -23,7 +23,7 @@ final sectionsRepositoryProvider =
 );
 
 typedef SectionsRepositoryRef = AutoDisposeProviderRef<SectionsRepository>;
-String _$sectionsForTopicHash() => r'a00c8e25b97472992171f7c5d6fb60c1789a0903';
+String _$sectionsForTopicHash() => r'6b6a540173e744d85f9f4d42967c62a0704d904c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -46,14 +46,14 @@ class _SystemHash {
   }
 }
 
-typedef SectionsForTopicRef = AutoDisposeStreamProviderRef<List<SectionData>>;
+typedef SectionsForTopicRef = AutoDisposeStreamProviderRef<List<SectionData?>>;
 
 /// See also [sectionsForTopic].
 @ProviderFor(sectionsForTopic)
 const sectionsForTopicProvider = SectionsForTopicFamily();
 
 /// See also [sectionsForTopic].
-class SectionsForTopicFamily extends Family<AsyncValue<List<SectionData>>> {
+class SectionsForTopicFamily extends Family<AsyncValue<List<SectionData?>>> {
   /// See also [sectionsForTopic].
   const SectionsForTopicFamily();
 
@@ -92,7 +92,7 @@ class SectionsForTopicFamily extends Family<AsyncValue<List<SectionData>>> {
 
 /// See also [sectionsForTopic].
 class SectionsForTopicProvider
-    extends AutoDisposeStreamProvider<List<SectionData>> {
+    extends AutoDisposeStreamProvider<List<SectionData?>> {
   /// See also [sectionsForTopic].
   SectionsForTopicProvider({
     required this.id,
@@ -128,11 +128,11 @@ class SectionsForTopicProvider
   }
 }
 
-String _$sectionsHash() => r'92beedc5d3f4bf48bf0117a067f06260326f3689';
+String _$sectionsHash() => r'f3f880b79a3b5eb392067309f51324763179e758';
 
 /// See also [sections].
 @ProviderFor(sections)
-final sectionsProvider = AutoDisposeStreamProvider<List<SectionData>>.internal(
+final sectionsProvider = AutoDisposeStreamProvider<List<SectionData?>>.internal(
   sections,
   name: r'sectionsProvider',
   debugGetCreateSourceHash:
@@ -141,5 +141,5 @@ final sectionsProvider = AutoDisposeStreamProvider<List<SectionData>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef SectionsRef = AutoDisposeStreamProviderRef<List<SectionData>>;
+typedef SectionsRef = AutoDisposeStreamProviderRef<List<SectionData?>>;
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

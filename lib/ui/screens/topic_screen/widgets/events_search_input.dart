@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../../hooks/listenable_value.dart';
+import '../../../../hooks/drop_down_controller_hook.dart';
 import '../../../../logic/event/repository/events_repository.dart';
 import '../../../../logic/notifiers/new_topic_screen_notifiers.dart';
 import '../../../../models/EventData.dart';
@@ -16,7 +16,7 @@ class EventsSearchInput extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dropdownValueController = useListenableState(SingleValueDropDownController());
+    final dropdownValueController = useDropDownController();
     final itemsForTopic = ref.watch(addedEventsProvider);
 
     final itemsList = ref.watch(eventsProvider);
