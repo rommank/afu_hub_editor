@@ -1,17 +1,15 @@
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/cover_image_card.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/events_search_input.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/topic_text_form_field.dart';
-import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/topics_search_input.dart';
+import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/sections_search_input.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:extra_alignments/extra_alignments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../hooks/drop_down_controller_hook.dart';
-import '../../../logic/event/repository/events_repository.dart';
 import '../../../logic/notifiers/new_topic_screen_notifiers.dart';
 import '../../../logic/topic/controller/topic_controller.dart';
 import '../../../models/Topic.dart';
@@ -41,9 +39,9 @@ class NewTopicScreen extends HookConsumerWidget {
   Widget _buildPage(WidgetRef ref, BuildContext context) {
     final ukTitleController = useTextEditingController();
     final enTitleController = useTextEditingController();
-    final startDateController = useTextEditingController();
+    final eventDateController = useTextEditingController();
     final endDateController = useTextEditingController();
-    final coverImage = ref.watch(coverImageProvider);
+    final icon = ref.watch(coverImageProvider);
     final topicTypeController = useDropDownController();
     final isLoading = ref.watch(loadingStateProvider);
     return Scaffold(
@@ -51,7 +49,7 @@ class NewTopicScreen extends HookConsumerWidget {
         leading: IconButton(
           onPressed: () {
             resetState(ref);
-            context.go(ScreenPaths.home);
+            appRouter.pop();
           },
           icon: const Icon(Icons.close),
         ),
@@ -73,20 +71,20 @@ class NewTopicScreen extends HookConsumerWidget {
                 const Gap(20),
                 buildTopicTextFormField(
                   controller: ukTitleController,
-                  hintText: $Strings.titleUk,
-                  errorText: $Strings.enterTitleUk,
+                  hintText: $Strings.topicTitleUk,
+                  errorText: $Strings.enterTopicTitleUk,
                   // validator: validateUkInput,
                 ),
                 const Gap(20),
                 buildTopicTextFormField(
                   controller: enTitleController,
-                  hintText: $Strings.titleEn,
-                  errorText: $Strings.enterTitleEn,
+                  hintText: $Strings.topicTitleEn,
+                  errorText: $Strings.enterTopicTitleEn,
                   validator: validateEnInput,
                 ),
                 const Gap(20),
                 buildTopicTextFormField(
-                  controller: startDateController,
+                  controller: eventDateController,
                   hintText: $Strings.startDate,
                   errorText: $Strings.enterDate,
                   suffixIcon: Icons.edit_calendar_outlined,
@@ -96,7 +94,7 @@ class NewTopicScreen extends HookConsumerWidget {
                       return $Strings.enterDate;
                     }
                     if (endDateController.text.isNotEmpty) {
-                      DateTime tempStartDate = parseDateString(startDateController.text);
+                      DateTime tempStartDate = parseDateString(eventDateController.text);
                       DateTime tempEndDate = parseDateString(endDateController.text);
                       if (tempEndDate.isBefore(tempStartDate)) {
                         return $Strings.startBeforeStartDateError;
@@ -105,7 +103,7 @@ class NewTopicScreen extends HookConsumerWidget {
 
                     return null;
                   },
-                  onTap: () => showCalendar(startDateController, context,
+                  onTap: () => showCalendar(eventDateController, context,
                           helpText: $Strings.pickStartDate.toUpperCase())
                       .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
                 ),
@@ -120,8 +118,8 @@ class NewTopicScreen extends HookConsumerWidget {
                       return $Strings.enterDate;
                     }
 
-                    if (startDateController.text.isNotEmpty) {
-                      DateTime tempStartDate = parseDateString(startDateController.text);
+                    if (eventDateController.text.isNotEmpty) {
+                      DateTime tempStartDate = parseDateString(eventDateController.text);
                       DateTime tempEndDate = parseDateString(endDateController.text);
                       if (tempEndDate.isBefore(tempStartDate)) {
                         return $Strings.endBeforeStartDateError;
@@ -191,7 +189,7 @@ class NewTopicScreen extends HookConsumerWidget {
                             titleUk: ukTitleController.text,
                             titleEn: enTitleController.text,
                             type: topicTypeController.dropDownValue?.name ?? '',
-                            startDate: startDateController.text,
+                            startDate: eventDateController.text,
                             endDate: endDateController.text,
                           );
 
@@ -204,17 +202,19 @@ class NewTopicScreen extends HookConsumerWidget {
                             .updateTopicIdForSections(topicId: id, sections: sections);
                       }
                       if (events.isNotEmpty) {
-                        await ref.read(eventsRepositoryProvider).updateTopicId(id, events);
+                        await ref
+                            .read(topicControllerProvider)
+                            .updateTopicIdForEvents(topicId: id, events: events);
                       }
 
-                      if (coverImage != null) {
+                      if (icon != null) {
                         final topic = await ref.read(topicControllerProvider).queryTopicWithId(id);
                         if (topic != null) {
-                          ref.read(topicControllerProvider).uploadFile(coverImage, topic);
+                          ref.read(topicControllerProvider).uploadFile(icon, topic);
                         }
                       }
                       resetState(ref);
-                      appRouter.go(ScreenPaths.home);
+                      appRouter.pop();
                     }
                   },
                 ),
@@ -228,17 +228,15 @@ class NewTopicScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-        child: kIsWeb ? centerAndScaleForWeb(_buildPage(ref, context)) : _buildPage(ref, context));
+    return _buildPage(ref, context);
   }
 }
 
-Widget centerAndScaleForWeb(Widget child) {
-  return TopCenter(
-    child: SizedBox(
-      width: 480,
-      child: child,
-    ),
-  );
-}
+// Widget centerAndScaleForWeb(Widget child) {
+//   return TopCenter(
+//     child: SizedBox(
+//       width: 480,
+//       child: child,
+//     ),
+//   );
+// }

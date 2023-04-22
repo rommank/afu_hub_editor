@@ -64,7 +64,10 @@ class TopicsDataStoreService {
 
   Stream<TopicData> listenToId(String topicId) {
     return Amplify.DataStore.observeQuery(TopicData.classType, where: TopicData.ID.eq(topicId))
-        .map((event) => event.items.toList().first);
+        .map((event) => event.items.toList().first)
+        .handleError((error) {
+      safePrint("Listen to events: stream error occurred");
+    });
   }
 
   Future<TopicData?> queryById(String topicId) async {

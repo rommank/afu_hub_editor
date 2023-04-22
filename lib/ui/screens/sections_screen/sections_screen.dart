@@ -1,9 +1,7 @@
 import 'package:afu_hub_editor/logic/section/repository/sections_repository.dart';
-import 'package:afu_hub_editor/models/ModelProvider.dart';
 import 'package:afu_hub_editor/ui/screens/sections_screen/section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../logic/topic/repository/topics_repository.dart';
 import '../../../strings.dart';
 
 class SectionsScreen extends HookConsumerWidget {

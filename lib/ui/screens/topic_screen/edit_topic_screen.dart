@@ -1,4 +1,3 @@
-import 'dart:io' as io;
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/cover_image_card.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/edit_sections_search_input.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/events_search_input.dart';
@@ -12,20 +11,16 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../hooks/drop_down_controller_hook.dart';
-import '../../../logic/event/repository/events_repository.dart';
 import '../../../logic/notifiers/new_topic_screen_notifiers.dart';
-import '../../../logic/section/repository/sections_datastore_repository.dart';
 import '../../../logic/topic/controller/topic_controller.dart';
 import '../../../logic/topic/repository/topics_repository.dart';
 import '../../../models/LocalizedText.dart';
-import '../../../models/SectionData.dart';
 import '../../../models/Topic.dart';
 import '../../../models/TopicData.dart';
 import '../../../router.dart';
 import '../../../strings.dart';
 import '../../common/delete_item_dialog.dart';
 import 'new_topic_screen.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EditTopicScreen extends HookConsumerWidget {
   EditTopicScreen({Key? key, required this.topicId}) : super(key: key);
@@ -45,7 +40,7 @@ class EditTopicScreen extends HookConsumerWidget {
     var value = await showDialog<bool>(
         context: context,
         builder: (context) {
-          return const DeleteItemDialog(itemName: $Strings.topic);
+          return const DeleteItemDialog(itemName: $Strings.topicAlt);
         });
     value ??= false;
     if (value) {
@@ -119,16 +114,16 @@ class EditTopicScreen extends HookConsumerWidget {
                         buildTopicTextFormField(
                           autofocus: false,
                           controller: ukTitleController,
-                          hintText: $Strings.titleUk,
-                          errorText: $Strings.enterTitleUk,
+                          hintText: $Strings.topicTitleUk,
+                          errorText: $Strings.enterTopicTitleUk,
                           //validator: validateUkInput,
                         ),
                         const Gap(20),
                         buildTopicTextFormField(
                           autofocus: false,
                           controller: enTitleController,
-                          hintText: $Strings.titleEn,
-                          errorText: $Strings.enterTitleEn,
+                          hintText: $Strings.topicTitleEn,
+                          errorText: $Strings.enterTopicTitleEn,
                           validator: validateEnInput,
                         ),
                         const Gap(20),
@@ -273,8 +268,8 @@ class EditTopicScreen extends HookConsumerWidget {
                                   }
                                   if (events.isNotEmpty) {
                                     await ref
-                                        .read(eventsRepositoryProvider)
-                                        .updateTopicId(topicId, events);
+                                        .read(topicControllerProvider)
+                                        .updateTopicIdForEvents(topicId: topicId, events: events);
                                   }
 
                                   if (coverImageValue != null) {

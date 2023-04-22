@@ -19,13 +19,23 @@ class TopicsScreen extends HookConsumerWidget {
           ? const Center(
               child: Text($Strings.emptyTopicList),
             )
-          : GridView.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              padding: const EdgeInsets.all(10),
-              children: topics.map((topic) => TopicCard(topic: topic!)).toList(),
-            ),
+          : LayoutBuilder(builder: (_, constraints) {
+              return GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                padding: EdgeInsets.symmetric(
+                    horizontal: calculatePadding(constraints.maxWidth), vertical: 10),
+                children: topics.map((topic) => TopicCard(topic: topic!)).toList(),
+              );
+            }),
     );
+  }
+
+  double calculatePadding(double width) {
+    if (width > 1200) return 400;
+    if (width > 700) return 200;
+    if (width > 400) return 50;
+    return 10;
   }
 }

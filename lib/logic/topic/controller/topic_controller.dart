@@ -1,3 +1,5 @@
+import 'package:afu_hub_editor/logic/event/repository/events_repository.dart';
+import 'package:afu_hub_editor/models/EventData.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -58,6 +60,14 @@ class TopicController {
     for (var section in sections) {
       final updatedSection = section.copyWith(topicDataID: topicId);
       await ref.read(sectionsRepositoryProvider).update(updatedSection);
+    }
+  }
+
+  Future<void> updateTopicIdForEvents(
+      {required String topicId, required List<EventData> events}) async {
+    for (var event in events) {
+      final updatedEvent = event.copyWith(topicdataID: topicId);
+      await ref.read(eventsRepositoryProvider).update(updatedEvent);
     }
   }
 

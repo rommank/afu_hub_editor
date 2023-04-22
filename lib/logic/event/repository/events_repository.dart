@@ -1,30 +1,34 @@
+import 'package:afu_hub_editor/logic/event/repository/events_datastore_repository.dart';
+import 'package:afu_hub_editor/logic/event/service/events_datastore_service.dart';
+import 'package:afu_hub_editor/models/EventData.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../models/EventData.dart';
-import '../service/events_datastore_service.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 part 'events_repository.g.dart';
 
 @riverpod
 EventsRepository eventsRepository(EventsRepositoryRef ref) {
-  return EventsRepository(ref.read(eventsDataStoreServiceProvider));
+  return kIsWeb
+      ? EventsDataStoreRepository(ref.read(eventsDataStoreServiceProvider))
+      : EventsDataStoreRepository(ref.read(eventsDataStoreServiceProvider));
 }
 
 @riverpod
-Stream<List<EventData>> events(EventsRef ref) {
-  return ref.watch(eventsRepositoryProvider).listenEvents();
+Stream<List<EventData?>> eventsForTopic(EventsForTopicRef ref, {required String id}) {
+  return ref.watch(eventsRepositoryProvider).listenEventsForTopicId(id);
 }
 
-class EventsRepository {
-  EventsRepository(this.eventsDataStoreService);
-  final EventsDataStoreService eventsDataStoreService;
-  Stream<List<EventData>> listenEventsForTopic(String topicId) {
-    return eventsDataStoreService.listenEventsForTopic(topicId);
-  }
+@riverpod
+Stream<List<EventData?>> events(EventsRef ref) {
+  return ref.watch(eventsRepositoryProvider).listen();
+}
 
-  Stream<List<EventData>> listenEvents() {
-    return eventsDataStoreService.listenEvents();
-  }
-
-  Future<void> updateTopicId(String topicId, List<EventData> events) async {
-    await eventsDataStoreService.updateTopicId(topicId, events);
-  }
+abstract class EventsRepository {
+  Stream<List<EventData?>> listen();
+  Stream<List<EventData?>> listenEventsForTopicId(String id);
+  Stream<EventData> listenToId(String id);
+  Future<List<EventData?>> list();
+  Future<EventData?> queryById(String id);
+  Future<void> add(EventData event);
+  Future<void> update(EventData event);
+  Future<void> delete(EventData event);
 }

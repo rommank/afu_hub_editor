@@ -17,7 +17,11 @@ class SectionsDataStoreService {
 
   Stream<List<SectionData>> listen() {
     return Amplify.DataStore.observeQuery(SectionData.classType)
-        .map((event) => event.items.toList());
+        .map((event) => event.items.toList())
+        .handleError((error) {
+      safePrint("Listen to sections: stream error occurred");
+    });
+    ;
   }
 
   Future<void> update(SectionData section) async {

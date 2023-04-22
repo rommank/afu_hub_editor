@@ -40,7 +40,7 @@ String? validateUkInput(String? value) {
   RegExp regex = RegExp('[А-ЩЬЮЯҐЄІЇ а-щьюяґєії 0-9]');
   if (value != null && value.isNotEmpty) {
     if (!regex.hasMatch(value)) {
-      return $Strings.enterTitleUk;
+      return $Strings.enterTopicTitleUk;
     } else {
       return null;
     }
@@ -52,7 +52,7 @@ String? validateEnInput(String? value) {
   RegExp regex = RegExp('[a-z A-Z 0-9]');
   if (value != null && value.isNotEmpty) {
     if (!regex.hasMatch(value)) {
-      return $Strings.enterTitleEn;
+      return $Strings.enterTopicTitleEn;
     } else {
       return null;
     }
