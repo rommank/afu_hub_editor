@@ -3,11 +3,16 @@ import 'package:flutter/services.dart';
 
 import '../../../../strings.dart';
 
-Widget buildTopicTextFormField(
+Widget buildCustomTextFormField(
     {required TextEditingController controller,
     required String hintText,
     required String errorText,
+    required BuildContext context,
     bool autofocus = true,
+    int? minLines,
+    int? maxLines,
+    int? maxLength,
+    TextInputType? keyboardType,
     IconData? suffixIcon,
     bool? readOnly,
     List<TextInputFormatter>? inputFormatters,
@@ -15,13 +20,16 @@ Widget buildTopicTextFormField(
     Function(String)? onChanged,
     String? Function(String?)? validator}) {
   return TextFormField(
+    maxLength: maxLength,
+    minLines: minLines,
+    maxLines: maxLines,
     inputFormatters: inputFormatters,
     textCapitalization: TextCapitalization.sentences,
     controller: controller,
     onChanged: onChanged,
     onTap: onTap,
     readOnly: readOnly ?? false,
-    keyboardType: TextInputType.text,
+    keyboardType: keyboardType ?? TextInputType.text,
     validator: validator ??
         (value) {
           if (value == null || value.isEmpty) {
@@ -32,7 +40,23 @@ Widget buildTopicTextFormField(
     autofocus: autofocus,
     autocorrect: false,
     decoration: InputDecoration(
-        hintText: hintText, suffixIcon: suffixIcon == null ? null : Icon(suffixIcon)),
+        border: (minLines != null)
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Theme.of(context).colorScheme.error, width: 2))
+            : null,
+        focusedBorder: (minLines != null)
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2))
+            : null,
+        enabledBorder: (minLines != null)
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Theme.of(context).colorScheme.outline))
+            : null,
+        hintText: hintText,
+        suffixIcon: suffixIcon == null ? null : Icon(suffixIcon)),
   );
 }
 

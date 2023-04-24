@@ -1,4 +1,6 @@
+import 'package:afu_hub_editor/logic/section/repository/sections_api_repository.dart';
 import 'package:afu_hub_editor/logic/section/repository/sections_datastore_repository.dart';
+import 'package:afu_hub_editor/logic/section/service/sections_api_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../models/SectionData.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -10,7 +12,7 @@ part 'sections_repository.g.dart';
 @riverpod
 SectionsRepository sectionsRepository(SectionsRepositoryRef ref) {
   return kIsWeb
-      ? SectionsDataStoreRepository(ref.read(sectionsDataStoreServiceProvider))
+      ? SectionsApiRepository((ref.read(sectionsApiServiceProvider)))
       : SectionsDataStoreRepository(ref.read(sectionsDataStoreServiceProvider));
 }
 
@@ -29,8 +31,8 @@ abstract class SectionsRepository {
   Stream<List<SectionData?>> listenSectionsForTopicId(String id);
   Stream<SectionData> listenToId(String id);
   Future<List<SectionData?>> list();
-  Future<SectionData?> queryById(String idd);
-  Future<void> add(SectionData topic);
-  Future<void> update(SectionData topic);
-  Future<void> delete(SectionData topic);
+  Future<SectionData?> queryById(String id);
+  Future<void> add(SectionData section);
+  Future<void> update(SectionData section);
+  Future<void> delete(SectionData section);
 }

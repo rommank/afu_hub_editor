@@ -24,6 +24,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return MaterialApp.router(
+    //   debugShowCheckedModeBanner: false,
+    //   routerDelegate: appRouter.routerDelegate,
+    //   routeInformationProvider: appRouter.routeInformationProvider,
+    //   routeInformationParser: appRouter.routeInformationParser,
+    //   theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+    //   darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+    // );
     return Authenticator(
       stringResolver: stringResolver,
       initialStep: AuthenticatorStep.signIn,

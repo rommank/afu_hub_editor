@@ -1,3 +1,5 @@
+import 'dart:html' as html;
+
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import '../../../../logic/notifiers/new_topic_screen_notifiers.dart';
 import '../../../../strings.dart';
 import '../new_topic_screen.dart';
 import 'dart:io' as io;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class CoverImageCard extends ConsumerWidget {
   const CoverImageCard({
@@ -27,6 +30,7 @@ class CoverImageCard extends ConsumerWidget {
       safePrint('No image selected');
     } else {
       ref.read(coverImageProvider.notifier).setValue(io.File(pickedImage.path));
+
       ref.read(containerHeightProvider.notifier).state = 150;
     }
   }
@@ -38,7 +42,7 @@ class CoverImageCard extends ConsumerWidget {
         ref.read(containerHeightProvider.notifier).state = 150;
       });
 
-      return Image.file(pickedImage);
+      return kIsWeb ? Image.network(pickedImage.path) : Image.file(pickedImage);
     }
     if (existingImageUrl != null) {
       Future(() {

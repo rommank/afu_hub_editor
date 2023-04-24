@@ -7,7 +7,7 @@ part of 'sections_repository.dart';
 // **************************************************************************
 
 String _$sectionsRepositoryHash() =>
-    r'4b020d75e3d08811d7fca6e32ab2ca9f3fc64568';
+    r'9c9d12f380408342b567444454d9c4ba3a0413e2';
 
 /// See also [sectionsRepository].
 @ProviderFor(sectionsRepository)

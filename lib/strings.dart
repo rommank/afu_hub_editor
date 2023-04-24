@@ -7,10 +7,18 @@ class $Strings {
   static const enterTopicTitleEn = "Введіть назву теми англійською";
   static const enterEventTitleUk = "Введіть назву події українською";
   static const enterEventTitleEn = "Введіть назву події англійською";
+  static const enterSectionTitleUk = "Введіть назву секції українською";
+  static const enterSectionTitleEn = "Введіть назву секції англійською";
+  static const enterSectionText1Uk = "Введіть текст №1 секції українською";
+  static const enterSectionText1En = "Введіть текст №1 секції англійською";
   static const topicTitleUk = "Назва теми українською";
   static const topicTitleEn = "Назва теми англійською";
   static const eventTitleUk = "Назва події українською";
   static const eventTitleEn = "Назва події англійською";
+  static const sectionTitleUk = "Назва секції українською";
+  static const sectionTitleEn = "Назва секції англійською";
+  static const sectionText1Uk = "Текст №1 секції українською";
+  static const sectionText1En = "Текст №1 секції англійською";
   static const enterDate = "Виберіть дату";
   static const enterTopic = "Виберіть тему";
   static const enterEventDate = "Вибреріть дату події";
@@ -28,11 +36,16 @@ class $Strings {
   static const topics = 'Теми';
   static const topic = 'Тема';
   static const sections = "Секції";
+  static const newSection = "Нова Секція";
+  static const newEvent = "Нова Подія";
+  static const newTopic = "Нова Тема";
   static const events = "Події";
   static const textFieldIsMandatory = 'Це текстове поле є обов\'язковим';
   static const endBeforeStartDateError = 'Дата закінчення не має бути раніше ніж дати початку';
   static const startBeforeStartDateError = 'Дата початку не має бути пізніше ніж дата закінчення';
   static const addTopicTooltip = 'Додати тему';
+  static const addSectionTooltip = 'Додати секцію';
+  static const addEventTooltip = 'Додати подію';
 
   static const uk = 'uk';
   static const ukDateFormat = "dd/MM/yyyy";

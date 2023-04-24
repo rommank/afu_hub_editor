@@ -5,6 +5,7 @@ import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../../strings.dart';
 part 'event_controller.g.dart';
 
 @riverpod
@@ -21,7 +22,7 @@ class EventController {
       required String titleUk,
       required String titleEn,
       required String topicdataID}) async {
-    DateTime tempDate = DateFormat("dd/MM/yyyy").parse(date.trim());
+    DateTime tempDate = DateFormat($Strings.ukDateFormat).parse(date.trim());
     final event = EventData(
         date: TemporalDate(tempDate.copyWith(day: tempDate.day + 1)),
         title: LocalizedText(uk: titleUk, en: titleEn),

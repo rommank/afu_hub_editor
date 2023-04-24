@@ -3,32 +3,31 @@ import '../../../models/SectionData.dart';
 import '../service/sections_datastore_service.dart';
 
 class SectionsDataStoreRepository implements SectionsRepository {
-  SectionsDataStoreRepository(this.appSyncAbstractSectionsService);
-  final SectionsDataStoreService appSyncAbstractSectionsService;
+  SectionsDataStoreRepository(this.sectionsDataStoreService);
+  final SectionsDataStoreService sectionsDataStoreService;
 
   @override
   Stream<List<SectionData>> listenSectionsForTopicId(String id) {
-    return appSyncAbstractSectionsService.listenToSectionsForTopicId(id);
+    return sectionsDataStoreService.listenToSectionsForTopicId(id);
   }
 
   @override
   Stream<List<SectionData?>> listen() {
-    return appSyncAbstractSectionsService.listen();
+    return sectionsDataStoreService.listen();
   }
 
   @override
   Future<void> update(SectionData section) async {
-    await appSyncAbstractSectionsService.update(section);
+    await sectionsDataStoreService.update(section);
   }
 
   @override
-  Future<void> add(SectionData topic) {
-    // TODO: implement add
-    throw UnimplementedError();
+  Future<void> add(SectionData section) async {
+    sectionsDataStoreService.add(section);
   }
 
   @override
-  Future<void> delete(SectionData topic) {
+  Future<void> delete(SectionData section) {
     // TODO: implement delete
     throw UnimplementedError();
   }

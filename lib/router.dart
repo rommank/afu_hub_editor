@@ -1,5 +1,6 @@
-import 'package:afu_hub_editor/ui/event_screen/new_event_screen.dart';
+import 'package:afu_hub_editor/ui/screens/event_screen/new_event_screen.dart';
 import 'package:afu_hub_editor/ui/screens/home_screen.dart';
+import 'package:afu_hub_editor/ui/screens/section_screen/new_section_screen.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/edit_topic_screen.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/new_topic_screen.dart';
 import 'package:extra_alignments/extra_alignments.dart';
@@ -13,6 +14,7 @@ class ScreenPaths {
   static String newTopic = '/new-topic';
   static String topic = '/topic:id';
   static String newEvent = '/new-event';
+  static String newSection = '/new-section';
 }
 
 final appRouter = GoRouter(
@@ -47,6 +49,12 @@ final appRouter = GoRouter(
             'new-event',
             useFade: true,
             (s) => NewEventScreen(),
+          ),
+          AppRoute(
+            ScreenPaths.newSection,
+            'new-section',
+            useFade: true,
+            (s) => NewSectionScreen(),
           ),
         ]),
   ],

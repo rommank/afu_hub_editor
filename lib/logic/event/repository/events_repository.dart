@@ -1,14 +1,17 @@
 import 'package:afu_hub_editor/logic/event/repository/events_datastore_repository.dart';
+import 'package:afu_hub_editor/logic/event/service/events_api_service.dart';
 import 'package:afu_hub_editor/logic/event/service/events_datastore_service.dart';
 import 'package:afu_hub_editor/models/EventData.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+
+import 'events_api_repository.dart';
 part 'events_repository.g.dart';
 
 @riverpod
 EventsRepository eventsRepository(EventsRepositoryRef ref) {
   return kIsWeb
-      ? EventsDataStoreRepository(ref.read(eventsDataStoreServiceProvider))
+      ? EventsApiRepository(ref.read(eventsApiServiceProvider))
       : EventsDataStoreRepository(ref.read(eventsDataStoreServiceProvider));
 }
 

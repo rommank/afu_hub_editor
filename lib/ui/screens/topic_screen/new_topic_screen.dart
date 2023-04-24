@@ -2,6 +2,7 @@ import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/cover_image_card.
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/events_search_input.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/topic_text_form_field.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/sections_search_input.dart';
+import 'package:afu_hub_editor/ui/screens/topics_screen/topics_screen.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:extra_alignments/extra_alignments.dart';
@@ -46,6 +47,7 @@ class NewTopicScreen extends HookConsumerWidget {
     final isLoading = ref.watch(loadingStateProvider);
     return Scaffold(
       appBar: AppBar(
+        title: const Text($Strings.newTopic),
         leading: IconButton(
           onPressed: () {
             resetState(ref);
@@ -54,175 +56,185 @@ class NewTopicScreen extends HookConsumerWidget {
           icon: const Icon(Icons.close),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          key: formGlobalKey,
-          child: Container(
-            padding: const EdgeInsets.only(
-                left: 15,
-                top: 20,
-                right: 15,
-                bottom: 0), // MediaQuery.of(context).viewInsets.bottom + 15),
-            width: double.infinity,
-            child: Column(
-              children: [
-                const CoverImageCard(),
-                const Gap(20),
-                buildTopicTextFormField(
-                  controller: ukTitleController,
-                  hintText: $Strings.topicTitleUk,
-                  errorText: $Strings.enterTopicTitleUk,
-                  // validator: validateUkInput,
-                ),
-                const Gap(20),
-                buildTopicTextFormField(
-                  controller: enTitleController,
-                  hintText: $Strings.topicTitleEn,
-                  errorText: $Strings.enterTopicTitleEn,
-                  validator: validateEnInput,
-                ),
-                const Gap(20),
-                buildTopicTextFormField(
-                  controller: eventDateController,
-                  hintText: $Strings.startDate,
-                  errorText: $Strings.enterDate,
-                  suffixIcon: Icons.edit_calendar_outlined,
-                  readOnly: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return $Strings.enterDate;
-                    }
-                    if (endDateController.text.isNotEmpty) {
-                      DateTime tempStartDate = parseDateString(eventDateController.text);
-                      DateTime tempEndDate = parseDateString(endDateController.text);
-                      if (tempEndDate.isBefore(tempStartDate)) {
-                        return $Strings.startBeforeStartDateError;
+      body: LayoutBuilder(builder: (_, constraints) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
+          child: Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: formGlobalKey,
+            child: Container(
+              padding: const EdgeInsets.only(
+                  left: 15,
+                  top: 20,
+                  right: 15,
+                  bottom: 0), // MediaQuery.of(context).viewInsets.bottom + 15),
+              width: double.infinity,
+              child: Column(
+                children: [
+                  const CoverImageCard(),
+                  const Gap(20),
+                  buildCustomTextFormField(
+                    context: context,
+                    maxLength: 40,
+                    controller: ukTitleController,
+                    hintText: $Strings.topicTitleUk,
+                    errorText: $Strings.enterTopicTitleUk,
+                    // validator: validateUkInput,
+                  ),
+                  const Gap(20),
+                  buildCustomTextFormField(
+                    context: context,
+                    maxLength: 40,
+                    controller: enTitleController,
+                    hintText: $Strings.topicTitleEn,
+                    errorText: $Strings.enterTopicTitleEn,
+                    validator: validateEnInput,
+                  ),
+                  const Gap(20),
+                  buildCustomTextFormField(
+                    context: context,
+                    controller: eventDateController,
+                    hintText: $Strings.startDate,
+                    errorText: $Strings.enterDate,
+                    suffixIcon: Icons.edit_calendar_outlined,
+                    readOnly: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return $Strings.enterDate;
                       }
-                    }
-
-                    return null;
-                  },
-                  onTap: () => showCalendar(eventDateController, context,
-                          helpText: $Strings.pickStartDate.toUpperCase())
-                      .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
-                ),
-                const Gap(20),
-                buildTopicTextFormField(
-                  controller: endDateController,
-                  hintText: $Strings.endDate,
-                  errorText: $Strings.enterDate,
-                  suffixIcon: Icons.edit_calendar_outlined,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return $Strings.enterDate;
-                    }
-
-                    if (eventDateController.text.isNotEmpty) {
-                      DateTime tempStartDate = parseDateString(eventDateController.text);
-                      DateTime tempEndDate = parseDateString(endDateController.text);
-                      if (tempEndDate.isBefore(tempStartDate)) {
-                        return $Strings.endBeforeStartDateError;
+                      if (endDateController.text.isNotEmpty) {
+                        DateTime tempStartDate = parseDateString(eventDateController.text);
+                        DateTime tempEndDate = parseDateString(endDateController.text);
+                        if (tempEndDate.isBefore(tempStartDate)) {
+                          return $Strings.startBeforeStartDateError;
+                        }
                       }
-                    }
-                    return null;
-                  },
-                  readOnly: true,
-                  onTap: () => showCalendar(endDateController, context,
-                          helpText: $Strings.pickEndDate.toUpperCase())
-                      .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
-                ),
-                const Gap(20),
-                DropDownTextField(
-                  controller: topicTypeController,
-                  clearOption: false,
-                  dropdownRadius: 10,
-                  dropDownItemCount: 5,
-                  textFieldDecoration: const InputDecoration(hintText: $Strings.topicType),
-                  dropdownColor: Theme.of(context).colorScheme.surface,
-                  onChanged: (newValue) {
-                    String name = (newValue as DropDownValueModel).name;
-                    Topic topic = Topic.values.byName(name);
-                    ref.read(dropdownProvider.notifier).setValue(topic);
-                  },
-                  validator: (value) {
-                    if (value != null && value.isNotEmpty) {
+
                       return null;
-                    } else {
-                      return $Strings.pickTopicType;
-                    }
-                  },
-                  dropDownList: List.from(
-                    Topic.values.map(
-                      (element) => DropDownValueModel(
-                        name: element.name,
-                        value: element.name,
+                    },
+                    onTap: () => showCalendar(eventDateController, context,
+                            helpText: $Strings.pickStartDate.toUpperCase())
+                        .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
+                  ),
+                  const Gap(40),
+                  buildCustomTextFormField(
+                    context: context,
+                    controller: endDateController,
+                    hintText: $Strings.endDate,
+                    errorText: $Strings.enterDate,
+                    suffixIcon: Icons.edit_calendar_outlined,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return $Strings.enterDate;
+                      }
+
+                      if (eventDateController.text.isNotEmpty) {
+                        DateTime tempStartDate = parseDateString(eventDateController.text);
+                        DateTime tempEndDate = parseDateString(endDateController.text);
+                        if (tempEndDate.isBefore(tempStartDate)) {
+                          return $Strings.endBeforeStartDateError;
+                        }
+                      }
+                      return null;
+                    },
+                    readOnly: true,
+                    onTap: () => showCalendar(endDateController, context,
+                            helpText: $Strings.pickEndDate.toUpperCase())
+                        .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
+                  ),
+                  const Gap(40),
+                  DropDownTextField(
+                    controller: topicTypeController,
+                    clearOption: false,
+                    dropdownRadius: 10,
+                    dropDownItemCount: 5,
+                    textFieldDecoration: const InputDecoration(hintText: $Strings.topicType),
+                    dropdownColor: Theme.of(context).colorScheme.surface,
+                    onChanged: (newValue) {
+                      String name = (newValue as DropDownValueModel).name;
+                      Topic topic = Topic.values.byName(name);
+                      ref.read(dropdownProvider.notifier).setValue(topic);
+                    },
+                    validator: (value) {
+                      if (value != null && value.isNotEmpty) {
+                        return null;
+                      } else {
+                        return $Strings.pickTopicType;
+                      }
+                    },
+                    dropDownList: List.from(
+                      Topic.values.map(
+                        (element) => DropDownValueModel(
+                          name: element.name,
+                          value: element.name,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const Gap(20),
-                const SectionsSearchInput(),
-                const Gap(20),
-                const EventsSearchInput(),
-                const Gap(20),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Theme.of(context).colorScheme.primaryContainer),
-                  ),
-                  child: isLoading
-                      ? const SizedBox(
-                          height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
-                      : Icon(
-                          Icons.check,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                  onPressed: () async {
-                    final currentState = formGlobalKey.currentState;
-                    if (currentState == null) return;
-                    if (currentState.validate()) {
-                      ref.read(loadingStateProvider.notifier).state = true;
-                      String id = UUID.getUUID();
-                      await ref.read(topicControllerProvider).addTopic(
-                            id: id,
-                            titleUk: ukTitleController.text,
-                            titleEn: enTitleController.text,
-                            type: topicTypeController.dropDownValue?.name ?? '',
-                            startDate: eventDateController.text,
-                            endDate: endDateController.text,
-                          );
+                  const Gap(40),
+                  const SectionsSearchInput(),
+                  const Gap(40),
+                  const EventsSearchInput(),
+                  const Gap(20),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith(
+                          (states) => Theme.of(context).colorScheme.primaryContainer),
+                    ),
+                    child: isLoading
+                        ? const SizedBox(
+                            height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
+                        : Icon(
+                            Icons.check,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                    onPressed: () async {
+                      final currentState = formGlobalKey.currentState;
+                      if (currentState == null) return;
+                      if (currentState.validate()) {
+                        ref.read(loadingStateProvider.notifier).state = true;
+                        String id = UUID.getUUID();
+                        await ref.read(topicControllerProvider).addTopic(
+                              id: id,
+                              titleUk: ukTitleController.text,
+                              titleEn: enTitleController.text,
+                              type: topicTypeController.dropDownValue?.name ?? '',
+                              startDate: eventDateController.text,
+                              endDate: endDateController.text,
+                            );
 
-                      final sections = ref.read(addedSectionsProvider);
-                      final events = ref.read(addedEventsProvider);
+                        final sections = ref.read(addedSectionsProvider);
+                        final events = ref.read(addedEventsProvider);
 
-                      if (sections.isNotEmpty) {
-                        await ref
-                            .read(topicControllerProvider)
-                            .updateTopicIdForSections(topicId: id, sections: sections);
-                      }
-                      if (events.isNotEmpty) {
-                        await ref
-                            .read(topicControllerProvider)
-                            .updateTopicIdForEvents(topicId: id, events: events);
-                      }
-
-                      if (icon != null) {
-                        final topic = await ref.read(topicControllerProvider).queryTopicWithId(id);
-                        if (topic != null) {
-                          ref.read(topicControllerProvider).uploadFile(icon, topic);
+                        if (sections.isNotEmpty) {
+                          await ref
+                              .read(topicControllerProvider)
+                              .updateTopicIdForSections(topicId: id, sections: sections);
                         }
+                        if (events.isNotEmpty) {
+                          await ref
+                              .read(topicControllerProvider)
+                              .updateTopicIdForEvents(topicId: id, events: events);
+                        }
+
+                        if (icon != null) {
+                          final topic =
+                              await ref.read(topicControllerProvider).queryTopicWithId(id);
+                          if (topic != null) {
+                            ref.read(topicControllerProvider).uploadFile(icon, topic);
+                          }
+                        }
+                        resetState(ref);
+                        appRouter.pop();
                       }
-                      resetState(ref);
-                      appRouter.pop();
-                    }
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 

@@ -96,7 +96,8 @@ class EditTopicScreen extends HookConsumerWidget {
               String formattedStartDate =
                   DateFormat('dd/MM/yyyy').format(data.startDate.getDateTime());
               startDateController.text = formattedStartDate;
-              String formattedEndDate = DateFormat('dd/MM/yyyy').format(data.endDate.getDateTime());
+              String formattedEndDate =
+                  DateFormat($Strings.ukDateFormat).format(data.endDate.getDateTime());
               endDateController.text = formattedEndDate;
               topicTypeController
                   .setDropDown(DropDownValueModel(name: data.type.name, value: data.type.name));
@@ -111,7 +112,9 @@ class EditTopicScreen extends HookConsumerWidget {
                       children: [
                         CoverImageCard(imageKey: data.titleImageKey, imageUrl: data.titleImageUrl),
                         const Gap(20),
-                        buildTopicTextFormField(
+                        buildCustomTextFormField(
+                          context: context,
+
                           autofocus: false,
                           controller: ukTitleController,
                           hintText: $Strings.topicTitleUk,
@@ -119,7 +122,8 @@ class EditTopicScreen extends HookConsumerWidget {
                           //validator: validateUkInput,
                         ),
                         const Gap(20),
-                        buildTopicTextFormField(
+                        buildCustomTextFormField(
+                          context: context,
                           autofocus: false,
                           controller: enTitleController,
                           hintText: $Strings.topicTitleEn,
@@ -127,7 +131,8 @@ class EditTopicScreen extends HookConsumerWidget {
                           validator: validateEnInput,
                         ),
                         const Gap(20),
-                        buildTopicTextFormField(
+                        buildCustomTextFormField(
+                          context: context,
                           autofocus: false,
                           controller: startDateController,
                           hintText: $Strings.startDate,
@@ -155,7 +160,8 @@ class EditTopicScreen extends HookConsumerWidget {
                               .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
                         ),
                         const Gap(20),
-                        buildTopicTextFormField(
+                        buildCustomTextFormField(
+                          context: context,
                           autofocus: false,
                           controller: endDateController,
                           hintText: $Strings.endDate,

@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+import 'dart:html' as html;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../models/EventData.dart';
 import '../../models/SectionData.dart';
@@ -93,6 +94,24 @@ class CoverImageNotifier extends Notifier<io.File?> {
   }
 
   void setValue(io.File newValue) {
+    state = newValue;
+  }
+
+  void clear() {
+    state = null;
+  }
+}
+
+final coverWebImageProvider =
+    NotifierProvider<CoverWebImageNotifier, html.File?>(CoverWebImageNotifier.new);
+
+class CoverWebImageNotifier extends Notifier<html.File?> {
+  @override
+  html.File? build() {
+    return null;
+  }
+
+  void setValue(html.File newValue) {
     state = newValue;
   }
 

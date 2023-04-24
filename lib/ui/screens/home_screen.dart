@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../router.dart';
 import '../../strings.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
 import 'events_screen/events_screen.dart';
 
 class HomeScreen extends HookConsumerWidget {
@@ -16,15 +15,15 @@ class HomeScreen extends HookConsumerWidget {
   List<Widget> _buildHomeTabs(List<String> titles) {
     return [
       Tab(
-        icon: const Icon(Icons.cloud_outlined),
+        icon: const Icon(Icons.newspaper_outlined),
         text: titles[0],
       ),
       Tab(
-        icon: const Icon(Icons.beach_access_sharp),
+        icon: const Icon(Icons.category_outlined),
         text: titles[1],
       ),
       Tab(
-        icon: const Icon(Icons.brightness_5_sharp),
+        icon: const Icon(Icons.event),
         text: titles[2],
       ),
     ];
@@ -32,8 +31,19 @@ class HomeScreen extends HookConsumerWidget {
 
   void _addButtonPressed(int index) {
     if (index == 0) appRouter.push(ScreenPaths.newTopic);
-    if (index == 1) appRouter.push(ScreenPaths.newTopic);
+    if (index == 1) appRouter.push(ScreenPaths.newSection);
     if (index == 2) appRouter.push(ScreenPaths.newEvent);
+  }
+
+  String _pickTooltip(int index) {
+    switch (index) {
+      case 0:
+        return $Strings.addTopicTooltip;
+      case 1:
+        return $Strings.addSectionTooltip;
+      default:
+        return $Strings.addEventTooltip;
+    }
   }
 
   Future<void> _signOutCurrentUser() async {
@@ -85,7 +95,7 @@ class HomeScreen extends HookConsumerWidget {
         floatingActionButton: FloatingActionButton(
           isExtended: kIsWeb,
           onPressed: () => _addButtonPressed(tabController.index),
-          tooltip: $Strings.addTopicTooltip,
+          tooltip: _pickTooltip(tabController.index),
           child: const Icon(Icons.add),
         ),
       ),

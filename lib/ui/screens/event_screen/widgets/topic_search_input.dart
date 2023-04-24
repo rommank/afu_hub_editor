@@ -3,8 +3,8 @@ import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../hooks/drop_down_controller_hook.dart';
+import '../../../../models/TopicData.dart';
 import '../../../../strings.dart';
-import '../../../models/TopicData.dart';
 
 final topicForEventProvider = StateProvider<TopicData?>((ref) => null);
 
