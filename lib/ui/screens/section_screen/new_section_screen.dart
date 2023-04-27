@@ -34,7 +34,8 @@ class NewSectionScreen extends HookConsumerWidget {
     ref.read(coverImageProvider.notifier).clear();
   }
 
-  Widget _buildPage(WidgetRef ref, BuildContext context) {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final ukTitleController = useTextEditingController();
     final enTitleController = useTextEditingController();
     final ukText1Controller = useTextEditingController();
@@ -54,103 +55,116 @@ class NewSectionScreen extends HookConsumerWidget {
         ),
       ),
       body: LayoutBuilder(builder: (_, constraints) {
-        return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
-          child: Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            key: formGlobalKey,
-            child: Container(
-              padding: const EdgeInsets.only(left: 15, top: 20, right: 15, bottom: 0),
-              width: double.infinity,
-              child: Column(
-                children: [
-                  const CoverImageCard(),
-                  const Gap(30),
-                  const TopicSearchInput(),
-                  const Gap(40),
-                  buildCustomTextFormField(
-                    maxLength: 15,
-                    context: context,
-                    controller: ukTitleController,
-                    hintText: $Strings.sectionTitleUk,
-                    errorText: $Strings.enterSectionTitleUk,
-                    validator: validateUkInput,
-                  ),
-                  const Gap(20),
-                  buildCustomTextFormField(
-                    maxLength: 15,
-                    context: context,
-                    controller: enTitleController,
-                    hintText: $Strings.sectionTitleEn,
-                    errorText: $Strings.enterSectionTitleEn,
-                    validator: validateEnInput,
-                  ),
-                  const Gap(30),
-                  buildCustomTextFormField(
-                    context: context,
-                    keyboardType: TextInputType.multiline,
-                    controller: ukText1Controller,
-                    hintText: $Strings.sectionText1Uk,
-                    errorText: $Strings.enterSectionText1Uk,
-                    minLines: 3,
-                    maxLines: 100,
-                    validator: validateEnInput,
-                  ),
-                  const Gap(30),
-                  buildCustomTextFormField(
-                    context: context,
-                    keyboardType: TextInputType.multiline,
-                    controller: enText1Controller,
-                    hintText: $Strings.sectionText1En,
-                    errorText: $Strings.enterSectionText1En,
-                    minLines: 3,
-                    maxLines: 100,
-                    validator: validateEnInput,
-                  ),
-                  const Gap(20),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Theme.of(context).colorScheme.primaryContainer),
-                    ),
-                    child: isLoading
-                        ? const SizedBox(
-                            height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
-                        : Icon(
-                            Icons.check,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                    onPressed: () async {
-                      final currentState = formGlobalKey.currentState;
-                      if (currentState == null) return;
-                      if (currentState.validate()) {
-                        ref.read(loadingStateProvider.notifier).state = true;
-                        final topic = ref.read(topicForEventProvider);
-
-                        await ref.read(sectionControllerProvider).addSection(
-                            nameUk: ukTitleController.text,
-                            nameEn: enTitleController.text,
-                            text1Uk: ukText1Controller.text,
-                            text1En: enText1Controller.text,
-                            order: '1',
-                            topicdataID: topic!.id);
-
-                        resetState(ref);
-                        appRouter.pop();
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+        return kIsWeb
+            ? Center(
+                child: buildSingleChildScrollView(constraints, context, ukTitleController,
+                    enTitleController, ukText1Controller, enText1Controller, isLoading, ref),
+              )
+            : buildSingleChildScrollView(constraints, context, ukTitleController, enTitleController,
+                ukText1Controller, enText1Controller, isLoading, ref);
       }),
     );
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return _buildPage(ref, context);
+  SingleChildScrollView buildSingleChildScrollView(
+      BoxConstraints constraints,
+      BuildContext context,
+      TextEditingController ukTitleController,
+      TextEditingController enTitleController,
+      TextEditingController ukText1Controller,
+      TextEditingController enText1Controller,
+      bool isLoading,
+      WidgetRef ref) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
+      child: Form(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        key: formGlobalKey,
+        child: Container(
+          padding: const EdgeInsets.only(left: 15, top: 20, right: 15, bottom: 0),
+          width: double.infinity,
+          child: Column(
+            children: [
+              const CoverImageCard(),
+              const Gap(30),
+              // const TopicSearchInput(),
+              const Gap(40),
+              buildCustomTextFormField(
+                maxLength: 15,
+                context: context,
+                controller: ukTitleController,
+                hintText: $Strings.sectionTitleUk,
+                errorText: $Strings.enterSectionTitleUk,
+                validator: validateUkInput,
+              ),
+              const Gap(20),
+              buildCustomTextFormField(
+                maxLength: 15,
+                context: context,
+                controller: enTitleController,
+                hintText: $Strings.sectionTitleEn,
+                errorText: $Strings.enterSectionTitleEn,
+                validator: validateEnInput,
+              ),
+              const Gap(30),
+              buildCustomTextFormField(
+                context: context,
+                keyboardType: TextInputType.multiline,
+                controller: ukText1Controller,
+                hintText: $Strings.sectionText1Uk,
+                errorText: $Strings.enterSectionText1Uk,
+                minLines: 3,
+                maxLines: 100,
+                validator: validateEnInput,
+              ),
+              const Gap(30),
+              buildCustomTextFormField(
+                context: context,
+                keyboardType: TextInputType.multiline,
+                controller: enText1Controller,
+                hintText: $Strings.sectionText1En,
+                errorText: $Strings.enterSectionText1En,
+                minLines: 3,
+                maxLines: 100,
+                validator: validateEnInput,
+              ),
+              const Gap(20),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith(
+                      (states) => Theme.of(context).colorScheme.primaryContainer),
+                ),
+                child: isLoading
+                    ? const SizedBox(
+                        height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
+                    : Icon(
+                        Icons.check,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                onPressed: () async {
+                  final currentState = formGlobalKey.currentState;
+                  if (currentState == null) return;
+                  if (currentState.validate()) {
+                    ref.read(loadingStateProvider.notifier).state = true;
+                    final topic = ref.read(topicForEventProvider);
+
+                    await ref.read(sectionControllerProvider).addSection(
+                        nameUk: ukTitleController.text,
+                        nameEn: enTitleController.text,
+                        text1Uk: ukText1Controller.text,
+                        text1En: enText1Controller.text,
+                        order: '1',
+                        topicdataID: topic!.id);
+
+                    resetState(ref);
+                    appRouter.pop();
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

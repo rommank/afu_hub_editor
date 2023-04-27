@@ -17,12 +17,11 @@ class AmplifyService {
       final apiPlugin = AmplifyAPI(modelProvider: ModelProvider.instance);
       if (!kIsWeb) {
         final datastorePlugin = AmplifyDataStore(
+          authModeStrategy: AuthModeStrategy.multiAuth,
           modelProvider: ModelProvider.instance,
-          // authModeStrategy: AuthModeStrategy.multiAuth,
-          // modelProvider: ModelProvider.instance,
-          // errorHandler: (error) => {
-          //   debugPrint('Error of DataStore $error'),
-          // },
+          errorHandler: (error) => {
+            debugPrint('Error of DataStore $error'),
+          },
         );
         await Amplify.addPlugin(datastorePlugin);
       }

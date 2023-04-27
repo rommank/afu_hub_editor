@@ -23,13 +23,12 @@ class SectionsDataStoreRepository implements SectionsRepository {
 
   @override
   Future<void> add(SectionData section) async {
-    sectionsDataStoreService.add(section);
+    await sectionsDataStoreService.add(section);
   }
 
   @override
-  Future<void> delete(SectionData section) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> delete(SectionData section) async {
+    await sectionsDataStoreService.delete(section);
   }
 
   @override

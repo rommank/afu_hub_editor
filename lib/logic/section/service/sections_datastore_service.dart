@@ -61,4 +61,12 @@ class SectionsDataStoreService {
       safePrint(error);
     }
   }
+
+  Future<void> delete(SectionData section) async {
+    try {
+      await Amplify.DataStore.delete(section);
+    } on Exception catch (error) {
+      safePrint(error);
+    }
+  }
 }

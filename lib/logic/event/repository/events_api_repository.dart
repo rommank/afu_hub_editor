@@ -7,8 +7,8 @@ class EventsApiRepository implements EventsRepository {
   final EventsApiService eventsApiService;
 
   @override
-  Future<List<EventData?>> list() {
-    return eventsApiService.list();
+  Future<List<EventData?>> list() async {
+    return await eventsApiService.list();
   }
 
   @override
@@ -17,15 +17,18 @@ class EventsApiRepository implements EventsRepository {
   }
 
   @override
-  Future<void> add(EventData event) {
-    // TODO: implement add
-    throw UnimplementedError();
+  Future<void> add(EventData event) async {
+    await eventsApiService.add(event);
   }
 
   @override
-  Future<void> delete(EventData event) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> update(EventData event) async {
+    await eventsApiService.update(event);
+  }
+
+  @override
+  Future<void> delete(EventData event) async {
+    await eventsApiService.delete(event);
   }
 
   @override
@@ -43,12 +46,6 @@ class EventsApiRepository implements EventsRepository {
   @override
   Future<EventData?> queryById(String id) {
     // TODO: implement queryById
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> update(EventData event) {
-    // TODO: implement update
     throw UnimplementedError();
   }
 }

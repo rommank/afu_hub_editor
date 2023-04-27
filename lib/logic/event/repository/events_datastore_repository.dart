@@ -21,9 +21,18 @@ class EventsDataStoreRepository implements EventsRepository {
   }
 
   @override
-  Future<void> delete(EventData event) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> update(EventData event) async {
+    await eventsDataStoreService.update(event);
+  }
+
+  @override
+  Future<void> delete(EventData event) async {
+    await eventsDataStoreService.delete(event);
+  }
+
+  @override
+  Stream<EventData> listenToId(String id) {
+    return eventsDataStoreService.listenToId(id);
   }
 
   @override
@@ -33,20 +42,7 @@ class EventsDataStoreRepository implements EventsRepository {
   }
 
   @override
-  Stream<EventData> listenToId(String id) {
-    // TODO: implement listenToId
-    throw UnimplementedError();
-  }
-
-  @override
   Future<EventData?> queryById(String id) {
-    // TODO: implement queryById
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> update(EventData event) {
-    // TODO: implement update
-    throw UnimplementedError();
+    return eventsDataStoreService.queryById(id);
   }
 }

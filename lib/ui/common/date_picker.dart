@@ -20,5 +20,5 @@ Future<void> showCalendar(TextEditingController controller, BuildContext context
 }
 
 DateTime parseDateString(String string) {
-  return DateFormat("dd/MM/yyyy").parse(string);
+  return DateFormat($Strings.ukDateFormat).parse(string);
 }

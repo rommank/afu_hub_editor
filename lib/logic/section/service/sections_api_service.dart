@@ -31,4 +31,33 @@ class SectionsApiService {
     final sectionList = list();
     return Stream.fromFuture(sectionList);
   }
+
+  Future<void> add(SectionData section) async {
+    try {
+      final request =
+          ModelMutations.create(section, authorizationMode: APIAuthorizationType.userPools);
+      final response = await Amplify.API.mutate(request: request).response;
+    } on ApiException catch (e) {
+      safePrint('Api mutation failed: $e');
+    }
+  }
+
+  Future<void> update(SectionData section) async {
+    try {
+      final request = ModelMutations.update(section);
+      final response = await Amplify.API.mutate(request: request).response;
+      print('Update response is: $response');
+    } on ApiException catch (e) {
+      safePrint('Error: $e');
+    }
+  }
+
+  Future<void> delete(SectionData section) async {
+    try {
+      final request = ModelMutations.delete(section);
+      final response = await Amplify.API.mutate(request: request).response;
+    } on ApiException catch (e) {
+      safePrint('Api delete failed: $e');
+    }
+  }
 }

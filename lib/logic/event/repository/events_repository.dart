@@ -25,6 +25,11 @@ Stream<List<EventData?>> events(EventsRef ref) {
   return ref.watch(eventsRepositoryProvider).listen();
 }
 
+@riverpod
+Stream<EventData> singleEvent(SingleEventRef ref, {required String id}) {
+  return ref.watch(eventsRepositoryProvider).listenToId(id);
+}
+
 abstract class EventsRepository {
   Stream<List<EventData?>> listen();
   Stream<List<EventData?>> listenEventsForTopicId(String id);

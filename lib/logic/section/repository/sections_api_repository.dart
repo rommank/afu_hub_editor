@@ -18,15 +18,18 @@ class SectionsApiRepository implements SectionsRepository {
   }
 
   @override
-  Future<void> add(SectionData section) {
-    // TODO: implement add
-    throw UnimplementedError();
+  Future<void> add(SectionData section) async {
+    await sectionsApiService.add(section);
   }
 
   @override
-  Future<void> delete(SectionData section) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> update(SectionData section) async {
+    await sectionsApiService.update(section);
+  }
+
+  @override
+  Future<void> delete(SectionData section) async {
+    await sectionsApiService.delete(section);
   }
 
   @override
@@ -44,12 +47,6 @@ class SectionsApiRepository implements SectionsRepository {
   @override
   Future<SectionData?> queryById(String id) {
     // TODO: implement queryById
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> update(SectionData section) {
-    // TODO: implement update
     throw UnimplementedError();
   }
 }

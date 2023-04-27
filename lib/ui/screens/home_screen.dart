@@ -89,9 +89,8 @@ class HomeScreen extends HookConsumerWidget {
             EventsScreen(),
           ],
         ),
-        floatingActionButtonLocation: kIsWeb
-            ? FloatingActionButtonLocation.centerFloat
-            : FloatingActionButtonLocation.endFloat,
+        floatingActionButtonLocation:
+            kIsWeb ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
           isExtended: kIsWeb,
           onPressed: () => _addButtonPressed(tabController.index),

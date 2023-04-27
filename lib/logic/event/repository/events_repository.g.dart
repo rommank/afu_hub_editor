@@ -6,7 +6,7 @@ part of 'events_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$eventsRepositoryHash() => r'2ecfcb582938121575f30e23d61cf9a882754c6d';
+String _$eventsRepositoryHash() => r'da8b8f68c6371fcce2302fa1e992b9fb3f027ea8';
 
 /// See also [eventsRepository].
 @ProviderFor(eventsRepository)
@@ -140,4 +140,85 @@ final eventsProvider = AutoDisposeStreamProvider<List<EventData?>>.internal(
 );
 
 typedef EventsRef = AutoDisposeStreamProviderRef<List<EventData?>>;
+String _$singleEventHash() => r'f895a6805ddd076cb0eb014320fbae94c06f0e94';
+typedef SingleEventRef = AutoDisposeStreamProviderRef<EventData>;
+
+/// See also [singleEvent].
+@ProviderFor(singleEvent)
+const singleEventProvider = SingleEventFamily();
+
+/// See also [singleEvent].
+class SingleEventFamily extends Family<AsyncValue<EventData>> {
+  /// See also [singleEvent].
+  const SingleEventFamily();
+
+  /// See also [singleEvent].
+  SingleEventProvider call({
+    required String id,
+  }) {
+    return SingleEventProvider(
+      id: id,
+    );
+  }
+
+  @override
+  SingleEventProvider getProviderOverride(
+    covariant SingleEventProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'singleEventProvider';
+}
+
+/// See also [singleEvent].
+class SingleEventProvider extends AutoDisposeStreamProvider<EventData> {
+  /// See also [singleEvent].
+  SingleEventProvider({
+    required this.id,
+  }) : super.internal(
+          (ref) => singleEvent(
+            ref,
+            id: id,
+          ),
+          from: singleEventProvider,
+          name: r'singleEventProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$singleEventHash,
+          dependencies: SingleEventFamily._dependencies,
+          allTransitiveDependencies:
+              SingleEventFamily._allTransitiveDependencies,
+        );
+
+  final String id;
+
+  @override
+  bool operator ==(Object other) {
+    return other is SingleEventProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

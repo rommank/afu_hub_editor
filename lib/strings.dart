@@ -38,6 +38,7 @@ class $Strings {
   static const sections = "Секції";
   static const newSection = "Нова Секція";
   static const newEvent = "Нова Подія";
+  static const editEvent = "Редагувати Подію";
   static const newTopic = "Нова Тема";
   static const events = "Події";
   static const textFieldIsMandatory = 'Це текстове поле є обов\'язковим';
@@ -48,5 +49,5 @@ class $Strings {
   static const addEventTooltip = 'Додати подію';
 
   static const uk = 'uk';
-  static const ukDateFormat = "dd/MM/yyyy";
+  static const ukDateFormat = "dd.MM.yyyy";
 }

@@ -1,3 +1,4 @@
+import 'package:afu_hub_editor/ui/screens/event_screen/edit_event_screen.dart';
 import 'package:afu_hub_editor/ui/screens/event_screen/new_event_screen.dart';
 import 'package:afu_hub_editor/ui/screens/home_screen.dart';
 import 'package:afu_hub_editor/ui/screens/section_screen/new_section_screen.dart';
@@ -13,6 +14,7 @@ class ScreenPaths {
   static String home = '/';
   static String newTopic = '/new-topic';
   static String topic = '/topic:id';
+  static String event = '/event:id';
   static String newEvent = '/new-event';
   static String newSection = '/new-section';
 }
@@ -49,6 +51,12 @@ final appRouter = GoRouter(
             'new-event',
             useFade: true,
             (s) => NewEventScreen(),
+          ),
+          AppRoute(
+            ScreenPaths.event,
+            'event',
+            useFade: true,
+            (s) => EditEventScreen(eventId: s.params['id']!),
           ),
           AppRoute(
             ScreenPaths.newSection,

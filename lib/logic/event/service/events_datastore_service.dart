@@ -39,7 +39,7 @@ class EventsDataStoreService {
     try {
       final eventWithId =
           await Amplify.DataStore.query(EventData.classType, where: SectionData.ID.eq(event.id));
-      final oldEvent = eventWithId.first;
+      final oldEvent = eventWithId.single;
       final newEvent = oldEvent.copyWith(
           date: event.date,
           title: event.title,
@@ -49,6 +49,33 @@ class EventsDataStoreService {
           iconUrl: event.iconUrl);
 
       await Amplify.DataStore.save(newEvent);
+    } on Exception catch (error) {
+      safePrint(error);
+    }
+  }
+
+  Future<EventData?> queryById(String id) async {
+    try {
+      final eventsWithId =
+          await Amplify.DataStore.query(EventData.classType, where: EventData.ID.eq(id));
+      return eventsWithId.first;
+    } on Exception catch (error) {
+      safePrint(error);
+      return null;
+    }
+  }
+
+  Stream<EventData> listenToId(String id) {
+    return Amplify.DataStore.observeQuery(EventData.classType, where: EventData.ID.eq(id))
+        .map((event) => event.items.toList().single)
+        .handleError((error) {
+      safePrint("Listen to event with id: stream error occurred");
+    });
+  }
+
+  Future<void> delete(EventData event) async {
+    try {
+      await Amplify.DataStore.delete(event);
     } on Exception catch (error) {
       safePrint(error);
     }

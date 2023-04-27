@@ -1,9 +1,10 @@
 import 'package:afu_hub_editor/logic/event/controller/event_controller.dart';
-import 'package:afu_hub_editor/models/ModelProvider.dart';
 import 'package:afu_hub_editor/ui/screens/event_screen/widgets/topic_search_input.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/cover_image_card.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/topic_text_form_field.dart';
 import 'package:afu_hub_editor/ui/screens/topics_screen/topics_screen.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
@@ -33,12 +34,13 @@ class NewEventScreen extends HookConsumerWidget {
     ref.read(coverImageProvider.notifier).clear();
   }
 
-  Widget _buildPage(WidgetRef ref, BuildContext context) {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final ukTitleController = useTextEditingController();
     final enTitleController = useTextEditingController();
     final eventDateController = useTextEditingController();
-    final coverImage = ref.watch(coverImageProvider);
-    //final topicTypeController = useDropDownController();
+
+    final parentTopicController = useDropDownController();
     final isLoading = ref.watch(loadingStateProvider);
     return Scaffold(
       appBar: AppBar(
@@ -52,105 +54,119 @@ class NewEventScreen extends HookConsumerWidget {
         ),
       ),
       body: LayoutBuilder(builder: (_, constraints) {
-        return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
-          child: Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            key: formGlobalKey,
-            child: Container(
-              padding: const EdgeInsets.only(left: 15, top: 20, right: 15, bottom: 0),
-              width: double.infinity,
-              child: Column(
-                children: [
-                  const CoverImageCard(),
-                  const Gap(30),
-                  const TopicSearchInput(),
-                  const Gap(40),
-                  buildCustomTextFormField(
-                    context: context,
-                    maxLength: 30,
-                    controller: ukTitleController,
-                    hintText: $Strings.eventTitleUk,
-                    errorText: $Strings.enterEventTitleUk,
-                    validator: validateUkInput,
-                  ),
-                  const Gap(20),
-                  buildCustomTextFormField(
-                    context: context,
-                    maxLength: 30,
-                    controller: enTitleController,
-                    hintText: $Strings.eventTitleEn,
-                    errorText: $Strings.enterEventTitleEn,
-                    validator: validateEnInput,
-                  ),
-                  const Gap(20),
-                  buildCustomTextFormField(
-                    context: context,
-                    controller: eventDateController,
-                    hintText: $Strings.eventDate,
-                    errorText: $Strings.enterEventDate,
-                    suffixIcon: Icons.edit_calendar_outlined,
-                    readOnly: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return $Strings.enterDate;
-                      }
-
-                      return null;
-                    },
-                    onTap: () => showCalendar(eventDateController, context,
-                            helpText: $Strings.pickStartDate.toUpperCase())
-                        .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
-                  ),
-                  const Gap(20),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Theme.of(context).colorScheme.primaryContainer),
-                    ),
-                    child: isLoading
-                        ? const SizedBox(
-                            height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
-                        : Icon(
-                            Icons.check,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                    onPressed: () async {
-                      final currentState = formGlobalKey.currentState;
-
-                      if (currentState == null) return;
-                      if (currentState.validate()) {
-                        ref.read(loadingStateProvider.notifier).state = true;
-                        final topic = ref.read(topicForEventProvider);
-
-                        await ref.read(eventControllerProvider).addEvent(
-                            date: eventDateController.text,
-                            titleUk: ukTitleController.text,
-                            titleEn: enTitleController.text,
-                            topicdataID: topic!.id);
-
-                        // if (coverImage != null) {
-                        //   final topic = await ref.read(topicControllerProvider).queryTopicWithId(id);
-                        //   if (topic != null) {
-                        //     ref.read(topicControllerProvider).uploadFile(coverImage, topic);
-                        //   }
-                        // }
-                        resetState(ref);
-                        appRouter.pop();
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+        return kIsWeb
+            ? Center(
+                child: buildSingleChildScrollView(constraints, context, ukTitleController,
+                    enTitleController, eventDateController, parentTopicController, isLoading, ref))
+            : buildSingleChildScrollView(constraints, context, ukTitleController, enTitleController,
+                eventDateController, parentTopicController, isLoading, ref);
       }),
     );
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return _buildPage(ref, context);
+  SingleChildScrollView buildSingleChildScrollView(
+      BoxConstraints constraints,
+      BuildContext context,
+      TextEditingController ukTitleController,
+      TextEditingController enTitleController,
+      TextEditingController eventDateController,
+      SingleValueDropDownController parentTopicController,
+      bool isLoading,
+      WidgetRef ref) {
+    final coverImage = ref.watch(coverImageProvider);
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
+      child: Form(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        key: formGlobalKey,
+        child: Container(
+          padding: const EdgeInsets.only(left: 15, top: 20, right: 15, bottom: 0),
+          width: double.infinity,
+          child: Column(
+            children: [
+              const CoverImageCard(),
+              const Gap(30),
+              TopicSearchInput(controller: parentTopicController),
+              const Gap(40),
+              buildCustomTextFormField(
+                context: context,
+                maxLength: 30,
+                controller: ukTitleController,
+                hintText: $Strings.eventTitleUk,
+                errorText: $Strings.enterEventTitleUk,
+                validator: validateUkInput,
+              ),
+              const Gap(20),
+              buildCustomTextFormField(
+                context: context,
+                maxLength: 30,
+                controller: enTitleController,
+                hintText: $Strings.eventTitleEn,
+                errorText: $Strings.enterEventTitleEn,
+                validator: validateEnInput,
+              ),
+              const Gap(20),
+              buildCustomTextFormField(
+                context: context,
+                controller: eventDateController,
+                hintText: $Strings.eventDate,
+                errorText: $Strings.enterEventDate,
+                suffixIcon: Icons.edit_calendar_outlined,
+                readOnly: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return $Strings.enterDate;
+                  }
+
+                  return null;
+                },
+                onTap: () => showCalendar(eventDateController, context,
+                        helpText: $Strings.pickStartDate.toUpperCase())
+                    .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
+              ),
+              const Gap(20),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith(
+                      (states) => Theme.of(context).colorScheme.primaryContainer),
+                ),
+                child: isLoading
+                    ? const SizedBox(
+                        height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
+                    : Icon(
+                        Icons.check,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                onPressed: () async {
+                  final currentState = formGlobalKey.currentState;
+
+                  if (currentState == null) return;
+                  if (currentState.validate()) {
+                    String id = UUID.getUUID();
+                    ref.read(loadingStateProvider.notifier).state = true;
+                    final parentTopic = ref.read(topicForEventProvider);
+
+                    await ref.read(eventControllerProvider).addEvent(
+                        date: eventDateController.text,
+                        titleUk: ukTitleController.text,
+                        titleEn: enTitleController.text,
+                        topicdataID: parentTopic!.id);
+
+                    if (coverImage != null) {
+                      final event = await ref.read(eventControllerProvider).queryEventWithId(id);
+                      if (parentTopic != null) {
+                        ref.read(eventControllerProvider).uploadFile(coverImage, event!);
+                      }
+                    }
+                    resetState(ref);
+                    appRouter.pop();
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

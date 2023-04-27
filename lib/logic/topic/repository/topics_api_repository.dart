@@ -16,15 +16,18 @@ class TopicsApiRepository implements TopicsRepository {
   }
 
   @override
-  Future<void> add(TopicData topic) {
-    // TODO: implement add
-    throw UnimplementedError();
+  Future<void> add(TopicData topic) async {
+    await topicsApiService.add(topic);
   }
 
   @override
-  Future<void> delete(TopicData topic) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> update(TopicData topic) async {
+    await topicsApiService.update(topic);
+  }
+
+  @override
+  Future<void> delete(TopicData topic) async {
+    await topicsApiService.delete(topic);
   }
 
   @override
@@ -36,12 +39,6 @@ class TopicsApiRepository implements TopicsRepository {
   @override
   Future<TopicData?> queryById(String idd) {
     // TODO: implement queryById
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> update(TopicData topic) {
-    // TODO: implement update
     throw UnimplementedError();
   }
 }
