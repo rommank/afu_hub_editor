@@ -1,6 +1,6 @@
 class $Strings {
   static const emptyTopicList = "Додайте першу тему💪";
-  static const emptySectionList = "Додайте першу секіцію💪";
+  static const emptySectionList = "Додайте першу секцію💪";
   static const emptyEventList = "Додайте першу подію💪";
   static const errorOccurred = "Виникла помилка";
   static const enterTopicTitleUk = "Введіть назву теми українською";
@@ -10,6 +10,9 @@ class $Strings {
   static const enterSectionTitleUk = "Введіть назву секції українською";
   static const enterSectionTitleEn = "Введіть назву секції англійською";
   static const enterSectionText1Uk = "Введіть текст №1 секції українською";
+  static const enterQuote1AuthorUk = "Введіть автора цитати №1 українською";
+  static const enterQuote1TextUk = "Введіть текст цитати №1 українською";
+  static const quote1Uk = "Цитата №1 українською";
   static const enterSectionText1En = "Введіть текст №1 секції англійською";
   static const topicTitleUk = "Назва теми українською";
   static const topicTitleEn = "Назва теми англійською";
@@ -17,13 +20,17 @@ class $Strings {
   static const eventTitleEn = "Назва події англійською";
   static const sectionTitleUk = "Назва секції українською";
   static const sectionTitleEn = "Назва секції англійською";
-  static const sectionText1Uk = "Текст №1 секції українською";
-  static const sectionText1En = "Текст №1 секції англійською";
+  static const sectionText1Uk = "Текст №1 українською";
+  static const quote1AuthorUk = "Автор цитати №1";
+  static const quote1TextUk = "Текст цитати №1";
+
+  static const sectionText1En = "Текст №1 англійською";
   static const enterDate = "Виберіть дату";
   static const enterTopic = "Виберіть тему";
   static const enterEventDate = "Вибреріть дату події";
   static const startDate = "Дата початку";
   static const eventDate = "Дата події";
+  static const search = "Пошук...";
   static const pickStartDate = "Виберіть дату початку";
   static const endDate = "Дата закінчення";
   static const pickEndDate = "Виберіть дату закінчення";
@@ -33,21 +40,23 @@ class $Strings {
   static const pickTopic = "Bиберіть тему";
   static const changeCoverImage = "Змінити обкладинку";
   static const addCoverImage = "Додати обкладинку";
-  static const topics = 'Теми';
-  static const topic = 'Тема';
+  static const addImage = "Додати картинку";
+  static const addIcon = "Додати іконку";
+  static const topics = "Теми";
+  static const topic = "Тема";
   static const sections = "Секції";
   static const newSection = "Нова Секція";
   static const newEvent = "Нова Подія";
   static const editEvent = "Редагувати Подію";
   static const newTopic = "Нова Тема";
   static const events = "Події";
-  static const textFieldIsMandatory = 'Це текстове поле є обов\'язковим';
-  static const endBeforeStartDateError = 'Дата закінчення не має бути раніше ніж дати початку';
-  static const startBeforeStartDateError = 'Дата початку не має бути пізніше ніж дата закінчення';
-  static const addTopicTooltip = 'Додати тему';
-  static const addSectionTooltip = 'Додати секцію';
-  static const addEventTooltip = 'Додати подію';
+  static const textFieldIsMandatory = "Це текстове поле є обов\'язковим";
+  static const endBeforeStartDateError = "Дата закінчення не має бути раніше ніж дати початку";
+  static const startBeforeStartDateError = "Дата початку не має бути пізніше ніж дата закінчення";
+  static const addTopicTooltip = "Додати тему";
+  static const addSectionTooltip = "Додати секцію";
+  static const addEventTooltip = "Додати подію";
 
-  static const uk = 'uk';
+  static const uk = "uk";
   static const ukDateFormat = "dd.MM.yyyy";
 }

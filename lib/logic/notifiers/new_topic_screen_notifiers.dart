@@ -2,21 +2,6 @@ import 'dart:io' as io;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../models/EventData.dart';
 import '../../models/SectionData.dart';
-import '../../models/Topic.dart';
-
-final dropdownProvider =
-    NotifierProvider<TopicTypeDropdownValueNotifier, Topic>(TopicTypeDropdownValueNotifier.new);
-
-class TopicTypeDropdownValueNotifier extends Notifier<Topic> {
-  @override
-  Topic build() {
-    return Topic.MODERN_ARMY;
-  }
-
-  void setValue(Topic newValue) {
-    state = newValue;
-  }
-}
 
 final addedEventsProvider =
     NotifierProvider<AddedEventForTopicNotifier, List<EventData>>(AddedEventForTopicNotifier.new);

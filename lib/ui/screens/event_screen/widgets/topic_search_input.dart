@@ -4,7 +4,6 @@ import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../../models/Topic.dart';
 import '../../../../models/TopicData.dart';
 import '../../../../strings.dart';
 
@@ -32,7 +31,6 @@ class TopicSearchInput extends HookConsumerWidget {
             final parentTopic = topics.firstWhere((topic) => topic?.id == parentTopicId,
                 orElse: () => TopicData(
                     title: LocalizedText(uk: '', en: ''),
-                    type: Topic.MODERN_ARMY,
                     startDate: TemporalDate(DateTime.now()),
                     endDate: TemporalDate(DateTime.now())));
             controller.setDropDown(DropDownValueModel(
@@ -42,6 +40,9 @@ class TopicSearchInput extends HookConsumerWidget {
           return Column(
             children: [
               DropDownTextField(
+                searchDecoration: const InputDecoration(
+                  hintText: $Strings.search,
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return $Strings.enterTopic;

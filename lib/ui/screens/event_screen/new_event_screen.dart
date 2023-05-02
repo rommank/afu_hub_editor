@@ -15,9 +15,8 @@ import '../../../router.dart';
 import '../../../strings.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../common/date_picker.dart';
-
-final loadingStateProvider = StateProvider<bool>((ref) => false);
-final containerHeightProvider = StateProvider<double>((ref) => 48);
+import '../section_screen/new_section_screen.dart';
+import '../topic_screen/new_topic_screen.dart';
 
 class NewEventScreen extends HookConsumerWidget {
   NewEventScreen({
@@ -84,7 +83,7 @@ class NewEventScreen extends HookConsumerWidget {
           width: double.infinity,
           child: Column(
             children: [
-              const CoverImageCard(),
+              const CoverImageCard(label: $Strings.addImage),
               const Gap(30),
               TopicSearchInput(controller: parentTopicController),
               const Gap(40),
@@ -147,16 +146,16 @@ class NewEventScreen extends HookConsumerWidget {
                     final parentTopic = ref.read(topicForEventProvider);
 
                     await ref.read(eventControllerProvider).addEvent(
-                        date: eventDateController.text,
-                        titleUk: ukTitleController.text,
-                        titleEn: enTitleController.text,
-                        topicdataID: parentTopic!.id);
+                          id: id,
+                          date: eventDateController.text,
+                          titleUk: ukTitleController.text,
+                          titleEn: enTitleController.text,
+                          topicId: parentTopic!.id,
+                        );
 
                     if (coverImage != null) {
                       final event = await ref.read(eventControllerProvider).queryEventWithId(id);
-                      if (parentTopic != null) {
-                        ref.read(eventControllerProvider).uploadFile(coverImage, event!);
-                      }
+                      ref.read(eventControllerProvider).uploadFile(coverImage, event!);
                     }
                     resetState(ref);
                     appRouter.pop();

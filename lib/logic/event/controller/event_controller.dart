@@ -42,15 +42,17 @@ class EventController {
   }
 
   Future<void> addEvent(
-      {required String date,
+      {String? id,
+      required String date,
       required String titleUk,
       required String titleEn,
-      required String topicdataID}) async {
+      required String topicId}) async {
     DateTime tempDate = DateFormat($Strings.ukDateFormat).parse(date.trim());
     final event = EventData(
+        id: id,
         date: TemporalDate(tempDate.copyWith(day: tempDate.day + 1)),
         title: LocalizedText(uk: titleUk, en: titleEn),
-        topicdataID: topicdataID);
+        topicId: topicId);
     await ref.read(eventsRepositoryProvider).add(event);
   }
 }

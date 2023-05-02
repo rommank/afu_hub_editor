@@ -18,7 +18,7 @@ class SectionsScreen extends HookConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       data: (sections) => sections.isEmpty
           ? const Center(
-              child: Text($Strings.emptyTopicList),
+              child: Text($Strings.emptySectionList),
             )
           : LayoutBuilder(builder: (_, constraints) {
               return GridView.count(

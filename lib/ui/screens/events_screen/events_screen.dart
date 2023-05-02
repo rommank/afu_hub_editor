@@ -18,7 +18,7 @@ class EventsScreen extends HookConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       data: (events) => events.isEmpty
           ? const Center(
-              child: Text($Strings.emptyTopicList),
+              child: Text($Strings.emptyEventList),
             )
           : LayoutBuilder(builder: (_, constraints) {
               return GridView.count(

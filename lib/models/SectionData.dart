@@ -29,25 +29,25 @@ import 'package:flutter/foundation.dart';
 class SectionData extends Model {
   static const classType = const _SectionDataModelType();
   final String id;
-  final LocalizedText? _name;
+  final LocalizedText? _title;
   final LocalizedText? _text1;
   final LocalizedText? _text2;
   final Quote? _quote1;
   final LocalizedText? _callout1;
-  final LocalizedText? _callout2;
-  final String? _photo2;
-  final String? _photo3;
-  final String? _iconKey;
-  final String? _topicDataID;
-  final ImageData? _imageData;
   final int? _order;
+  final String? _topicId;
   final TermToExplain? _termToExplain1;
+  final String? _iconKey;
+  final String? _iconUrl;
+  final LocalizedText? _callout2;
   final String? _photo1Key;
   final String? _photo1Url;
-  final String? _iconUrl;
+  final String? _photo2Key;
+  final String? _photo2Url;
+  final String? _photo3Key;
+  final String? _photo3Url;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
-  final String? _sectionDataImageDataId;
 
   @override
   getInstanceType() => classType;
@@ -62,9 +62,9 @@ class SectionData extends Model {
       );
   }
   
-  LocalizedText get name {
+  LocalizedText get title {
     try {
-      return _name!;
+      return _title!;
     } catch(e) {
       throw new AmplifyCodeGenModelException(
           AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -100,25 +100,9 @@ class SectionData extends Model {
     return _callout1;
   }
   
-  LocalizedText? get callout2 {
-    return _callout2;
-  }
-  
-  String? get photo2 {
-    return _photo2;
-  }
-  
-  String? get photo3 {
-    return _photo3;
-  }
-  
-  String? get iconKey {
-    return _iconKey;
-  }
-  
-  String get topicDataID {
+  int get order {
     try {
-      return _topicDataID!;
+      return _order!;
     } catch(e) {
       throw new AmplifyCodeGenModelException(
           AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -129,13 +113,9 @@ class SectionData extends Model {
     }
   }
   
-  ImageData? get imageData {
-    return _imageData;
-  }
-  
-  int get order {
+  String get topicId {
     try {
-      return _order!;
+      return _topicId!;
     } catch(e) {
       throw new AmplifyCodeGenModelException(
           AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -150,6 +130,18 @@ class SectionData extends Model {
     return _termToExplain1;
   }
   
+  String? get iconKey {
+    return _iconKey;
+  }
+  
+  String? get iconUrl {
+    return _iconUrl;
+  }
+  
+  LocalizedText? get callout2 {
+    return _callout2;
+  }
+  
   String? get photo1Key {
     return _photo1Key;
   }
@@ -158,8 +150,20 @@ class SectionData extends Model {
     return _photo1Url;
   }
   
-  String? get iconUrl {
-    return _iconUrl;
+  String? get photo2Key {
+    return _photo2Key;
+  }
+  
+  String? get photo2Url {
+    return _photo2Url;
+  }
+  
+  String? get photo3Key {
+    return _photo3Key;
+  }
+  
+  String? get photo3Url {
+    return _photo3Url;
   }
   
   TemporalDateTime? get createdAt {
@@ -170,32 +174,28 @@ class SectionData extends Model {
     return _updatedAt;
   }
   
-  String? get sectionDataImageDataId {
-    return _sectionDataImageDataId;
-  }
+  const SectionData._internal({required this.id, required title, required text1, text2, quote1, callout1, required order, required topicId, termToExplain1, iconKey, iconUrl, callout2, photo1Key, photo1Url, photo2Key, photo2Url, photo3Key, photo3Url, createdAt, updatedAt}): _title = title, _text1 = text1, _text2 = text2, _quote1 = quote1, _callout1 = callout1, _order = order, _topicId = topicId, _termToExplain1 = termToExplain1, _iconKey = iconKey, _iconUrl = iconUrl, _callout2 = callout2, _photo1Key = photo1Key, _photo1Url = photo1Url, _photo2Key = photo2Key, _photo2Url = photo2Url, _photo3Key = photo3Key, _photo3Url = photo3Url, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  const SectionData._internal({required this.id, required name, required text1, text2, quote1, callout1, callout2, photo2, photo3, iconKey, required topicDataID, imageData, required order, termToExplain1, photo1Key, photo1Url, iconUrl, createdAt, updatedAt, sectionDataImageDataId}): _name = name, _text1 = text1, _text2 = text2, _quote1 = quote1, _callout1 = callout1, _callout2 = callout2, _photo2 = photo2, _photo3 = photo3, _iconKey = iconKey, _topicDataID = topicDataID, _imageData = imageData, _order = order, _termToExplain1 = termToExplain1, _photo1Key = photo1Key, _photo1Url = photo1Url, _iconUrl = iconUrl, _createdAt = createdAt, _updatedAt = updatedAt, _sectionDataImageDataId = sectionDataImageDataId;
-  
-  factory SectionData({String? id, required LocalizedText name, required LocalizedText text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, LocalizedText? callout2, String? photo2, String? photo3, String? iconKey, required String topicDataID, ImageData? imageData, required int order, TermToExplain? termToExplain1, String? photo1Key, String? photo1Url, String? iconUrl, String? sectionDataImageDataId}) {
+  factory SectionData({String? id, required LocalizedText title, required LocalizedText text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, required int order, required String topicId, TermToExplain? termToExplain1, String? iconKey, String? iconUrl, LocalizedText? callout2, String? photo1Key, String? photo1Url, String? photo2Key, String? photo2Url, String? photo3Key, String? photo3Url}) {
     return SectionData._internal(
       id: id == null ? UUID.getUUID() : id,
-      name: name,
+      title: title,
       text1: text1,
       text2: text2,
       quote1: quote1,
       callout1: callout1,
-      callout2: callout2,
-      photo2: photo2,
-      photo3: photo3,
-      iconKey: iconKey,
-      topicDataID: topicDataID,
-      imageData: imageData,
       order: order,
+      topicId: topicId,
       termToExplain1: termToExplain1,
+      iconKey: iconKey,
+      iconUrl: iconUrl,
+      callout2: callout2,
       photo1Key: photo1Key,
       photo1Url: photo1Url,
-      iconUrl: iconUrl,
-      sectionDataImageDataId: sectionDataImageDataId);
+      photo2Key: photo2Key,
+      photo2Url: photo2Url,
+      photo3Key: photo3Key,
+      photo3Url: photo3Url);
   }
   
   bool equals(Object other) {
@@ -207,23 +207,23 @@ class SectionData extends Model {
     if (identical(other, this)) return true;
     return other is SectionData &&
       id == other.id &&
-      _name == other._name &&
+      _title == other._title &&
       _text1 == other._text1 &&
       _text2 == other._text2 &&
       _quote1 == other._quote1 &&
       _callout1 == other._callout1 &&
-      _callout2 == other._callout2 &&
-      _photo2 == other._photo2 &&
-      _photo3 == other._photo3 &&
-      _iconKey == other._iconKey &&
-      _topicDataID == other._topicDataID &&
-      _imageData == other._imageData &&
       _order == other._order &&
+      _topicId == other._topicId &&
       _termToExplain1 == other._termToExplain1 &&
+      _iconKey == other._iconKey &&
+      _iconUrl == other._iconUrl &&
+      _callout2 == other._callout2 &&
       _photo1Key == other._photo1Key &&
       _photo1Url == other._photo1Url &&
-      _iconUrl == other._iconUrl &&
-      _sectionDataImageDataId == other._sectionDataImageDataId;
+      _photo2Key == other._photo2Key &&
+      _photo2Url == other._photo2Url &&
+      _photo3Key == other._photo3Key &&
+      _photo3Url == other._photo3Url;
   }
   
   @override
@@ -235,55 +235,56 @@ class SectionData extends Model {
     
     buffer.write("SectionData {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("name=" + (_name != null ? _name!.toString() : "null") + ", ");
+    buffer.write("title=" + (_title != null ? _title!.toString() : "null") + ", ");
     buffer.write("text1=" + (_text1 != null ? _text1!.toString() : "null") + ", ");
     buffer.write("text2=" + (_text2 != null ? _text2!.toString() : "null") + ", ");
     buffer.write("quote1=" + (_quote1 != null ? _quote1!.toString() : "null") + ", ");
     buffer.write("callout1=" + (_callout1 != null ? _callout1!.toString() : "null") + ", ");
-    buffer.write("callout2=" + (_callout2 != null ? _callout2!.toString() : "null") + ", ");
-    buffer.write("photo2=" + "$_photo2" + ", ");
-    buffer.write("photo3=" + "$_photo3" + ", ");
-    buffer.write("iconKey=" + "$_iconKey" + ", ");
-    buffer.write("topicDataID=" + "$_topicDataID" + ", ");
     buffer.write("order=" + (_order != null ? _order!.toString() : "null") + ", ");
+    buffer.write("topicId=" + "$_topicId" + ", ");
     buffer.write("termToExplain1=" + (_termToExplain1 != null ? _termToExplain1!.toString() : "null") + ", ");
+    buffer.write("iconKey=" + "$_iconKey" + ", ");
+    buffer.write("iconUrl=" + "$_iconUrl" + ", ");
+    buffer.write("callout2=" + (_callout2 != null ? _callout2!.toString() : "null") + ", ");
     buffer.write("photo1Key=" + "$_photo1Key" + ", ");
     buffer.write("photo1Url=" + "$_photo1Url" + ", ");
-    buffer.write("iconUrl=" + "$_iconUrl" + ", ");
+    buffer.write("photo2Key=" + "$_photo2Key" + ", ");
+    buffer.write("photo2Url=" + "$_photo2Url" + ", ");
+    buffer.write("photo3Key=" + "$_photo3Key" + ", ");
+    buffer.write("photo3Url=" + "$_photo3Url" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
-    buffer.write("sectionDataImageDataId=" + "$_sectionDataImageDataId");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  SectionData copyWith({LocalizedText? name, LocalizedText? text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, LocalizedText? callout2, String? photo2, String? photo3, String? iconKey, String? topicDataID, ImageData? imageData, int? order, TermToExplain? termToExplain1, String? photo1Key, String? photo1Url, String? iconUrl, String? sectionDataImageDataId}) {
+  SectionData copyWith({LocalizedText? title, LocalizedText? text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, int? order, String? topicId, TermToExplain? termToExplain1, String? iconKey, String? iconUrl, LocalizedText? callout2, String? photo1Key, String? photo1Url, String? photo2Key, String? photo2Url, String? photo3Key, String? photo3Url}) {
     return SectionData._internal(
       id: id,
-      name: name ?? this.name,
+      title: title ?? this.title,
       text1: text1 ?? this.text1,
       text2: text2 ?? this.text2,
       quote1: quote1 ?? this.quote1,
       callout1: callout1 ?? this.callout1,
-      callout2: callout2 ?? this.callout2,
-      photo2: photo2 ?? this.photo2,
-      photo3: photo3 ?? this.photo3,
-      iconKey: iconKey ?? this.iconKey,
-      topicDataID: topicDataID ?? this.topicDataID,
-      imageData: imageData ?? this.imageData,
       order: order ?? this.order,
+      topicId: topicId ?? this.topicId,
       termToExplain1: termToExplain1 ?? this.termToExplain1,
+      iconKey: iconKey ?? this.iconKey,
+      iconUrl: iconUrl ?? this.iconUrl,
+      callout2: callout2 ?? this.callout2,
       photo1Key: photo1Key ?? this.photo1Key,
       photo1Url: photo1Url ?? this.photo1Url,
-      iconUrl: iconUrl ?? this.iconUrl,
-      sectionDataImageDataId: sectionDataImageDataId ?? this.sectionDataImageDataId);
+      photo2Key: photo2Key ?? this.photo2Key,
+      photo2Url: photo2Url ?? this.photo2Url,
+      photo3Key: photo3Key ?? this.photo3Key,
+      photo3Url: photo3Url ?? this.photo3Url);
   }
   
   SectionData.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _name = json['name']?['serializedData'] != null
-        ? LocalizedText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+      _title = json['title']?['serializedData'] != null
+        ? LocalizedText.fromJson(new Map<String, dynamic>.from(json['title']['serializedData']))
         : null,
       _text1 = json['text1']?['serializedData'] != null
         ? LocalizedText.fromJson(new Map<String, dynamic>.from(json['text1']['serializedData']))
@@ -297,56 +298,52 @@ class SectionData extends Model {
       _callout1 = json['callout1']?['serializedData'] != null
         ? LocalizedText.fromJson(new Map<String, dynamic>.from(json['callout1']['serializedData']))
         : null,
-      _callout2 = json['callout2']?['serializedData'] != null
-        ? LocalizedText.fromJson(new Map<String, dynamic>.from(json['callout2']['serializedData']))
-        : null,
-      _photo2 = json['photo2'],
-      _photo3 = json['photo3'],
-      _iconKey = json['iconKey'],
-      _topicDataID = json['topicDataID'],
-      _imageData = json['imageData']?['serializedData'] != null
-        ? ImageData.fromJson(new Map<String, dynamic>.from(json['imageData']['serializedData']))
-        : null,
       _order = (json['order'] as num?)?.toInt(),
+      _topicId = json['topicId'],
       _termToExplain1 = json['termToExplain1']?['serializedData'] != null
         ? TermToExplain.fromJson(new Map<String, dynamic>.from(json['termToExplain1']['serializedData']))
         : null,
+      _iconKey = json['iconKey'],
+      _iconUrl = json['iconUrl'],
+      _callout2 = json['callout2']?['serializedData'] != null
+        ? LocalizedText.fromJson(new Map<String, dynamic>.from(json['callout2']['serializedData']))
+        : null,
       _photo1Key = json['photo1Key'],
       _photo1Url = json['photo1Url'],
-      _iconUrl = json['iconUrl'],
+      _photo2Key = json['photo2Key'],
+      _photo2Url = json['photo2Url'],
+      _photo3Key = json['photo3Key'],
+      _photo3Url = json['photo3Url'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null,
-      _sectionDataImageDataId = json['sectionDataImageDataId'];
+      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name?.toJson(), 'text1': _text1?.toJson(), 'text2': _text2?.toJson(), 'quote1': _quote1?.toJson(), 'callout1': _callout1?.toJson(), 'callout2': _callout2?.toJson(), 'photo2': _photo2, 'photo3': _photo3, 'iconKey': _iconKey, 'topicDataID': _topicDataID, 'imageData': _imageData?.toJson(), 'order': _order, 'termToExplain1': _termToExplain1?.toJson(), 'photo1Key': _photo1Key, 'photo1Url': _photo1Url, 'iconUrl': _iconUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'sectionDataImageDataId': _sectionDataImageDataId
+    'id': id, 'title': _title?.toJson(), 'text1': _text1?.toJson(), 'text2': _text2?.toJson(), 'quote1': _quote1?.toJson(), 'callout1': _callout1?.toJson(), 'order': _order, 'topicId': _topicId, 'termToExplain1': _termToExplain1?.toJson(), 'iconKey': _iconKey, 'iconUrl': _iconUrl, 'callout2': _callout2?.toJson(), 'photo1Key': _photo1Key, 'photo1Url': _photo1Url, 'photo2Key': _photo2Key, 'photo2Url': _photo2Url, 'photo3Key': _photo3Key, 'photo3Url': _photo3Url, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'name': _name, 'text1': _text1, 'text2': _text2, 'quote1': _quote1, 'callout1': _callout1, 'callout2': _callout2, 'photo2': _photo2, 'photo3': _photo3, 'iconKey': _iconKey, 'topicDataID': _topicDataID, 'imageData': _imageData, 'order': _order, 'termToExplain1': _termToExplain1, 'photo1Key': _photo1Key, 'photo1Url': _photo1Url, 'iconUrl': _iconUrl, 'createdAt': _createdAt, 'updatedAt': _updatedAt, 'sectionDataImageDataId': _sectionDataImageDataId
+    'id': id, 'title': _title, 'text1': _text1, 'text2': _text2, 'quote1': _quote1, 'callout1': _callout1, 'order': _order, 'topicId': _topicId, 'termToExplain1': _termToExplain1, 'iconKey': _iconKey, 'iconUrl': _iconUrl, 'callout2': _callout2, 'photo1Key': _photo1Key, 'photo1Url': _photo1Url, 'photo2Key': _photo2Key, 'photo2Url': _photo2Url, 'photo3Key': _photo3Key, 'photo3Url': _photo3Url, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryModelIdentifier<SectionDataModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<SectionDataModelIdentifier>();
   static final QueryField ID = QueryField(fieldName: "id");
-  static final QueryField NAME = QueryField(fieldName: "name");
+  static final QueryField TITLE = QueryField(fieldName: "title");
   static final QueryField TEXT1 = QueryField(fieldName: "text1");
   static final QueryField TEXT2 = QueryField(fieldName: "text2");
   static final QueryField QUOTE1 = QueryField(fieldName: "quote1");
   static final QueryField CALLOUT1 = QueryField(fieldName: "callout1");
-  static final QueryField CALLOUT2 = QueryField(fieldName: "callout2");
-  static final QueryField PHOTO2 = QueryField(fieldName: "photo2");
-  static final QueryField PHOTO3 = QueryField(fieldName: "photo3");
-  static final QueryField ICONKEY = QueryField(fieldName: "iconKey");
-  static final QueryField TOPICDATAID = QueryField(fieldName: "topicDataID");
-  static final QueryField IMAGEDATA = QueryField(
-    fieldName: "imageData",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'ImageData'));
   static final QueryField ORDER = QueryField(fieldName: "order");
+  static final QueryField TOPICID = QueryField(fieldName: "topicId");
   static final QueryField TERMTOEXPLAIN1 = QueryField(fieldName: "termToExplain1");
+  static final QueryField ICONKEY = QueryField(fieldName: "iconKey");
+  static final QueryField ICONURL = QueryField(fieldName: "iconUrl");
+  static final QueryField CALLOUT2 = QueryField(fieldName: "callout2");
   static final QueryField PHOTO1KEY = QueryField(fieldName: "photo1Key");
   static final QueryField PHOTO1URL = QueryField(fieldName: "photo1Url");
-  static final QueryField ICONURL = QueryField(fieldName: "iconUrl");
-  static final QueryField SECTIONDATAIMAGEDATAID = QueryField(fieldName: "sectionDataImageDataId");
+  static final QueryField PHOTO2KEY = QueryField(fieldName: "photo2Key");
+  static final QueryField PHOTO2URL = QueryField(fieldName: "photo2Url");
+  static final QueryField PHOTO3KEY = QueryField(fieldName: "photo3Key");
+  static final QueryField PHOTO3URL = QueryField(fieldName: "photo3Url");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "SectionData";
     modelSchemaDefinition.pluralName = "SectionData";
@@ -373,13 +370,13 @@ class SectionData extends Model {
     ];
     
     modelSchemaDefinition.indexes = [
-      ModelIndex(fields: const ["topicDataID"], name: "byTopicData")
+      ModelIndex(fields: const ["topicId"], name: "byTopicData")
     ];
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
-      fieldName: 'name',
+      fieldName: 'title',
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'LocalizedText')
     ));
@@ -408,22 +405,22 @@ class SectionData extends Model {
       ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'LocalizedText')
     ));
     
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: SectionData.ORDER,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: SectionData.TOPICID,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
-      fieldName: 'callout2',
+      fieldName: 'termToExplain1',
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'LocalizedText')
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.PHOTO2,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.PHOTO3,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'TermToExplain')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
@@ -433,28 +430,15 @@ class SectionData extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.TOPICDATAID,
-      isRequired: true,
+      key: SectionData.ICONURL,
+      isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasOne(
-      key: SectionData.IMAGEDATA,
-      isRequired: false,
-      ofModelName: 'ImageData',
-      associatedKey: ImageData.ID
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.ORDER,
-      isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
-    ));
-    
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
-      fieldName: 'termToExplain1',
+      fieldName: 'callout2',
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'TermToExplain')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'LocalizedText')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
@@ -470,7 +454,25 @@ class SectionData extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.ICONURL,
+      key: SectionData.PHOTO2KEY,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: SectionData.PHOTO2URL,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: SectionData.PHOTO3KEY,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: SectionData.PHOTO3URL,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
@@ -487,12 +489,6 @@ class SectionData extends Model {
       isRequired: false,
       isReadOnly: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.SECTIONDATAIMAGEDATAID,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
   });
 }

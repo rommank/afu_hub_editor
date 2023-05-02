@@ -72,7 +72,7 @@ class SectionCard extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        section.name.uk.toString(),
+                        section.title.uk.toString(),
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],

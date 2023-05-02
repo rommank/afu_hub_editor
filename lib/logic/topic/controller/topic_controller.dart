@@ -1,5 +1,6 @@
 import 'package:afu_hub_editor/logic/event/repository/events_repository.dart';
 import 'package:afu_hub_editor/models/EventData.dart';
+import 'package:afu_hub_editor/strings.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,7 +9,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../common_services/storage_service.dart';
 import '../../../models/LocalizedText.dart';
 import '../../../models/SectionData.dart';
-import '../../../models/Topic.dart';
 import '../../../models/TopicData.dart';
 import 'dart:io' as io;
 import '../../section/repository/sections_repository.dart';
@@ -56,7 +56,7 @@ class TopicController {
   Future<void> updateTopicIdForSections(
       {required String topicId, required List<SectionData> sections}) async {
     for (var section in sections) {
-      final updatedSection = section.copyWith(topicDataID: topicId);
+      final updatedSection = section.copyWith(topicId: topicId);
       await ref.read(sectionsRepositoryProvider).update(updatedSection);
     }
   }
@@ -64,7 +64,7 @@ class TopicController {
   Future<void> updateTopicIdForEvents(
       {required String topicId, required List<EventData> events}) async {
     for (var event in events) {
-      final updatedEvent = event.copyWith(topicdataID: topicId);
+      final updatedEvent = event.copyWith(topicId: topicId);
       await ref.read(eventsRepositoryProvider).update(updatedEvent);
     }
   }
@@ -77,12 +77,11 @@ class TopicController {
     required String startDate,
     required String endDate,
   }) async {
-    DateTime tempStartDate = DateFormat("dd/MM/yyyy").parse(startDate.trim());
-    DateTime tempEndDate = DateFormat("dd/MM/yyyy").parse(endDate.trim());
+    DateTime tempStartDate = DateFormat($Strings.ukDateFormat).parse(startDate.trim());
+    DateTime tempEndDate = DateFormat($Strings.ukDateFormat).parse(endDate.trim());
     final topic = TopicData(
         id: id.trim(),
         title: LocalizedText(uk: titleUk.trim(), en: titleEn.trim()),
-        type: Topic.values.byName(type.trim() ?? ''),
         startDate: TemporalDate(tempStartDate.copyWith(day: tempStartDate.day + 1)),
         endDate: TemporalDate(tempEndDate.copyWith(day: tempEndDate.day + 1)));
     ref.read(topicsRepositoryProvider).add(topic);

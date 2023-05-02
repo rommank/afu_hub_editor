@@ -43,14 +43,14 @@ class EditSectionsSearchInput extends HookConsumerWidget {
             onChanged: (newValue) {
               dropdownValueController.clearDropDown();
               String name = (newValue as DropDownValueModel).name;
-              SectionData? section = items.firstWhere((element) => element?.name.uk == name);
+              SectionData? section = items.firstWhere((element) => element?.title.uk == name);
               ref.read(addedSectionsProvider.notifier).addValue(section!);
             },
             dropDownList: List.from(
               items.where((element) => !ref.read(addedSectionsProvider).contains(element)).map(
                     (items) => DropDownValueModel(
-                      name: items!.name.uk.toString(),
-                      value: items.name.uk.toString(),
+                      name: items!.title.uk.toString(),
+                      value: items.title.uk.toString(),
                     ),
                   ),
             ),
@@ -67,7 +67,7 @@ class EditSectionsSearchInput extends HookConsumerWidget {
                       children: List.generate(
                         data.length,
                         (index) => InputChip(
-                          label: Text((data[index])!.name.uk.toString()),
+                          label: Text((data[index])!.title.uk.toString()),
                           deleteIcon: const Icon(Icons.cancel_rounded),
                           onDeleted: () {
                             ref.read(addedSectionsProvider.notifier).removeValueAtIndex(index);

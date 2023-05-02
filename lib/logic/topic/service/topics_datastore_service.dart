@@ -50,7 +50,6 @@ class TopicsDataStoreService {
 
       final newTopic = oldTopic.copyWith(
           title: topic.title,
-          type: topic.type,
           startDate: topic.startDate,
           titleImageKey: topic.titleImageKey,
           titleImageUrl: topic.titleImageUrl,

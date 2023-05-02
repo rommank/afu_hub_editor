@@ -25,10 +25,10 @@ class SectionController {
       required String text1Uk,
       required String text1En,
       required String order,
-      required String topicdataID}) async {
+      required String topicId}) async {
     final section = SectionData(
-        name: LocalizedText(uk: nameUk, en: nameEn),
-        topicDataID: topicdataID,
+        title: LocalizedText(uk: nameUk, en: nameEn),
+        topicId: topicId,
         text1: LocalizedText(uk: text1Uk, en: text1En),
         order: 1);
     await ref.read(sectionsRepositoryProvider).add(section);

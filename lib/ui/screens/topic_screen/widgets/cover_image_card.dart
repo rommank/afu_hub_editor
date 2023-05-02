@@ -12,15 +12,19 @@ import '../new_topic_screen.dart';
 import 'dart:io' as io;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+final containerHeightProvider = StateProvider<double>((ref) => 48);
+
 class CoverImageCard extends ConsumerWidget {
   const CoverImageCard({
     this.imageKey,
     this.imageUrl,
+    this.label,
     Key? key,
   }) : super(key: key);
 
   final String? imageUrl;
   final String? imageKey;
+  final String? label;
 
   Future<void> pickImageFromGallery(WidgetRef ref) async {
     final pickedImage = await ref.read(imagePickerProvider).pickImage(source: ImageSource.gallery);
@@ -98,7 +102,7 @@ class CoverImageCard extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        $Strings.addCoverImage,
+                        label ?? $Strings.addCoverImage,
                         style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                       const Gap(8),

@@ -1,9 +1,8 @@
-import 'package:afu_hub_editor/logic/event/controller/event_controller.dart';
-import 'package:afu_hub_editor/models/ModelProvider.dart';
 import 'package:afu_hub_editor/ui/screens/event_screen/widgets/topic_search_input.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/cover_image_card.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/topic_text_form_field.dart';
 import 'package:afu_hub_editor/ui/screens/topics_screen/topics_screen.dart';
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
@@ -14,10 +13,7 @@ import '../../../logic/section/controller/section_controller.dart';
 import '../../../router.dart';
 import '../../../strings.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import '../../common/date_picker.dart';
-
-final loadingStateProvider = StateProvider<bool>((ref) => false);
-final containerHeightProvider = StateProvider<double>((ref) => 48);
+import '../topic_screen/new_topic_screen.dart';
 
 class NewSectionScreen extends HookConsumerWidget {
   NewSectionScreen({
@@ -36,6 +32,7 @@ class NewSectionScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final parentTopicController = useDropDownController();
     final ukTitleController = useTextEditingController();
     final enTitleController = useTextEditingController();
     final ukText1Controller = useTextEditingController();
@@ -57,24 +54,41 @@ class NewSectionScreen extends HookConsumerWidget {
       body: LayoutBuilder(builder: (_, constraints) {
         return kIsWeb
             ? Center(
-                child: buildSingleChildScrollView(constraints, context, ukTitleController,
-                    enTitleController, ukText1Controller, enText1Controller, isLoading, ref),
+                child: buildSingleChildScrollView(
+                    constraints: constraints,
+                    context: context,
+                    ukTitleController: ukTitleController,
+                    enTitleController: enTitleController,
+                    ukText1Controller: ukText1Controller,
+                    enText1Controller: enText1Controller,
+                    isLoading: isLoading,
+                    ref: ref,
+                    parentTopicController: parentTopicController),
               )
-            : buildSingleChildScrollView(constraints, context, ukTitleController, enTitleController,
-                ukText1Controller, enText1Controller, isLoading, ref);
+            : buildSingleChildScrollView(
+                constraints: constraints,
+                context: context,
+                ukTitleController: ukTitleController,
+                enTitleController: enTitleController,
+                ukText1Controller: ukText1Controller,
+                enText1Controller: enText1Controller,
+                isLoading: isLoading,
+                ref: ref,
+                parentTopicController: parentTopicController);
       }),
     );
   }
 
   SingleChildScrollView buildSingleChildScrollView(
-      BoxConstraints constraints,
-      BuildContext context,
-      TextEditingController ukTitleController,
-      TextEditingController enTitleController,
-      TextEditingController ukText1Controller,
-      TextEditingController enText1Controller,
-      bool isLoading,
-      WidgetRef ref) {
+      {required BoxConstraints constraints,
+      required BuildContext context,
+      required TextEditingController ukTitleController,
+      required TextEditingController enTitleController,
+      required TextEditingController ukText1Controller,
+      required TextEditingController enText1Controller,
+      required SingleValueDropDownController parentTopicController,
+      required bool isLoading,
+      required WidgetRef ref}) {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
       child: Form(
@@ -85,9 +99,9 @@ class NewSectionScreen extends HookConsumerWidget {
           width: double.infinity,
           child: Column(
             children: [
-              const CoverImageCard(),
+              const CoverImageCard(label: $Strings.addIcon),
               const Gap(30),
-              // const TopicSearchInput(),
+              TopicSearchInput(controller: parentTopicController),
               const Gap(40),
               buildCustomTextFormField(
                 maxLength: 15,
@@ -128,6 +142,38 @@ class NewSectionScreen extends HookConsumerWidget {
                 maxLines: 100,
                 validator: validateEnInput,
               ),
+              const Gap(30),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text($Strings.quote1Uk, style: Theme.of(context).textTheme.bodyLarge),
+                      const Gap(15),
+                      buildCustomTextFormField(
+                        maxLength: 15,
+                        context: context,
+                        controller: ukTitleController,
+                        hintText: $Strings.quote1AuthorUk,
+                        errorText: $Strings.enterQuote1AuthorUk,
+                        //validator: validateUkInput,
+                      ),
+                      const Gap(10),
+                      buildCustomTextFormField(
+                        context: context,
+                        keyboardType: TextInputType.multiline,
+                        controller: enText1Controller,
+                        hintText: $Strings.quote1TextUk,
+                        errorText: $Strings.enterQuote1TextUk,
+                        minLines: 3,
+                        maxLines: 100,
+                        //validator: validateUkInput,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               const Gap(20),
               ElevatedButton(
                 style: ButtonStyle(
@@ -154,7 +200,7 @@ class NewSectionScreen extends HookConsumerWidget {
                         text1Uk: ukText1Controller.text,
                         text1En: enText1Controller.text,
                         order: '1',
-                        topicdataID: topic!.id);
+                        topicId: topic!.id);
 
                     resetState(ref);
                     appRouter.pop();

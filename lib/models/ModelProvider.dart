@@ -21,7 +21,6 @@
 
 import 'package:amplify_core/amplify_core.dart';
 import 'EventData.dart';
-import 'ImageData.dart';
 import 'SectionData.dart';
 import 'TopicData.dart';
 import 'LocalizedText.dart';
@@ -29,19 +28,17 @@ import 'Quote.dart';
 import 'TermToExplain.dart';
 
 export 'EventData.dart';
-export 'ImageData.dart';
 export 'LocalizedText.dart';
 export 'Quote.dart';
 export 'SectionData.dart';
 export 'TermToExplain.dart';
-export 'Topic.dart';
 export 'TopicData.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "afb6280526d0b7913e33c0600ef052ad";
+  String version = "700cb9ae66e005a6baf9bcf0196c7142";
   @override
-  List<ModelSchema> modelSchemas = [EventData.schema, ImageData.schema, SectionData.schema, TopicData.schema];
+  List<ModelSchema> modelSchemas = [EventData.schema, SectionData.schema, TopicData.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
   List<ModelSchema> customTypeSchemas = [LocalizedText.schema, Quote.schema, TermToExplain.schema];
@@ -52,8 +49,6 @@ class ModelProvider implements ModelProviderInterface {
     switch(modelName) {
       case "EventData":
         return EventData.classType;
-      case "ImageData":
-        return ImageData.classType;
       case "SectionData":
         return SectionData.classType;
       case "TopicData":

@@ -20,9 +20,8 @@ import '../../../strings.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../common/date_picker.dart';
 import '../../common/delete_item_dialog.dart';
-
-final loadingStateProvider = StateProvider<bool>((ref) => false);
-final containerHeightProvider = StateProvider<double>((ref) => 48);
+import '../section_screen/new_section_screen.dart';
+import '../topic_screen/new_topic_screen.dart';
 
 class EditEventScreen extends HookConsumerWidget {
   EditEventScreen({
@@ -58,9 +57,7 @@ class EditEventScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final eventAsync = ref.watch(singleEventProvider(id: eventId));
     final parentTopicController = useDropDownController();
-    final ukTitleController = useTextEditingController();
-    final enTitleController = useTextEditingController();
-    final eventDateController = useTextEditingController();
+
     final coverImage = ref.watch(coverImageProvider);
     final isLoading = ref.watch(loadingStateProvider);
 
@@ -81,11 +78,12 @@ class EditEventScreen extends HookConsumerWidget {
           data: (event) {
             parentTopicController.dropDownValue = DropDownValueModel(
                 name: event.title.uk.toString(), value: event.title.uk.toString());
-            ukTitleController.text = event.title.uk.toString();
-            enTitleController.text = event.title.en.toString();
+            final ukTitleController = useTextEditingController(text: event.title.uk.toString());
+            final enTitleController = useTextEditingController(text: event.title.en.toString());
+
             String formattedEventDate =
                 DateFormat($Strings.ukDateFormat).format(event.date.getDateTime());
-            eventDateController.text = formattedEventDate;
+            final eventDateController = useTextEditingController(text: formattedEventDate);
             return LayoutBuilder(
               builder: (_, constraints) {
                 return kIsWeb
@@ -99,7 +97,7 @@ class EditEventScreen extends HookConsumerWidget {
                             eventDateController: eventDateController,
                             parentTopicController: parentTopicController,
                             isLoading: isLoading,
-                            parentTopicId: event.topicdataID,
+                            parentTopicId: event.topicId,
                             ref: ref))
                     : buildSingleChildScrollView(
                         event: event,
@@ -110,7 +108,7 @@ class EditEventScreen extends HookConsumerWidget {
                         eventDateController: eventDateController,
                         parentTopicController: parentTopicController,
                         isLoading: isLoading,
-                        parentTopicId: event.topicdataID,
+                        parentTopicId: event.topicId,
                         ref: ref);
               },
             );
@@ -130,6 +128,7 @@ class EditEventScreen extends HookConsumerWidget {
     required WidgetRef ref,
     String? parentTopicId,
   }) {
+    final coverImage = ref.watch(coverImageProvider);
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
       child: Form(
@@ -140,7 +139,10 @@ class EditEventScreen extends HookConsumerWidget {
           width: double.infinity,
           child: Column(
             children: [
-              const CoverImageCard(),
+              CoverImageCard(
+                imageKey: event.iconKey,
+                imageUrl: event.iconUrl,
+              ),
               const Gap(30),
               TopicSearchInput(
                 controller: parentTopicController,
@@ -154,7 +156,7 @@ class EditEventScreen extends HookConsumerWidget {
                 controller: ukTitleController,
                 hintText: $Strings.eventTitleUk,
                 errorText: $Strings.enterEventTitleUk,
-                validator: validateUkInput,
+                //validator: validateUkInput,
               ),
               const Gap(20),
               buildCustomTextFormField(
@@ -217,9 +219,13 @@ class EditEventScreen extends HookConsumerWidget {
                             LocalizedText(uk: ukTitleController.text, en: enTitleController.text);
                         final parentTopicId = ref.read(topicForEventProvider)?.id.toString();
                         final updatedItem =
-                            event.copyWith(date: date, title: title, topicdataID: parentTopicId);
+                            event.copyWith(date: date, title: title, topicId: parentTopicId);
                         await ref.read(eventControllerProvider).updateEvent(updatedItem);
-
+                        if (coverImage != null) {
+                          final updatedEvent =
+                              await ref.read(eventControllerProvider).queryEventWithId(event.id);
+                          ref.read(eventControllerProvider).uploadFile(coverImage, updatedEvent!);
+                        }
                         resetState(ref);
                         appRouter.pop();
                       }

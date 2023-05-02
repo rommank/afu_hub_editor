@@ -12,7 +12,7 @@ EventsDataStoreService eventsDataStoreService(EventsDataStoreServiceRef ref) {
 class EventsDataStoreService {
   Stream<List<EventData>> listenEventsForTopicId(String topicId) {
     return Amplify.DataStore.observeQuery(EventData.classType,
-            where: SectionData.TOPICDATAID.eq(topicId))
+            where: SectionData.TOPICID.eq(topicId))
         .map((event) => event.items.toList())
         .handleError((error) {
       safePrint("Listen to events for topicId : stream error occurred");
@@ -44,7 +44,7 @@ class EventsDataStoreService {
           date: event.date,
           title: event.title,
           text: event.text,
-          topicdataID: event.topicdataID,
+          topicId: event.topicId,
           iconKey: event.iconKey,
           iconUrl: event.iconUrl);
 

@@ -4,7 +4,8 @@ import 'package:flutter/services.dart';
 import '../../../../strings.dart';
 
 Widget buildCustomTextFormField(
-    {required TextEditingController controller,
+    {bool isRequired = false,
+    required TextEditingController controller,
     required String hintText,
     required String errorText,
     required BuildContext context,

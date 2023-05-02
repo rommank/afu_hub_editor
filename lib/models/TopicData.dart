@@ -32,7 +32,6 @@ class TopicData extends Model {
   final String id;
   final LocalizedText? _title;
   final List<SectionData>? _sections;
-  final Topic? _type;
   final List<EventData>? _events;
   final TemporalDate? _startDate;
   final TemporalDate? _endDate;
@@ -69,19 +68,6 @@ class TopicData extends Model {
   
   List<SectionData>? get sections {
     return _sections;
-  }
-  
-  Topic get type {
-    try {
-      return _type!;
-    } catch(e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
   }
   
   List<EventData>? get events {
@@ -130,14 +116,13 @@ class TopicData extends Model {
     return _updatedAt;
   }
   
-  const TopicData._internal({required this.id, required title, sections, required type, events, required startDate, required endDate, titleImageKey, titleImageUrl, createdAt, updatedAt}): _title = title, _sections = sections, _type = type, _events = events, _startDate = startDate, _endDate = endDate, _titleImageKey = titleImageKey, _titleImageUrl = titleImageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
+  const TopicData._internal({required this.id, required title, sections, events, required startDate, required endDate, titleImageKey, titleImageUrl, createdAt, updatedAt}): _title = title, _sections = sections, _events = events, _startDate = startDate, _endDate = endDate, _titleImageKey = titleImageKey, _titleImageUrl = titleImageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory TopicData({String? id, required LocalizedText title, List<SectionData>? sections, required Topic type, List<EventData>? events, required TemporalDate startDate, required TemporalDate endDate, String? titleImageKey, String? titleImageUrl}) {
+  factory TopicData({String? id, required LocalizedText title, List<SectionData>? sections, List<EventData>? events, required TemporalDate startDate, required TemporalDate endDate, String? titleImageKey, String? titleImageUrl}) {
     return TopicData._internal(
       id: id == null ? UUID.getUUID() : id,
       title: title,
       sections: sections != null ? List<SectionData>.unmodifiable(sections) : sections,
-      type: type,
       events: events != null ? List<EventData>.unmodifiable(events) : events,
       startDate: startDate,
       endDate: endDate,
@@ -156,7 +141,6 @@ class TopicData extends Model {
       id == other.id &&
       _title == other._title &&
       DeepCollectionEquality().equals(_sections, other._sections) &&
-      _type == other._type &&
       DeepCollectionEquality().equals(_events, other._events) &&
       _startDate == other._startDate &&
       _endDate == other._endDate &&
@@ -174,7 +158,6 @@ class TopicData extends Model {
     buffer.write("TopicData {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("title=" + (_title != null ? _title!.toString() : "null") + ", ");
-    buffer.write("type=" + (_type != null ? enumToString(_type)! : "null") + ", ");
     buffer.write("startDate=" + (_startDate != null ? _startDate!.format() : "null") + ", ");
     buffer.write("endDate=" + (_endDate != null ? _endDate!.format() : "null") + ", ");
     buffer.write("titleImageKey=" + "$_titleImageKey" + ", ");
@@ -186,12 +169,11 @@ class TopicData extends Model {
     return buffer.toString();
   }
   
-  TopicData copyWith({LocalizedText? title, List<SectionData>? sections, Topic? type, List<EventData>? events, TemporalDate? startDate, TemporalDate? endDate, String? titleImageKey, String? titleImageUrl}) {
+  TopicData copyWith({LocalizedText? title, List<SectionData>? sections, List<EventData>? events, TemporalDate? startDate, TemporalDate? endDate, String? titleImageKey, String? titleImageUrl}) {
     return TopicData._internal(
       id: id,
       title: title ?? this.title,
       sections: sections ?? this.sections,
-      type: type ?? this.type,
       events: events ?? this.events,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -210,7 +192,6 @@ class TopicData extends Model {
           .map((e) => SectionData.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
-      _type = enumFromString<Topic>(json['type'], Topic.values),
       _events = json['events'] is List
         ? (json['events'] as List)
           .where((e) => e?['serializedData'] != null)
@@ -225,11 +206,11 @@ class TopicData extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'title': _title?.toJson(), 'sections': _sections?.map((SectionData? e) => e?.toJson()).toList(), 'type': enumToString(_type), 'events': _events?.map((EventData? e) => e?.toJson()).toList(), 'startDate': _startDate?.format(), 'endDate': _endDate?.format(), 'titleImageKey': _titleImageKey, 'titleImageUrl': _titleImageUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'title': _title?.toJson(), 'sections': _sections?.map((SectionData? e) => e?.toJson()).toList(), 'events': _events?.map((EventData? e) => e?.toJson()).toList(), 'startDate': _startDate?.format(), 'endDate': _endDate?.format(), 'titleImageKey': _titleImageKey, 'titleImageUrl': _titleImageUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'title': _title, 'sections': _sections, 'type': _type, 'events': _events, 'startDate': _startDate, 'endDate': _endDate, 'titleImageKey': _titleImageKey, 'titleImageUrl': _titleImageUrl, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'title': _title, 'sections': _sections, 'events': _events, 'startDate': _startDate, 'endDate': _endDate, 'titleImageKey': _titleImageKey, 'titleImageUrl': _titleImageUrl, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryModelIdentifier<TopicDataModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<TopicDataModelIdentifier>();
@@ -238,7 +219,6 @@ class TopicData extends Model {
   static final QueryField SECTIONS = QueryField(
     fieldName: "sections",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'SectionData'));
-  static final QueryField TYPE = QueryField(fieldName: "type");
   static final QueryField EVENTS = QueryField(
     fieldName: "events",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'EventData'));
@@ -283,20 +263,14 @@ class TopicData extends Model {
       key: TopicData.SECTIONS,
       isRequired: false,
       ofModelName: 'SectionData',
-      associatedKey: SectionData.TOPICDATAID
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: TopicData.TYPE,
-      isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)
+      associatedKey: SectionData.TOPICID
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
       key: TopicData.EVENTS,
       isRequired: false,
       ofModelName: 'EventData',
-      associatedKey: EventData.TOPICDATAID
+      associatedKey: EventData.TOPICID
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

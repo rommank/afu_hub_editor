@@ -11,7 +11,7 @@ SectionsDataStoreService sectionsDataStoreService(SectionsDataStoreServiceRef re
 class SectionsDataStoreService {
   Stream<List<SectionData>> listenToSectionsForTopicId(String topicId) {
     return Amplify.DataStore.observeQuery(SectionData.classType,
-            where: SectionData.TOPICDATAID.eq(topicId))
+            where: SectionData.TOPICID.eq(topicId))
         .map((event) => event.items.toList());
   }
 
@@ -39,18 +39,19 @@ class SectionsDataStoreService {
           where: SectionData.ID.eq(section.id));
       final oldSection = sectionsWithId.first;
       final newSection = oldSection.copyWith(
-          name: section.name,
+          title: section.title,
           text1: section.text1,
           text2: section.text2,
           quote1: section.quote1,
           callout1: section.callout1,
           callout2: section.callout2,
-          photo2: section.photo2,
-          photo3: section.photo3,
+          photo2Key: section.photo2Key,
+          photo2Url: section.photo2Url,
+          photo3Key: section.photo3Key,
+          photo3Url: section.photo3Url,
           iconKey: section.iconKey,
           iconUrl: section.iconUrl,
-          imageData: section.imageData,
-          topicDataID: section.topicDataID,
+          topicId: section.topicId,
           order: section.order,
           termToExplain1: section.termToExplain1,
           photo1Key: section.photo1Key,

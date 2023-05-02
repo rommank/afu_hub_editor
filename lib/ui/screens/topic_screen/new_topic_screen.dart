@@ -6,7 +6,6 @@ import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/sections_search_i
 import 'package:afu_hub_editor/ui/screens/topics_screen/topics_screen.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
-import 'package:extra_alignments/extra_alignments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
@@ -14,14 +13,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../hooks/drop_down_controller_hook.dart';
 import '../../../logic/notifiers/new_topic_screen_notifiers.dart';
 import '../../../logic/topic/controller/topic_controller.dart';
-import '../../../models/Topic.dart';
 import '../../../router.dart';
 import '../../../strings.dart';
 import '../../common/date_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 final loadingStateProvider = StateProvider<bool>((ref) => false);
-final containerHeightProvider = StateProvider<double>((ref) => 48);
 
 class NewTopicScreen extends HookConsumerWidget {
   NewTopicScreen({
@@ -84,7 +81,7 @@ class NewTopicScreen extends HookConsumerWidget {
       BuildContext context,
       TextEditingController ukTitleController,
       TextEditingController enTitleController,
-      TextEditingController eventDateController,
+      TextEditingController startDateController,
       TextEditingController endDateController,
       SingleValueDropDownController topicTypeController,
       WidgetRef ref,
@@ -108,7 +105,7 @@ class NewTopicScreen extends HookConsumerWidget {
                 controller: ukTitleController,
                 hintText: $Strings.topicTitleUk,
                 errorText: $Strings.enterTopicTitleUk,
-                // validator: validateUkInput,
+                validator: validateUkInput,
               ),
               const Gap(20),
               buildCustomTextFormField(
@@ -122,7 +119,7 @@ class NewTopicScreen extends HookConsumerWidget {
               const Gap(20),
               buildCustomTextFormField(
                 context: context,
-                controller: eventDateController,
+                controller: startDateController,
                 hintText: $Strings.startDate,
                 errorText: $Strings.enterDate,
                 suffixIcon: Icons.edit_calendar_outlined,
@@ -132,7 +129,7 @@ class NewTopicScreen extends HookConsumerWidget {
                     return $Strings.enterDate;
                   }
                   if (endDateController.text.isNotEmpty) {
-                    DateTime tempStartDate = parseDateString(eventDateController.text);
+                    DateTime tempStartDate = parseDateString(startDateController.text);
                     DateTime tempEndDate = parseDateString(endDateController.text);
                     if (tempEndDate.isBefore(tempStartDate)) {
                       return $Strings.startBeforeStartDateError;
@@ -141,7 +138,7 @@ class NewTopicScreen extends HookConsumerWidget {
 
                   return null;
                 },
-                onTap: () => showCalendar(eventDateController, context,
+                onTap: () => showCalendar(startDateController, context,
                         helpText: $Strings.pickStartDate.toUpperCase())
                     .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
               ),
@@ -157,8 +154,8 @@ class NewTopicScreen extends HookConsumerWidget {
                     return $Strings.enterDate;
                   }
 
-                  if (eventDateController.text.isNotEmpty) {
-                    DateTime tempStartDate = parseDateString(eventDateController.text);
+                  if (startDateController.text.isNotEmpty) {
+                    DateTime tempStartDate = parseDateString(startDateController.text);
                     DateTime tempEndDate = parseDateString(endDateController.text);
                     if (tempEndDate.isBefore(tempStartDate)) {
                       return $Strings.endBeforeStartDateError;
@@ -170,35 +167,6 @@ class NewTopicScreen extends HookConsumerWidget {
                 onTap: () => showCalendar(endDateController, context,
                         helpText: $Strings.pickEndDate.toUpperCase())
                     .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
-              ),
-              const Gap(40),
-              DropDownTextField(
-                controller: topicTypeController,
-                clearOption: false,
-                dropdownRadius: 10,
-                dropDownItemCount: 5,
-                textFieldDecoration: const InputDecoration(hintText: $Strings.topicType),
-                dropdownColor: Theme.of(context).colorScheme.surface,
-                onChanged: (newValue) {
-                  String name = (newValue as DropDownValueModel).name;
-                  Topic topic = Topic.values.byName(name);
-                  ref.read(dropdownProvider.notifier).setValue(topic);
-                },
-                validator: (value) {
-                  if (value != null && value.isNotEmpty) {
-                    return null;
-                  } else {
-                    return $Strings.pickTopicType;
-                  }
-                },
-                dropDownList: List.from(
-                  Topic.values.map(
-                    (element) => DropDownValueModel(
-                      name: element.name,
-                      value: element.name,
-                    ),
-                  ),
-                ),
               ),
               const Gap(40),
               const SectionsSearchInput(),
@@ -228,7 +196,7 @@ class NewTopicScreen extends HookConsumerWidget {
                           titleUk: ukTitleController.text,
                           titleEn: enTitleController.text,
                           type: topicTypeController.dropDownValue?.name ?? '',
-                          startDate: eventDateController.text,
+                          startDate: startDateController.text,
                           endDate: endDateController.text,
                         );
 

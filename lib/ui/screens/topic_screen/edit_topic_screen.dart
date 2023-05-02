@@ -3,7 +3,6 @@ import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/edit_sections_sea
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/events_search_input.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/topic_text_form_field.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
@@ -15,7 +14,6 @@ import '../../../logic/notifiers/new_topic_screen_notifiers.dart';
 import '../../../logic/topic/controller/topic_controller.dart';
 import '../../../logic/topic/repository/topics_repository.dart';
 import '../../../models/LocalizedText.dart';
-import '../../../models/Topic.dart';
 import '../../../models/TopicData.dart';
 import '../../../router.dart';
 import '../../../strings.dart';
@@ -67,10 +65,7 @@ class EditTopicScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final topicAsync = ref.watch(singleTopicProvider(id: topicId));
-    final ukTitleController = useTextEditingController();
-    final enTitleController = useTextEditingController();
-    final startDateController = useTextEditingController();
-    final endDateController = useTextEditingController();
+
     final coverImageValue = ref.watch(coverImageProvider);
     final isLoading = ref.watch(loadingStateProvider);
     final topicTypeController = useDropDownController();
@@ -88,17 +83,16 @@ class EditTopicScreen extends HookConsumerWidget {
         error: (err, stack) => const Text($Strings.errorOccurred),
         loading: () => const Center(child: CircularProgressIndicator()),
         data: (data) {
-          ukTitleController.text = data.title.uk.toString();
-          enTitleController.text = data.title.en.toString();
-
+          final ukTitleController = useTextEditingController(text: data.title.uk.toString());
+          final enTitleController = useTextEditingController(text: data.title.en.toString());
           String formattedStartDate =
               DateFormat($Strings.ukDateFormat).format(data.startDate.getDateTime());
-          startDateController.text = formattedStartDate;
+          final startDateController = useTextEditingController(text: formattedStartDate);
+
           String formattedEndDate =
               DateFormat($Strings.ukDateFormat).format(data.endDate.getDateTime());
-          endDateController.text = formattedEndDate;
-          topicTypeController
-              .setDropDown(DropDownValueModel(name: data.type.name, value: data.type.name));
+          final endDateController = useTextEditingController(text: formattedEndDate);
+
           return SingleChildScrollView(
             child: Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -188,35 +182,6 @@ class EditTopicScreen extends HookConsumerWidget {
                           .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
                     ),
                     const Gap(20),
-                    DropDownTextField(
-                      controller: topicTypeController,
-                      clearOption: false,
-                      dropdownRadius: 10,
-                      dropDownItemCount: 5,
-                      textFieldDecoration: const InputDecoration(hintText: $Strings.topicType),
-                      dropdownColor: Theme.of(context).colorScheme.surface,
-                      onChanged: (newValue) {
-                        String name = (newValue as DropDownValueModel).name;
-                        Topic topic = Topic.values.byName(name);
-                        ref.read(dropdownProvider.notifier).setValue(topic);
-                      },
-                      validator: (value) {
-                        if (value != null && value.isNotEmpty) {
-                          return null;
-                        } else {
-                          return $Strings.pickTopicType;
-                        }
-                      },
-                      dropDownList: List.from(
-                        Topic.values.map(
-                          (element) => DropDownValueModel(
-                            name: element.name,
-                            value: element.name,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Gap(20),
                     EditSectionsSearchInput(topicId: topicId),
                     const Gap(20),
                     const EventsSearchInput(),
@@ -254,8 +219,6 @@ class EditTopicScreen extends HookConsumerWidget {
                               TopicData updatedTopic = data.copyWith(
                                 title: LocalizedText(
                                     uk: ukTitleController.text, en: enTitleController.text),
-                                type: Topic.values
-                                    .byName(topicTypeController.dropDownValue?.name ?? ''),
                                 startDate: TemporalDate(
                                   tempStartDate.copyWith(day: tempStartDate.day + 1),
                                 ),
