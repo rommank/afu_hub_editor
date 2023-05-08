@@ -76,8 +76,8 @@ class EditEventScreen extends HookConsumerWidget {
           error: (err, stack) => const Text($Strings.errorOccurred),
           loading: () => const Center(child: CircularProgressIndicator()),
           data: (event) {
-            parentTopicController.dropDownValue = DropDownValueModel(
-                name: event.title.uk.toString(), value: event.title.uk.toString());
+            // parentTopicController.dropDownValue = DropDownValueModel(
+            //     name: event.title.uk.toString(), value: event.title.uk.toString());
             final ukTitleController = useTextEditingController(text: event.title.uk.toString());
             final enTitleController = useTextEditingController(text: event.title.en.toString());
 
@@ -129,8 +129,9 @@ class EditEventScreen extends HookConsumerWidget {
     String? parentTopicId,
   }) {
     final coverImage = ref.watch(coverImageProvider);
+    final horizontalPadding = calculatePadding(constraints.maxWidth);
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
+      padding: EdgeInsets.fromLTRB(horizontalPadding, 0, horizontalPadding, 25),
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formGlobalKey,

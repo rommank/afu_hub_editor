@@ -51,8 +51,8 @@ class TopicsDataStoreService {
       final newTopic = oldTopic.copyWith(
           title: topic.title,
           startDate: topic.startDate,
-          titleImageKey: topic.titleImageKey,
-          titleImageUrl: topic.titleImageUrl,
+          bgImageKey: topic.bgImageKey,
+          bgImageUrl: topic.bgImageUrl,
           endDate: topic.endDate);
 
       await Amplify.DataStore.save(newTopic);

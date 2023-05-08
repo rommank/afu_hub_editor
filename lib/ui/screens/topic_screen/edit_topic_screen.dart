@@ -102,7 +102,7 @@ class EditTopicScreen extends HookConsumerWidget {
                 width: double.infinity,
                 child: Column(
                   children: [
-                    CoverImageCard(imageKey: data.titleImageKey, imageUrl: data.titleImageUrl),
+                    CoverImageCard(imageKey: data.bgImageKey, imageUrl: data.bgImageUrl),
                     const Gap(20),
                     buildCustomTextFormField(
                       context: context,

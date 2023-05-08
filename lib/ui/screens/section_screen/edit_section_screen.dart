@@ -5,25 +5,28 @@ import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/cover_image_card.
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/topic_text_form_field.dart';
 import 'package:afu_hub_editor/ui/screens/topics_screen/topics_screen.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
-import 'package:extra_alignments/extra_alignments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../hooks/drop_down_controller_hook.dart';
 import '../../../logic/notifiers/new_topic_screen_notifiers.dart';
 import '../../../logic/section/controller/section_controller.dart';
+import '../../../models/SectionData.dart';
 import '../../../router.dart';
 import '../../../strings.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../topic_screen/new_topic_screen.dart';
 
-class NewSectionScreen extends HookConsumerWidget {
-  NewSectionScreen({
+class EditSectionScreen extends HookConsumerWidget {
+  EditSectionScreen({
+    this.goRouterState,
     Key? key,
   }) : super(key: key);
 
+  final GoRouterState? goRouterState;
   final formGlobalKey = GlobalKey<FormState>();
   final quote1FormGlobalKey = GlobalKey<FormState>();
 
@@ -39,26 +42,30 @@ class NewSectionScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final section = goRouterState?.extra as SectionData;
+
     final parentTopicController = useDropDownController();
-    final ukTitleController = useTextEditingController();
-    final enTitleController = useTextEditingController();
+    final ukTitleController = useTextEditingController(text: section.title.uk);
+    final enTitleController = useTextEditingController(text: section.title.en);
+    final ukText1Controller = useTextEditingController(text: section.text1.uk);
+    final enText1Controller = useTextEditingController(text: section.text1.en);
+    final quote1UkAuthorController = useTextEditingController(text: section.quote1?.author?.uk);
+    final quote1UkTextController = useTextEditingController(text: section.quote1?.text?.uk);
+    final quote1EnAuthorController = useTextEditingController(text: section.quote1?.author?.en);
+    final quote1EnTextController = useTextEditingController(text: section.quote1?.text?.en);
+    final term1TermUkTextController =
+        useTextEditingController(text: section.termToExplain1?.term?.uk);
+    final term1TermEnTextController =
+        useTextEditingController(text: section.termToExplain1?.term?.en);
+    final term1TextUkTextController =
+        useTextEditingController(text: section.termToExplain1?.meaning?.uk);
+    final term1TextEnTextController =
+        useTextEditingController(text: section.termToExplain1?.meaning?.en);
+    final callout1UkTextController = useTextEditingController(text: section.callout1?.uk);
+    final callout1EnTextController = useTextEditingController(text: section.callout1?.en);
 
-    final ukText1Controller = useTextEditingController();
-    final enText1Controller = useTextEditingController();
     final coverImage = ref.watch(coverImageProvider);
-
     final isLoading = ref.watch(loadingStateProvider);
-
-    final quote1UkAuthorController = useTextEditingController();
-    final quote1UkTextController = useTextEditingController();
-    final quote1EnAuthorController = useTextEditingController();
-    final quote1EnTextController = useTextEditingController();
-    final term1TermUkTextController = useTextEditingController();
-    final term1TermEnTextController = useTextEditingController();
-    final term1TextUkTextController = useTextEditingController();
-    final term1TextEnTextController = useTextEditingController();
-    final callout1UkTextController = useTextEditingController();
-    final callout1EnTextController = useTextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -75,6 +82,7 @@ class NewSectionScreen extends HookConsumerWidget {
         return kIsWeb
             ? Center(
                 child: buildSingleChildScrollView(
+                    section: section,
                     constraints: constraints,
                     context: context,
                     ukCallout1Controller: callout1UkTextController,
@@ -96,6 +104,7 @@ class NewSectionScreen extends HookConsumerWidget {
                     parentTopicController: parentTopicController),
               )
             : buildSingleChildScrollView(
+                section: section,
                 constraints: constraints,
                 context: context,
                 ukCallout1Controller: callout1UkTextController,
@@ -120,7 +129,8 @@ class NewSectionScreen extends HookConsumerWidget {
   }
 
   SingleChildScrollView buildSingleChildScrollView(
-      {required BoxConstraints constraints,
+      {required SectionData section,
+      required BoxConstraints constraints,
       required BuildContext context,
       required TextEditingController ukTitleController,
       required TextEditingController enTitleController,
@@ -149,7 +159,7 @@ class NewSectionScreen extends HookConsumerWidget {
           children: [
             const CoverImageCard(label: $Strings.addIcon),
             const Gap(30),
-            TopicSearchInput(controller: parentTopicController),
+            TopicSearchInput(controller: parentTopicController, parentTopicId: section.topicId),
             const Gap(40),
             buildCustomTextFormField(
               maxLength: 15,
@@ -335,151 +345,4 @@ class NewSectionScreen extends HookConsumerWidget {
       ),
     );
   }
-
-  // SingleChildScrollView buildSingleChildScrollView(
-  //     {required BoxConstraints constraints,
-  //     required BuildContext context,
-  //     required TextEditingController ukTitleController,
-  //     required TextEditingController enTitleController,
-  //     required TextEditingController ukText1Controller,
-  //     required TextEditingController enText1Controller,
-  //     required TextEditingController quote1UkAuthorController,
-  //     required TextEditingController quote1UkTextController,
-  //     required TextEditingController quote1EnAuthorController,
-  //     required TextEditingController quote1EnTextController,
-  //     required TextEditingController term1TermUkTextController,
-  //     required TextEditingController term1TermEnTextController,
-  //     required TextEditingController term1TextUkTextController,
-  //     required TextEditingController term1TextEnTextController,
-  //     required SingleValueDropDownController parentTopicController,
-  //     required bool isLoading,
-  //     required WidgetRef ref}) {
-  //   final horizontalPadding = calculatePadding(constraints.maxWidth);
-  //   return SingleChildScrollView(
-  //     padding: EdgeInsets.fromLTRB(horizontalPadding, 0, horizontalPadding, 25),
-  //     child: Form(
-  //       autovalidateMode: AutovalidateMode.onUserInteraction,
-  //       key: formGlobalKey,
-  //       child: Container(
-  //         padding: const EdgeInsets.only(left: 15, top: 20, right: 15, bottom: 0),
-  //         width: double.infinity,
-  //         child: Column(
-  //           children: [
-  //             const CoverImageCard(label: $Strings.addIcon),
-  //             const Gap(30),
-  //             TopicSearchInput(controller: parentTopicController),
-  //             const Gap(40),
-  //             buildCustomTextFormField(
-  //               maxLength: 15,
-  //               context: context,
-  //               controller: ukTitleController,
-  //               hintText: $Strings.sectionTitleUk,
-  //               errorText: $Strings.enterSectionTitleUk,
-  //               validator: validateUkInput,
-  //             ),
-  //             const Gap(20),
-  //             buildCustomTextFormField(
-  //               maxLength: 15,
-  //               context: context,
-  //               controller: enTitleController,
-  //               hintText: $Strings.sectionTitleEn,
-  //               errorText: $Strings.enterSectionTitleEn,
-  //               validator: validateEnInput,
-  //             ),
-  //             const Gap(30),
-  //             buildCustomTextFormField(
-  //               context: context,
-  //               keyboardType: TextInputType.multiline,
-  //               controller: ukText1Controller,
-  //               hintText: $Strings.sectionText1Uk,
-  //               errorText: $Strings.enterSectionText1Uk,
-  //               minLines: 3,
-  //               maxLines: 100,
-  //               validator: validateEnInput,
-  //             ),
-  //             const Gap(30),
-  //             buildCustomTextFormField(
-  //               context: context,
-  //               keyboardType: TextInputType.multiline,
-  //               controller: enText1Controller,
-  //               hintText: $Strings.sectionText1En,
-  //               errorText: $Strings.enterSectionText1En,
-  //               minLines: 3,
-  //               maxLines: 100,
-  //               validator: validateEnInput,
-  //             ),
-  //             const Gap(30),
-  //             QuoteForm(
-  //                 title: $Strings.quote1Uk,
-  //                 author: $Strings.quote1AuthorUk,
-  //                 text: $Strings.quote1TextUk,
-  //                 formGlobalKey: quote1UkFormGlobalKey,
-  //                 quoteAuthorController: quote1UkAuthorController,
-  //                 quoteTextController: quote1UkTextController),
-  //             const Gap(20),
-  //             QuoteForm(
-  //                 title: $Strings.quote1En,
-  //                 author: $Strings.quote1AuthorUk,
-  //                 text: $Strings.quote1TextUk,
-  //                 formGlobalKey: quote1EnFormGlobalKey,
-  //                 quoteAuthorController: quote1EnAuthorController,
-  //                 quoteTextController: quote1EnTextController),
-  //             QuoteForm(
-  //                 title: $Strings.term1Uk,
-  //                 author: $Strings.term1TermUk,
-  //                 text: $Strings.term1TextUk,
-  //                 formGlobalKey: term1UkFormGlobalKey,
-  //                 quoteAuthorController: term1TermUkTextController,
-  //                 quoteTextController: term1TextUkTextController),
-  //             QuoteForm(
-  //                 title: $Strings.term1En,
-  //                 author: $Strings.term1TermEn,
-  //                 text: $Strings.term1TextEn,
-  //                 formGlobalKey: term1EnFormGlobalKey,
-  //                 quoteAuthorController: term1TermEnTextController,
-  //                 quoteTextController: term1TextEnTextController),
-  //             const Gap(20),
-  //             ElevatedButton(
-  //               style: ButtonStyle(
-  //                 backgroundColor: MaterialStateProperty.resolveWith(
-  //                     (states) => Theme.of(context).colorScheme.primaryContainer),
-  //               ),
-  //               child: isLoading
-  //                   ? const SizedBox(
-  //                       height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
-  //                   : Icon(
-  //                       Icons.check,
-  //                       color: Theme.of(context).colorScheme.onSurface,
-  //                     ),
-  //               onPressed: () async {
-  //                 final currentState = formGlobalKey.currentState;
-  //                 final quoteFormCurrentState = quote1UkFormGlobalKey.currentState;
-  //                 if (currentState == null) return;
-  //                 if (quoteFormCurrentState == null) return;
-  //
-  //                 if (currentState.validate()) {
-  //                   if (quoteFormCurrentState.validate()) {
-  //                     // ref.read(loadingStateProvider.notifier).state = true;
-  //                     // final topic = ref.read(topicForEventProvider);
-  //                     //
-  //                     // await ref.read(sectionControllerProvider).addSection(
-  //                     //     nameUk: ukTitleController.text,
-  //                     //     nameEn: enTitleController.text,
-  //                     //     text1Uk: ukText1Controller.text,
-  //                     //     text1En: enText1Controller.text,
-  //                     //     order: '1',
-  //                     //     topicId: topic!.id);
-  //                     //
-  //                     // resetState(ref);
-  //                     // appRouter.pop();
-  //                   }
-  //                 }
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

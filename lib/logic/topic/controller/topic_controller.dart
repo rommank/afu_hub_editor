@@ -31,7 +31,7 @@ class TopicController {
       final imageUrl = await ref
           .read(storageServiceProvider)
           .getDownloadUrl(key: fileKey, accessLevel: StorageAccessLevel.guest);
-      final updatedTopic = topic.copyWith(titleImageKey: fileKey, titleImageUrl: imageUrl);
+      final updatedTopic = topic.copyWith(bgImageKey: fileKey, bgImageUrl: imageUrl);
       await ref.read(topicsRepositoryProvider).update(updatedTopic);
       ref.read(storageServiceProvider).resetUploadProgress();
     }

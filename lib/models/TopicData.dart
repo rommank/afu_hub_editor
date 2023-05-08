@@ -35,8 +35,16 @@ class TopicData extends Model {
   final List<EventData>? _events;
   final TemporalDate? _startDate;
   final TemporalDate? _endDate;
-  final String? _titleImageKey;
-  final String? _titleImageUrl;
+  final String? _bgImageKey;
+  final String? _bgImageUrl;
+  final String? _leftImageKey;
+  final String? _leftImageUrl;
+  final String? _rightImageKey;
+  final String? _rightImageUrl;
+  final String? _topImageKey;
+  final String? _topImageUrl;
+  final String? _bottomImageKey;
+  final String? _bottomImageUrl;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -100,12 +108,44 @@ class TopicData extends Model {
     }
   }
   
-  String? get titleImageKey {
-    return _titleImageKey;
+  String? get bgImageKey {
+    return _bgImageKey;
   }
   
-  String? get titleImageUrl {
-    return _titleImageUrl;
+  String? get bgImageUrl {
+    return _bgImageUrl;
+  }
+  
+  String? get leftImageKey {
+    return _leftImageKey;
+  }
+  
+  String? get leftImageUrl {
+    return _leftImageUrl;
+  }
+  
+  String? get rightImageKey {
+    return _rightImageKey;
+  }
+  
+  String? get rightImageUrl {
+    return _rightImageUrl;
+  }
+  
+  String? get topImageKey {
+    return _topImageKey;
+  }
+  
+  String? get topImageUrl {
+    return _topImageUrl;
+  }
+  
+  String? get bottomImageKey {
+    return _bottomImageKey;
+  }
+  
+  String? get bottomImageUrl {
+    return _bottomImageUrl;
   }
   
   TemporalDateTime? get createdAt {
@@ -116,9 +156,9 @@ class TopicData extends Model {
     return _updatedAt;
   }
   
-  const TopicData._internal({required this.id, required title, sections, events, required startDate, required endDate, titleImageKey, titleImageUrl, createdAt, updatedAt}): _title = title, _sections = sections, _events = events, _startDate = startDate, _endDate = endDate, _titleImageKey = titleImageKey, _titleImageUrl = titleImageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
+  const TopicData._internal({required this.id, required title, sections, events, required startDate, required endDate, bgImageKey, bgImageUrl, leftImageKey, leftImageUrl, rightImageKey, rightImageUrl, topImageKey, topImageUrl, bottomImageKey, bottomImageUrl, createdAt, updatedAt}): _title = title, _sections = sections, _events = events, _startDate = startDate, _endDate = endDate, _bgImageKey = bgImageKey, _bgImageUrl = bgImageUrl, _leftImageKey = leftImageKey, _leftImageUrl = leftImageUrl, _rightImageKey = rightImageKey, _rightImageUrl = rightImageUrl, _topImageKey = topImageKey, _topImageUrl = topImageUrl, _bottomImageKey = bottomImageKey, _bottomImageUrl = bottomImageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory TopicData({String? id, required LocalizedText title, List<SectionData>? sections, List<EventData>? events, required TemporalDate startDate, required TemporalDate endDate, String? titleImageKey, String? titleImageUrl}) {
+  factory TopicData({String? id, required LocalizedText title, List<SectionData>? sections, List<EventData>? events, required TemporalDate startDate, required TemporalDate endDate, String? bgImageKey, String? bgImageUrl, String? leftImageKey, String? leftImageUrl, String? rightImageKey, String? rightImageUrl, String? topImageKey, String? topImageUrl, String? bottomImageKey, String? bottomImageUrl}) {
     return TopicData._internal(
       id: id == null ? UUID.getUUID() : id,
       title: title,
@@ -126,8 +166,16 @@ class TopicData extends Model {
       events: events != null ? List<EventData>.unmodifiable(events) : events,
       startDate: startDate,
       endDate: endDate,
-      titleImageKey: titleImageKey,
-      titleImageUrl: titleImageUrl);
+      bgImageKey: bgImageKey,
+      bgImageUrl: bgImageUrl,
+      leftImageKey: leftImageKey,
+      leftImageUrl: leftImageUrl,
+      rightImageKey: rightImageKey,
+      rightImageUrl: rightImageUrl,
+      topImageKey: topImageKey,
+      topImageUrl: topImageUrl,
+      bottomImageKey: bottomImageKey,
+      bottomImageUrl: bottomImageUrl);
   }
   
   bool equals(Object other) {
@@ -144,8 +192,16 @@ class TopicData extends Model {
       DeepCollectionEquality().equals(_events, other._events) &&
       _startDate == other._startDate &&
       _endDate == other._endDate &&
-      _titleImageKey == other._titleImageKey &&
-      _titleImageUrl == other._titleImageUrl;
+      _bgImageKey == other._bgImageKey &&
+      _bgImageUrl == other._bgImageUrl &&
+      _leftImageKey == other._leftImageKey &&
+      _leftImageUrl == other._leftImageUrl &&
+      _rightImageKey == other._rightImageKey &&
+      _rightImageUrl == other._rightImageUrl &&
+      _topImageKey == other._topImageKey &&
+      _topImageUrl == other._topImageUrl &&
+      _bottomImageKey == other._bottomImageKey &&
+      _bottomImageUrl == other._bottomImageUrl;
   }
   
   @override
@@ -160,8 +216,16 @@ class TopicData extends Model {
     buffer.write("title=" + (_title != null ? _title!.toString() : "null") + ", ");
     buffer.write("startDate=" + (_startDate != null ? _startDate!.format() : "null") + ", ");
     buffer.write("endDate=" + (_endDate != null ? _endDate!.format() : "null") + ", ");
-    buffer.write("titleImageKey=" + "$_titleImageKey" + ", ");
-    buffer.write("titleImageUrl=" + "$_titleImageUrl" + ", ");
+    buffer.write("bgImageKey=" + "$_bgImageKey" + ", ");
+    buffer.write("bgImageUrl=" + "$_bgImageUrl" + ", ");
+    buffer.write("leftImageKey=" + "$_leftImageKey" + ", ");
+    buffer.write("leftImageUrl=" + "$_leftImageUrl" + ", ");
+    buffer.write("rightImageKey=" + "$_rightImageKey" + ", ");
+    buffer.write("rightImageUrl=" + "$_rightImageUrl" + ", ");
+    buffer.write("topImageKey=" + "$_topImageKey" + ", ");
+    buffer.write("topImageUrl=" + "$_topImageUrl" + ", ");
+    buffer.write("bottomImageKey=" + "$_bottomImageKey" + ", ");
+    buffer.write("bottomImageUrl=" + "$_bottomImageUrl" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -169,7 +233,7 @@ class TopicData extends Model {
     return buffer.toString();
   }
   
-  TopicData copyWith({LocalizedText? title, List<SectionData>? sections, List<EventData>? events, TemporalDate? startDate, TemporalDate? endDate, String? titleImageKey, String? titleImageUrl}) {
+  TopicData copyWith({LocalizedText? title, List<SectionData>? sections, List<EventData>? events, TemporalDate? startDate, TemporalDate? endDate, String? bgImageKey, String? bgImageUrl, String? leftImageKey, String? leftImageUrl, String? rightImageKey, String? rightImageUrl, String? topImageKey, String? topImageUrl, String? bottomImageKey, String? bottomImageUrl}) {
     return TopicData._internal(
       id: id,
       title: title ?? this.title,
@@ -177,8 +241,16 @@ class TopicData extends Model {
       events: events ?? this.events,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
-      titleImageKey: titleImageKey ?? this.titleImageKey,
-      titleImageUrl: titleImageUrl ?? this.titleImageUrl);
+      bgImageKey: bgImageKey ?? this.bgImageKey,
+      bgImageUrl: bgImageUrl ?? this.bgImageUrl,
+      leftImageKey: leftImageKey ?? this.leftImageKey,
+      leftImageUrl: leftImageUrl ?? this.leftImageUrl,
+      rightImageKey: rightImageKey ?? this.rightImageKey,
+      rightImageUrl: rightImageUrl ?? this.rightImageUrl,
+      topImageKey: topImageKey ?? this.topImageKey,
+      topImageUrl: topImageUrl ?? this.topImageUrl,
+      bottomImageKey: bottomImageKey ?? this.bottomImageKey,
+      bottomImageUrl: bottomImageUrl ?? this.bottomImageUrl);
   }
   
   TopicData.fromJson(Map<String, dynamic> json)  
@@ -200,17 +272,25 @@ class TopicData extends Model {
         : null,
       _startDate = json['startDate'] != null ? TemporalDate.fromString(json['startDate']) : null,
       _endDate = json['endDate'] != null ? TemporalDate.fromString(json['endDate']) : null,
-      _titleImageKey = json['titleImageKey'],
-      _titleImageUrl = json['titleImageUrl'],
+      _bgImageKey = json['bgImageKey'],
+      _bgImageUrl = json['bgImageUrl'],
+      _leftImageKey = json['leftImageKey'],
+      _leftImageUrl = json['leftImageUrl'],
+      _rightImageKey = json['rightImageKey'],
+      _rightImageUrl = json['rightImageUrl'],
+      _topImageKey = json['topImageKey'],
+      _topImageUrl = json['topImageUrl'],
+      _bottomImageKey = json['bottomImageKey'],
+      _bottomImageUrl = json['bottomImageUrl'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'title': _title?.toJson(), 'sections': _sections?.map((SectionData? e) => e?.toJson()).toList(), 'events': _events?.map((EventData? e) => e?.toJson()).toList(), 'startDate': _startDate?.format(), 'endDate': _endDate?.format(), 'titleImageKey': _titleImageKey, 'titleImageUrl': _titleImageUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'title': _title?.toJson(), 'sections': _sections?.map((SectionData? e) => e?.toJson()).toList(), 'events': _events?.map((EventData? e) => e?.toJson()).toList(), 'startDate': _startDate?.format(), 'endDate': _endDate?.format(), 'bgImageKey': _bgImageKey, 'bgImageUrl': _bgImageUrl, 'leftImageKey': _leftImageKey, 'leftImageUrl': _leftImageUrl, 'rightImageKey': _rightImageKey, 'rightImageUrl': _rightImageUrl, 'topImageKey': _topImageKey, 'topImageUrl': _topImageUrl, 'bottomImageKey': _bottomImageKey, 'bottomImageUrl': _bottomImageUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'title': _title, 'sections': _sections, 'events': _events, 'startDate': _startDate, 'endDate': _endDate, 'titleImageKey': _titleImageKey, 'titleImageUrl': _titleImageUrl, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'title': _title, 'sections': _sections, 'events': _events, 'startDate': _startDate, 'endDate': _endDate, 'bgImageKey': _bgImageKey, 'bgImageUrl': _bgImageUrl, 'leftImageKey': _leftImageKey, 'leftImageUrl': _leftImageUrl, 'rightImageKey': _rightImageKey, 'rightImageUrl': _rightImageUrl, 'topImageKey': _topImageKey, 'topImageUrl': _topImageUrl, 'bottomImageKey': _bottomImageKey, 'bottomImageUrl': _bottomImageUrl, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryModelIdentifier<TopicDataModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<TopicDataModelIdentifier>();
@@ -224,8 +304,16 @@ class TopicData extends Model {
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'EventData'));
   static final QueryField STARTDATE = QueryField(fieldName: "startDate");
   static final QueryField ENDDATE = QueryField(fieldName: "endDate");
-  static final QueryField TITLEIMAGEKEY = QueryField(fieldName: "titleImageKey");
-  static final QueryField TITLEIMAGEURL = QueryField(fieldName: "titleImageUrl");
+  static final QueryField BGIMAGEKEY = QueryField(fieldName: "bgImageKey");
+  static final QueryField BGIMAGEURL = QueryField(fieldName: "bgImageUrl");
+  static final QueryField LEFTIMAGEKEY = QueryField(fieldName: "leftImageKey");
+  static final QueryField LEFTIMAGEURL = QueryField(fieldName: "leftImageUrl");
+  static final QueryField RIGHTIMAGEKEY = QueryField(fieldName: "rightImageKey");
+  static final QueryField RIGHTIMAGEURL = QueryField(fieldName: "rightImageUrl");
+  static final QueryField TOPIMAGEKEY = QueryField(fieldName: "topImageKey");
+  static final QueryField TOPIMAGEURL = QueryField(fieldName: "topImageUrl");
+  static final QueryField BOTTOMIMAGEKEY = QueryField(fieldName: "bottomImageKey");
+  static final QueryField BOTTOMIMAGEURL = QueryField(fieldName: "bottomImageUrl");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "TopicData";
     modelSchemaDefinition.pluralName = "TopicData";
@@ -286,13 +374,61 @@ class TopicData extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: TopicData.TITLEIMAGEKEY,
+      key: TopicData.BGIMAGEKEY,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: TopicData.TITLEIMAGEURL,
+      key: TopicData.BGIMAGEURL,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: TopicData.LEFTIMAGEKEY,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: TopicData.LEFTIMAGEURL,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: TopicData.RIGHTIMAGEKEY,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: TopicData.RIGHTIMAGEURL,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: TopicData.TOPIMAGEKEY,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: TopicData.TOPIMAGEURL,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: TopicData.BOTTOMIMAGEKEY,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: TopicData.BOTTOMIMAGEURL,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

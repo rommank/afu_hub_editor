@@ -73,8 +73,9 @@ class NewEventScreen extends HookConsumerWidget {
       bool isLoading,
       WidgetRef ref) {
     final coverImage = ref.watch(coverImageProvider);
+    final horizontalPadding = calculatePadding(constraints.maxWidth);
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
+      padding: EdgeInsets.fromLTRB(horizontalPadding, 0, horizontalPadding, 25),
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formGlobalKey,

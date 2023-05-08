@@ -87,8 +87,9 @@ class NewTopicScreen extends HookConsumerWidget {
       WidgetRef ref,
       bool isLoading,
       File? icon) {
+    final horizontalPadding = calculatePadding(constraints.maxWidth);
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: calculatePadding(constraints.maxWidth)),
+      padding: EdgeInsets.fromLTRB(horizontalPadding, 0, horizontalPadding, 25),
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formGlobalKey,

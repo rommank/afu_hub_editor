@@ -35,14 +35,14 @@ class TopicCard extends ConsumerWidget {
                   child: Stack(
                     children: [
                       Positioned.fill(
-                        child: topic.titleImageKey != null
+                        child: topic.bgImageKey != null
                             ? Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: CachedNetworkImage(
                                   errorWidget: (context, url, dynamic error) =>
                                       const Icon(Icons.error_outline_outlined),
-                                  imageUrl: topic.titleImageUrl.toString(),
-                                  cacheKey: topic.titleImageKey,
+                                  imageUrl: topic.bgImageUrl.toString(),
+                                  cacheKey: topic.bgImageKey,
                                   width: double.maxFinite,
                                   alignment: Alignment.topCenter,
                                   fit: BoxFit.scaleDown,

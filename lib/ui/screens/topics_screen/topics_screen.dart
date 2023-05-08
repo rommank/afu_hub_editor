@@ -37,5 +37,5 @@ double calculatePadding(double width) {
   if (width > 1200) return 400;
   if (width > 700) return 200;
   if (width > 400) return 50;
-  return 10;
+  return 16;
 }

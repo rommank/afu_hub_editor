@@ -15,12 +15,15 @@ Widget buildCustomTextFormField(
     int? maxLength,
     TextInputType? keyboardType,
     IconData? suffixIcon,
+    double? prefixSpace,
     bool? readOnly,
     List<TextInputFormatter>? inputFormatters,
+    Key? key,
     void Function()? onTap,
     Function(String)? onChanged,
     String? Function(String?)? validator}) {
   return TextFormField(
+    key: key,
     maxLength: maxLength,
     minLines: minLines,
     maxLines: maxLines,
@@ -41,23 +44,25 @@ Widget buildCustomTextFormField(
     autofocus: autofocus,
     autocorrect: false,
     decoration: InputDecoration(
-        border: (minLines != null)
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Theme.of(context).colorScheme.error, width: 2))
-            : null,
-        focusedBorder: (minLines != null)
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2))
-            : null,
-        enabledBorder: (minLines != null)
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Theme.of(context).colorScheme.outline))
-            : null,
-        hintText: hintText,
-        suffixIcon: suffixIcon == null ? null : Icon(suffixIcon)),
+      border: (minLines != null)
+          ? OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.error, width: 2))
+          : null,
+      focusedBorder: (minLines != null)
+          ? OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2))
+          : null,
+      enabledBorder: (minLines != null)
+          ? OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.outline))
+          : null,
+      hintText: hintText,
+      suffixIcon: suffixIcon == null ? null : Icon(suffixIcon),
+      prefix: prefixSpace == null ? null : SizedBox(width: prefixSpace),
+    ),
   );
 }
 
