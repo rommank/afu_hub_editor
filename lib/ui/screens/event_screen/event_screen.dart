@@ -1,18 +1,16 @@
 import 'package:afu_hub_editor/logic/event/controller/event_controller.dart';
 import 'package:afu_hub_editor/logic/event/repository/events_repository.dart';
-import 'package:afu_hub_editor/models/LocalizedText.dart';
 import 'package:afu_hub_editor/ui/screens/event_screen/widgets/topic_search_input.dart';
-import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/cover_image_card.dart';
-import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/topic_text_form_field.dart';
+import 'package:afu_hub_editor/ui/common/cover_image_card.dart';
+import 'package:afu_hub_editor/ui/common/custom_text_form_field.dart';
 import 'package:afu_hub_editor/ui/screens/topics_screen/topics_screen.dart';
-import 'package:amplify_datastore/amplify_datastore.dart';
-import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../../hooks/drop_down_controller_hook.dart';
 import '../../../logic/notifiers/new_topic_screen_notifiers.dart';
 import '../../../models/EventData.dart';
 import '../../../router.dart';
@@ -20,18 +18,17 @@ import '../../../strings.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../common/date_picker.dart';
 import '../../common/delete_item_dialog.dart';
-import '../section_screen/new_section_screen.dart';
-import '../topic_screen/new_topic_screen.dart';
+import '../topic_screen/topic_screen.dart';
 
-class EditEventScreen extends HookConsumerWidget {
-  EditEventScreen({
-    required this.eventId,
+class EventScreen extends HookConsumerWidget {
+  EventScreen({
+    required this.goRouterState,
     Key? key,
   }) : super(key: key);
 
   final formGlobalKey = GlobalKey<FormState>();
 
-  final String eventId;
+  final GoRouterState? goRouterState;
   void resetState(WidgetRef ref) {
     ref.read(containerHeightProvider.notifier).state = 48;
     ref.read(loadingStateProvider.notifier).state = false;
@@ -55,8 +52,12 @@ class EditEventScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eventAsync = ref.watch(singleEventProvider(id: eventId));
-    final parentTopicController = useDropDownController();
+    final event = (goRouterState?.extra != null) ? goRouterState!.extra as EventData : null;
+    final ukTitleController = useTextEditingController(text: event?.title.uk);
+    final enTitleController = useTextEditingController(text: event?.title.en);
+    String? formattedEventDate =
+        event != null ? DateFormat($Strings.ukDateFormat).format(event.date.getDateTime()) : null;
+    final eventDateController = useTextEditingController(text: formattedEventDate);
 
     final coverImage = ref.watch(coverImageProvider);
     final isLoading = ref.watch(loadingStateProvider);
@@ -72,58 +73,44 @@ class EditEventScreen extends HookConsumerWidget {
           icon: const Icon(Icons.close),
         ),
       ),
-      body: eventAsync.when(
-          error: (err, stack) => const Text($Strings.errorOccurred),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          data: (event) {
-            // parentTopicController.dropDownValue = DropDownValueModel(
-            //     name: event.title.uk.toString(), value: event.title.uk.toString());
-            final ukTitleController = useTextEditingController(text: event.title.uk.toString());
-            final enTitleController = useTextEditingController(text: event.title.en.toString());
-
-            String formattedEventDate =
-                DateFormat($Strings.ukDateFormat).format(event.date.getDateTime());
-            final eventDateController = useTextEditingController(text: formattedEventDate);
-            return LayoutBuilder(
-              builder: (_, constraints) {
-                return kIsWeb
-                    ? Center(
-                        child: buildSingleChildScrollView(
-                            event: event,
-                            constraints: constraints,
-                            context: context,
-                            ukTitleController: ukTitleController,
-                            enTitleController: enTitleController,
-                            eventDateController: eventDateController,
-                            parentTopicController: parentTopicController,
-                            isLoading: isLoading,
-                            parentTopicId: event.topicId,
-                            ref: ref))
-                    : buildSingleChildScrollView(
-                        event: event,
-                        constraints: constraints,
-                        context: context,
-                        ukTitleController: ukTitleController,
-                        enTitleController: enTitleController,
-                        eventDateController: eventDateController,
-                        parentTopicController: parentTopicController,
-                        isLoading: isLoading,
-                        parentTopicId: event.topicId,
-                        ref: ref);
-              },
-            );
-          }),
+      body: LayoutBuilder(
+        builder: (_, constraints) {
+          return kIsWeb
+              ? Center(
+                  child: buildSingleChildScrollView(
+                  event: event,
+                  constraints: constraints,
+                  context: context,
+                  ukTitleController: ukTitleController,
+                  enTitleController: enTitleController,
+                  eventDateController: eventDateController,
+                  isLoading: isLoading,
+                  parentTopicId: event?.topicId,
+                  ref: ref,
+                ))
+              : buildSingleChildScrollView(
+                  event: event,
+                  constraints: constraints,
+                  context: context,
+                  ukTitleController: ukTitleController,
+                  enTitleController: enTitleController,
+                  eventDateController: eventDateController,
+                  isLoading: isLoading,
+                  parentTopicId: event?.topicId,
+                  ref: ref,
+                );
+        },
+      ),
     );
   }
 
   SingleChildScrollView buildSingleChildScrollView({
-    required EventData event,
+    required EventData? event,
     required BoxConstraints constraints,
     required BuildContext context,
     required TextEditingController ukTitleController,
     required TextEditingController enTitleController,
     required TextEditingController eventDateController,
-    required SingleValueDropDownController parentTopicController,
     required bool isLoading,
     required WidgetRef ref,
     String? parentTopicId,
@@ -141,12 +128,11 @@ class EditEventScreen extends HookConsumerWidget {
           child: Column(
             children: [
               CoverImageCard(
-                imageKey: event.iconKey,
-                imageUrl: event.iconUrl,
+                imageKey: event?.iconKey,
+                imageUrl: event?.iconUrl,
               ),
               const Gap(30),
               TopicSearchInput(
-                controller: parentTopicController,
                 parentTopicId: parentTopicId,
               ),
               const Gap(40),
@@ -157,7 +143,6 @@ class EditEventScreen extends HookConsumerWidget {
                 controller: ukTitleController,
                 hintText: $Strings.eventTitleUk,
                 errorText: $Strings.enterEventTitleUk,
-                //validator: validateUkInput,
               ),
               const Gap(20),
               buildCustomTextFormField(
@@ -191,7 +176,7 @@ class EditEventScreen extends HookConsumerWidget {
               ),
               const Gap(20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
@@ -207,46 +192,62 @@ class EditEventScreen extends HookConsumerWidget {
                           ),
                     onPressed: () async {
                       final currentState = formGlobalKey.currentState;
-
                       if (currentState == null) return;
                       if (currentState.validate()) {
                         ref.read(loadingStateProvider.notifier).state = true;
-                        DateTime tempDate = DateFormat($Strings.ukDateFormat)
-                            .parse(eventDateController.text.trim());
-                        final date = TemporalDate(
-                          tempDate.copyWith(day: tempDate.day + 1),
-                        );
-                        final title =
-                            LocalizedText(uk: ukTitleController.text, en: enTitleController.text);
-                        final parentTopicId = ref.read(topicForEventProvider)?.id.toString();
-                        final updatedItem =
-                            event.copyWith(date: date, title: title, topicId: parentTopicId);
-                        await ref.read(eventControllerProvider).updateEvent(updatedItem);
+                        String id = UUID.getUUID();
+                        final parentTopic = ref.read(topicForEventProvider);
+
+                        (event == null)
+                            ? await ref.read(eventControllerProvider).addEvent(
+                                  id: id,
+                                  date: eventDateController.text,
+                                  titleUk: ukTitleController.text,
+                                  titleEn: enTitleController.text,
+                                  topicId: parentTopic!.id,
+                                )
+                            : await ref.read(eventControllerProvider).updateEvent(
+                                  id: event.id,
+                                  date: eventDateController.text,
+                                  titleUk: ukTitleController.text,
+                                  titleEn: enTitleController.text,
+                                  topicId: parentTopic!.id,
+                                );
+
                         if (coverImage != null) {
-                          final updatedEvent =
-                              await ref.read(eventControllerProvider).queryEventWithId(event.id);
-                          ref.read(eventControllerProvider).uploadFile(coverImage, updatedEvent!);
+                          final queriedEvent = await ref
+                              .read(eventControllerProvider)
+                              .queryEventWithId(event?.id ?? id);
+                          if (queriedEvent != null) {
+                            ref.read(eventControllerProvider).uploadFile(coverImage, queriedEvent);
+                          }
                         }
+
                         resetState(ref);
                         appRouter.pop();
                       }
                     },
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Theme.of(context).colorScheme.errorContainer),
-                    ),
-                    onPressed: () async {
-                      deleteEvent(context, ref, event).then((confirm) {
-                        if (confirm) appRouter.pop();
-                      });
-                    },
-                    child: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
+                  (event != null)
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 60.0),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.resolveWith(
+                                  (states) => Theme.of(context).colorScheme.errorContainer),
+                            ),
+                            onPressed: () async {
+                              deleteEvent(context, ref, event).then((confirm) {
+                                if (confirm) appRouter.pop();
+                              });
+                            },
+                            child: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
                 ],
               ),
             ],

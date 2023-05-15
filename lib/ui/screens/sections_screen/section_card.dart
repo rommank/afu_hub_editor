@@ -18,7 +18,7 @@ class SectionCard extends ConsumerWidget {
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
         onTap: () {
-          context.pushNamed('section', extra: section /*params: {'id': section.id}*/);
+          context.pushNamed('section', extra: section);
         },
         child: Card(
           clipBehavior: Clip.antiAlias,

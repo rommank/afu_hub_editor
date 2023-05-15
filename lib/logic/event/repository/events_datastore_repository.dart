@@ -42,7 +42,12 @@ class EventsDataStoreRepository implements EventsRepository {
   }
 
   @override
-  Future<EventData?> queryById(String id) {
-    return eventsDataStoreService.queryById(id);
+  Future<EventData?> queryById(String id) async {
+    return await eventsDataStoreService.queryById(id);
+  }
+
+  @override
+  Future<List<EventData?>> queryByTopicId(String id) async {
+    return await eventsDataStoreService.queryByTopicId(id);
   }
 }

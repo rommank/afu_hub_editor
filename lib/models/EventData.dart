@@ -81,17 +81,8 @@ class EventData extends Model {
     return _text;
   }
   
-  String get topicId {
-    try {
-      return _topicId!;
-    } catch(e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
+  String? get topicId {
+    return _topicId;
   }
   
   String? get iconKey {
@@ -110,9 +101,9 @@ class EventData extends Model {
     return _updatedAt;
   }
   
-  const EventData._internal({required this.id, required date, required title, text, required topicId, iconKey, iconUrl, createdAt, updatedAt}): _date = date, _title = title, _text = text, _topicId = topicId, _iconKey = iconKey, _iconUrl = iconUrl, _createdAt = createdAt, _updatedAt = updatedAt;
+  const EventData._internal({required this.id, required date, required title, text, topicId, iconKey, iconUrl, createdAt, updatedAt}): _date = date, _title = title, _text = text, _topicId = topicId, _iconKey = iconKey, _iconUrl = iconUrl, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory EventData({String? id, required TemporalDate date, required LocalizedText title, LocalizedText? text, required String topicId, String? iconKey, String? iconUrl}) {
+  factory EventData({String? id, required TemporalDate date, required LocalizedText title, LocalizedText? text, String? topicId, String? iconKey, String? iconUrl}) {
     return EventData._internal(
       id: id == null ? UUID.getUUID() : id,
       date: date,
@@ -255,7 +246,7 @@ class EventData extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: EventData.TOPICID,
-      isRequired: true,
+      isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     

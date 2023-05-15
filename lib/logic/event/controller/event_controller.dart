@@ -1,7 +1,6 @@
 import 'package:afu_hub_editor/logic/event/repository/events_repository.dart';
 import 'package:afu_hub_editor/models/EventData.dart';
 import 'package:afu_hub_editor/models/LocalizedText.dart';
-import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -33,15 +32,26 @@ class EventController {
     }
   }
 
-  Future<void> updateEvent(EventData event) async {
-    await ref.read(eventsRepositoryProvider).update(event);
-  }
-
   Future<EventData?> queryEventWithId(String id) {
     return ref.read(eventsRepositoryProvider).queryById(id);
   }
 
   Future<void> addEvent(
+      {String? id,
+      required String date,
+      required String titleUk,
+      required String titleEn,
+      required String topicId}) async {
+    DateTime tempDate = DateFormat($Strings.ukDateFormat).parse(date.trim());
+    final event = EventData(
+        id: id,
+        date: TemporalDate(tempDate.copyWith(day: tempDate.day + 1)),
+        title: LocalizedText(uk: titleUk, en: titleEn),
+        topicId: topicId);
+    await ref.read(eventsRepositoryProvider).add(event);
+  }
+
+  Future<void> updateEvent(
       {String? id,
       required String date,
       required String titleUk,

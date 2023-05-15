@@ -32,6 +32,7 @@ abstract class SectionsRepository {
   Stream<SectionData> listenToId(String id);
   Future<List<SectionData?>> list();
   Future<SectionData?> queryById(String id);
+  Future<List<SectionData?>> queryByTopicId(String id);
   Future<void> add(SectionData section);
   Future<void> update(SectionData section);
   Future<void> delete(SectionData section);

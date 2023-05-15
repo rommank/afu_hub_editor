@@ -18,7 +18,7 @@ class TopicCard extends ConsumerWidget {
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
         onTap: () {
-          context.pushNamed('topic', params: {'id': topic.id});
+          context.pushNamed('topic', extra: topic);
         },
         child: Card(
           clipBehavior: Clip.antiAlias,

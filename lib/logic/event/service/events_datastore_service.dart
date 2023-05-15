@@ -65,6 +65,17 @@ class EventsDataStoreService {
     }
   }
 
+  Future<List<EventData?>> queryByTopicId(String id) async {
+    try {
+      final eventsWithId =
+          await Amplify.DataStore.query(EventData.classType, where: EventData.TOPICID.eq(id));
+      return eventsWithId;
+    } on Exception catch (error) {
+      safePrint(error);
+      return [];
+    }
+  }
+
   Stream<EventData> listenToId(String id) {
     return Amplify.DataStore.observeQuery(EventData.classType, where: EventData.ID.eq(id))
         .map((event) => event.items.toList().single)

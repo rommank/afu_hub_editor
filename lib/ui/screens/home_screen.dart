@@ -30,9 +30,9 @@ class HomeScreen extends HookConsumerWidget {
   }
 
   void _addButtonPressed(int index) {
-    if (index == 0) appRouter.push(ScreenPaths.newTopic);
-    if (index == 1) appRouter.push(ScreenPaths.newSection);
-    if (index == 2) appRouter.push(ScreenPaths.newEvent);
+    if (index == 0) appRouter.push(ScreenPaths.topic);
+    if (index == 1) appRouter.push(ScreenPaths.section);
+    if (index == 2) appRouter.push(ScreenPaths.event);
   }
 
   String _pickTooltip(int index) {

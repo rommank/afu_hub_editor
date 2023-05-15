@@ -46,7 +46,14 @@ class SectionsApiRepository implements SectionsRepository {
 
   @override
   Future<SectionData?> queryById(String id) {
+    print('no joke');
     // TODO: implement queryById
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<SectionData?>> queryByTopicId(String id) {
+    // TODO: implement queryByTopicId
     throw UnimplementedError();
   }
 }

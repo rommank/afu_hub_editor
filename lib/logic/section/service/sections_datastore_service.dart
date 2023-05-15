@@ -15,6 +15,28 @@ class SectionsDataStoreService {
         .map((event) => event.items.toList());
   }
 
+  Future<SectionData?> queryById(String id) async {
+    try {
+      final sectionsWithId =
+          await Amplify.DataStore.query(SectionData.classType, where: SectionData.ID.eq(id));
+      return sectionsWithId.first;
+    } on Exception catch (error) {
+      safePrint(error);
+      return null;
+    }
+  }
+
+  Future<List<SectionData?>> queryByTopicId(String id) async {
+    try {
+      final sectionsWithId =
+          await Amplify.DataStore.query(SectionData.classType, where: SectionData.TOPICID.eq(id));
+      return sectionsWithId;
+    } on Exception catch (error) {
+      safePrint(error);
+      return [];
+    }
+  }
+
   Stream<List<SectionData>> listen() {
     return Amplify.DataStore.observeQuery(SectionData.classType)
         .map((event) => event.items.toList())

@@ -38,12 +38,20 @@ class SectionsForTopicNotifier extends Notifier<List<SectionData>> {
     return [];
   }
 
+  void setValue(List<SectionData> value) {
+    state = value;
+  }
+
   void addValue(SectionData value) {
     if (!state.contains(value)) {
       state = List.from(state)..add(value);
     } else {
       state = List.from(state);
     }
+  }
+
+  void addList(List<SectionData> value) {
+    state = List.from(state)..addAll(value);
   }
 
   void removeValueAtIndex(int index) {

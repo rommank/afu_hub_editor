@@ -5,10 +5,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../logic/event/service/image_picker_provider.dart';
-import '../../../../logic/notifiers/new_topic_screen_notifiers.dart';
-import '../../../../strings.dart';
-import '../new_topic_screen.dart';
+import '../../logic/event/service/image_picker_provider.dart';
+import '../../logic/notifiers/new_topic_screen_notifiers.dart';
+import '../../strings.dart';
 import 'dart:io' as io;
 import 'package:flutter/foundation.dart' show kIsWeb;
 

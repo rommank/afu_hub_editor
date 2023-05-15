@@ -48,4 +48,10 @@ class EventsApiRepository implements EventsRepository {
     // TODO: implement queryById
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<EventData?>> queryByTopicId(String id) {
+    // TODO: implement queryByTopicId
+    throw UnimplementedError();
+  }
 }

@@ -18,7 +18,7 @@ class EventCard extends ConsumerWidget {
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
         onTap: () {
-          context.pushNamed('event', params: {'id': event.id});
+          context.pushNamed('event', extra: event);
         },
         child: Card(
           clipBehavior: Clip.antiAlias,

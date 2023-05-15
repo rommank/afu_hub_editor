@@ -36,6 +36,7 @@ abstract class EventsRepository {
   Stream<EventData> listenToId(String id);
   Future<List<EventData?>> list();
   Future<EventData?> queryById(String id);
+  Future<List<EventData?>> queryByTopicId(String id);
   Future<void> add(EventData event);
   Future<void> update(EventData event);
   Future<void> delete(EventData event);

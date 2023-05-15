@@ -44,8 +44,12 @@ class SectionsDataStoreRepository implements SectionsRepository {
   }
 
   @override
-  Future<SectionData?> queryById(String idd) {
-    // TODO: implement queryById
-    throw UnimplementedError();
+  Future<SectionData?> queryById(String id) async {
+    return await sectionsDataStoreService.queryById(id);
+  }
+
+  @override
+  Future<List<SectionData?>> queryByTopicId(String id) async {
+    return await sectionsDataStoreService.queryByTopicId(id);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../strings.dart';
+import '../../strings.dart';
 
 Widget buildCustomTextFormField(
     {bool isRequired = false,

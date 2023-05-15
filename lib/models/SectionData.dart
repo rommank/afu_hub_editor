@@ -113,17 +113,8 @@ class SectionData extends Model {
     }
   }
   
-  String get topicId {
-    try {
-      return _topicId!;
-    } catch(e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
+  String? get topicId {
+    return _topicId;
   }
   
   TermToExplain? get termToExplain1 {
@@ -174,9 +165,9 @@ class SectionData extends Model {
     return _updatedAt;
   }
   
-  const SectionData._internal({required this.id, required title, required text1, text2, quote1, callout1, required order, required topicId, termToExplain1, iconKey, iconUrl, callout2, photo1Key, photo1Url, photo2Key, photo2Url, photo3Key, photo3Url, createdAt, updatedAt}): _title = title, _text1 = text1, _text2 = text2, _quote1 = quote1, _callout1 = callout1, _order = order, _topicId = topicId, _termToExplain1 = termToExplain1, _iconKey = iconKey, _iconUrl = iconUrl, _callout2 = callout2, _photo1Key = photo1Key, _photo1Url = photo1Url, _photo2Key = photo2Key, _photo2Url = photo2Url, _photo3Key = photo3Key, _photo3Url = photo3Url, _createdAt = createdAt, _updatedAt = updatedAt;
+  const SectionData._internal({required this.id, required title, required text1, text2, quote1, callout1, required order, topicId, termToExplain1, iconKey, iconUrl, callout2, photo1Key, photo1Url, photo2Key, photo2Url, photo3Key, photo3Url, createdAt, updatedAt}): _title = title, _text1 = text1, _text2 = text2, _quote1 = quote1, _callout1 = callout1, _order = order, _topicId = topicId, _termToExplain1 = termToExplain1, _iconKey = iconKey, _iconUrl = iconUrl, _callout2 = callout2, _photo1Key = photo1Key, _photo1Url = photo1Url, _photo2Key = photo2Key, _photo2Url = photo2Url, _photo3Key = photo3Key, _photo3Url = photo3Url, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory SectionData({String? id, required LocalizedText title, required LocalizedText text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, required int order, required String topicId, TermToExplain? termToExplain1, String? iconKey, String? iconUrl, LocalizedText? callout2, String? photo1Key, String? photo1Url, String? photo2Key, String? photo2Url, String? photo3Key, String? photo3Url}) {
+  factory SectionData({String? id, required LocalizedText title, required LocalizedText text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, required int order, String? topicId, TermToExplain? termToExplain1, String? iconKey, String? iconUrl, LocalizedText? callout2, String? photo1Key, String? photo1Url, String? photo2Key, String? photo2Url, String? photo3Key, String? photo3Url}) {
     return SectionData._internal(
       id: id == null ? UUID.getUUID() : id,
       title: title,
@@ -413,7 +404,7 @@ class SectionData extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: SectionData.TOPICID,
-      isRequired: true,
+      isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
