@@ -21,7 +21,7 @@ final storageServiceProvider = AutoDisposeProvider<StorageService>.internal(
 );
 
 typedef StorageServiceRef = AutoDisposeProviderRef<StorageService>;
-String _$imageUrlHash() => r'9c6f3a25d9ce69d9d248503f99131e33dd0c846c';
+String _$imageUrlHash() => r'ea7595e0f4ae195d2582ccf52d88c3dad5a3df06';
 
 /// Copied from Dart SDK
 class _SystemHash {

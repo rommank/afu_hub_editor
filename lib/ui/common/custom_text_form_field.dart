@@ -5,16 +5,17 @@ import '../../strings.dart';
 
 Widget buildCustomTextFormField(
     {bool isRequired = false,
-    required TextEditingController controller,
-    required String hintText,
     required String errorText,
     required BuildContext context,
     bool autofocus = true,
+    String? hintText,
     int? minLines,
     int? maxLines,
+    TextEditingController? controller,
     int? maxLength,
     TextInputType? keyboardType,
     IconData? suffixIcon,
+    Widget? suffix,
     double? prefixSpace,
     bool? readOnly,
     List<TextInputFormatter>? inputFormatters,
@@ -47,20 +48,24 @@ Widget buildCustomTextFormField(
       border: (minLines != null)
           ? OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.error, width: 2))
+              borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.error, width: 2))
           : null,
       focusedBorder: (minLines != null)
           ? OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2))
+              borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary, width: 2))
           : null,
       enabledBorder: (minLines != null)
           ? OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.outline))
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.outline))
           : null,
       hintText: hintText,
       suffixIcon: suffixIcon == null ? null : Icon(suffixIcon),
+      suffix: suffix,
       prefix: prefixSpace == null ? null : SizedBox(width: prefixSpace),
     ),
   );

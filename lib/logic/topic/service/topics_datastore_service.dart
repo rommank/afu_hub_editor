@@ -43,16 +43,17 @@ class TopicsDataStoreService {
 
   Future<void> update(TopicData topic) async {
     try {
-      final topicsWithId =
-          await Amplify.DataStore.query(TopicData.classType, where: TopicData.ID.eq(topic.id));
+      final topicsWithId = await Amplify.DataStore.query(TopicData.classType,
+          where: TopicData.ID.eq(topic.id));
 
       final oldTopic = topicsWithId.first;
 
       final newTopic = oldTopic.copyWith(
+          bgColor: topic.bgColor,
+          fgColor: topic.fgColor,
           title: topic.title,
           startDate: topic.startDate,
           bgImageKey: topic.bgImageKey,
-          bgImageUrl: topic.bgImageUrl,
           endDate: topic.endDate);
 
       await Amplify.DataStore.save(newTopic);
@@ -62,7 +63,8 @@ class TopicsDataStoreService {
   }
 
   Stream<TopicData> listenToId(String topicId) {
-    return Amplify.DataStore.observeQuery(TopicData.classType, where: TopicData.ID.eq(topicId))
+    return Amplify.DataStore.observeQuery(TopicData.classType,
+            where: TopicData.ID.eq(topicId))
         .map((event) => event.items.toList().first)
         .handleError((error) {
       safePrint("Listen to events: stream error occurred");
@@ -71,8 +73,8 @@ class TopicsDataStoreService {
 
   Future<TopicData?> queryById(String topicId) async {
     try {
-      final topicsWithId =
-          await Amplify.DataStore.query(TopicData.classType, where: TopicData.ID.eq(topicId));
+      final topicsWithId = await Amplify.DataStore.query(TopicData.classType,
+          where: TopicData.ID.eq(topicId));
       return topicsWithId.first;
     } on Exception catch (error) {
       safePrint(error);

@@ -1,19 +1,20 @@
 import 'package:afu_hub_editor/models/EventData.dart';
 import 'package:afu_hub_editor/ui/common/cover_image_card.dart';
+import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/events_search_input.dart';
 import 'package:afu_hub_editor/ui/screens/topic_screen/widgets/sections_search_input.dart';
 import 'package:afu_hub_editor/ui/common/custom_text_form_field.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../logic/event/controller/event_controller.dart';
 import '../../../logic/notifiers/new_topic_screen_notifiers.dart';
-import '../../../logic/section/repository/sections_repository.dart';
 import '../../../logic/topic/controller/topic_controller.dart';
 import '../../../logic/topic/repository/topics_repository.dart';
-import '../../../models/LocalizedText.dart';
 import '../../../models/SectionData.dart';
 import '../../../models/TopicData.dart';
 import '../../../router.dart';
@@ -36,7 +37,8 @@ class TopicScreen extends HookConsumerWidget {
     ref.read(coverImageProvider.notifier).clear();
   }
 
-  Future<bool> deleteTopic(BuildContext context, WidgetRef ref, TopicData topic) async {
+  Future<bool> deleteTopic(
+      BuildContext context, WidgetRef ref, TopicData topic) async {
     var value = await showDialog<bool>(
         context: context,
         builder: (context) {
@@ -49,7 +51,8 @@ class TopicScreen extends HookConsumerWidget {
     return value;
   }
 
-  Future<void> showCalendar(TextEditingController controller, BuildContext context,
+  Future<void> showCalendar(
+      TextEditingController controller, BuildContext context,
       {String? helpText}) async {
     DateTime? pickedDate = await showDatePicker(
         locale: const Locale($Strings.uk),
@@ -59,30 +62,58 @@ class TopicScreen extends HookConsumerWidget {
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
     if (pickedDate != null) {
-      String formattedDate = DateFormat($Strings.ukDateFormat).format(pickedDate);
+      String formattedDate =
+          DateFormat($Strings.ukDateFormat).format(pickedDate);
       controller.text = formattedDate;
     } else {}
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final existingTopic = (goRouterState?.extra != null) ? goRouterState!.extra as TopicData : null;
+    final existingTopic = (goRouterState?.extra != null)
+        ? goRouterState!.extra as TopicData
+        : null;
+    if (existingTopic != null) {
+      final color = int.parse(existingTopic.fgColor!, radix: 16);
+      final color1 = Color(int.parse(existingTopic.fgColor!, radix: 16));
+    }
+    final fgPickerColor = useState((existingTopic != null)
+        ? Color(int.parse(existingTopic.fgColor!, radix: 16))
+        : Theme.of(context).colorScheme.primary);
+    final bgPickerColor = useState((existingTopic != null)
+        ? Color(int.parse(existingTopic.bgColor!, radix: 16))
+        : Theme.of(context).colorScheme.secondary);
+    final fgCurrentColor = useState((existingTopic != null)
+        ? Color(int.parse(existingTopic.fgColor!, radix: 16))
+        : Theme.of(context).colorScheme.primary);
+    final bgCurrentColor = useState((existingTopic != null)
+        ? Color(int.parse(existingTopic.bgColor!, radix: 16))
+        : Theme.of(context).colorScheme.secondary);
 
-    final coverImageValue = ref.watch(coverImageProvider);
+    final coverImage = ref.watch(coverImageProvider);
+
     final isLoading = ref.watch(loadingStateProvider);
     final sectionsForTopic = useState<List<SectionData>>([]);
+
     final eventsForTopic = useState<List<EventData>>([]);
 
-    final ukTitleController = useTextEditingController(text: existingTopic?.title.uk);
-    final enTitleController = useTextEditingController(text: existingTopic?.title.en);
+    final ukTitleController =
+        useTextEditingController(text: existingTopic?.title.uk);
+    final enTitleController =
+        useTextEditingController(text: existingTopic?.title.en);
 
     String? formattedStartDate = existingTopic != null
-        ? DateFormat($Strings.ukDateFormat).format(existingTopic.startDate.getDateTime())
+        ? DateFormat($Strings.ukDateFormat)
+            .format(existingTopic.startDate.getDateTime())
         : null;
-    final startDateController = useTextEditingController(text: formattedStartDate);
+    final startDateController =
+        useTextEditingController(text: formattedStartDate);
+    final fgColorController = useTextEditingController(text: $Strings.fgColor);
+    final bgColorController = useTextEditingController(text: $Strings.bgColor);
 
     String? formattedEndDate = existingTopic != null
-        ? DateFormat($Strings.ukDateFormat).format(existingTopic.endDate.getDateTime())
+        ? DateFormat($Strings.ukDateFormat)
+            .format(existingTopic.endDate.getDateTime())
         : null;
     final endDateController = useTextEditingController(text: formattedEndDate);
     return Scaffold(
@@ -100,12 +131,116 @@ class TopicScreen extends HookConsumerWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           key: formGlobalKey,
           child: Container(
-            padding: const EdgeInsets.only(left: 15, top: 20, right: 15, bottom: 0),
+            padding:
+                const EdgeInsets.only(left: 15, top: 20, right: 15, bottom: 0),
             width: double.infinity,
             child: Column(
               children: [
-                CoverImageCard(
-                    imageKey: existingTopic?.bgImageKey, imageUrl: existingTopic?.bgImageUrl),
+                CoverImageCard(imageKey: existingTopic?.bgImageKey),
+                const Gap(20),
+                buildCustomTextFormField(
+                    context: context,
+                    autofocus: false,
+                    controller: fgColorController,
+                    hintText: "",
+                    errorText: $Strings.enterDate,
+                    suffix: Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: CircleAvatar(
+                        backgroundColor: fgCurrentColor.value,
+                        radius: 16,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return $Strings.enterDate;
+                      }
+
+                      return null;
+                    },
+                    readOnly: true,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: const Text($Strings.pickColor),
+                            content: SingleChildScrollView(
+                              child: MaterialPicker(
+                                pickerColor: fgPickerColor.value,
+                                onColorChanged: (newColor) {
+                                  fgPickerColor.value = newColor;
+                                },
+                              ),
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                child: const Text($Strings.toPick),
+                                onPressed: () {
+                                  fgCurrentColor.value = fgPickerColor.value;
+
+                                  appRouter.pop();
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }),
+                const Gap(20),
+                buildCustomTextFormField(
+                    context: context,
+                    autofocus: false,
+                    controller: bgColorController,
+                    hintText: "",
+                    errorText: $Strings.enterDate,
+                    suffix: Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: CircleAvatar(
+                        backgroundColor: bgCurrentColor.value,
+                        radius: 16,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return $Strings.enterDate;
+                      }
+
+                      return null;
+                    },
+                    readOnly: true,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: const Text($Strings.pickColor),
+                            content: SingleChildScrollView(
+                              child: MaterialPicker(
+                                pickerColor: bgPickerColor.value,
+                                onColorChanged: (newColor) {
+                                  bgPickerColor.value = newColor;
+                                },
+                              ),
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                child: const Text($Strings.toPick),
+                                onPressed: () {
+                                  bgCurrentColor.value = bgPickerColor.value;
+
+                                  appRouter.pop();
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }),
                 const Gap(20),
                 buildCustomTextFormField(
                   context: context,
@@ -138,10 +273,10 @@ class TopicScreen extends HookConsumerWidget {
                       return $Strings.enterDate;
                     }
                     if (endDateController.text.isNotEmpty) {
-                      DateTime tempStartDate =
-                          DateFormat($Strings.ukDateFormat).parse(startDateController.text);
-                      DateTime tempEndDate =
-                          DateFormat($Strings.ukDateFormat).parse(endDateController.text);
+                      DateTime tempStartDate = DateFormat($Strings.ukDateFormat)
+                          .parse(startDateController.text);
+                      DateTime tempEndDate = DateFormat($Strings.ukDateFormat)
+                          .parse(endDateController.text);
                       if (tempEndDate.isBefore(tempStartDate)) {
                         return $Strings.startBeforeStartDateError;
                       }
@@ -152,7 +287,8 @@ class TopicScreen extends HookConsumerWidget {
                   readOnly: true,
                   onTap: () => showCalendar(startDateController, context,
                           helpText: $Strings.pickStartDate.toUpperCase())
-                      .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
+                      .then((value) =>
+                          FocusScope.of(context).requestFocus(FocusNode())),
                 ),
                 const Gap(20),
                 buildCustomTextFormField(
@@ -168,10 +304,10 @@ class TopicScreen extends HookConsumerWidget {
                     }
 
                     if (startDateController.text.isNotEmpty) {
-                      DateTime tempStartDate =
-                          DateFormat($Strings.ukDateFormat).parse(startDateController.text);
-                      DateTime tempEndDate =
-                          DateFormat($Strings.ukDateFormat).parse(endDateController.text);
+                      DateTime tempStartDate = DateFormat($Strings.ukDateFormat)
+                          .parse(startDateController.text);
+                      DateTime tempEndDate = DateFormat($Strings.ukDateFormat)
+                          .parse(endDateController.text);
                       if (tempEndDate.isBefore(tempStartDate)) {
                         return $Strings.endBeforeStartDateError;
                       }
@@ -182,7 +318,8 @@ class TopicScreen extends HookConsumerWidget {
                   readOnly: true,
                   onTap: () => showCalendar(endDateController, context,
                           helpText: $Strings.pickEndDate.toUpperCase())
-                      .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
+                      .then((value) =>
+                          FocusScope.of(context).requestFocus(FocusNode())),
                 ),
                 const Gap(20),
                 SectionsSearchInput(
@@ -192,7 +329,12 @@ class TopicScreen extends HookConsumerWidget {
                   },
                 ),
                 const Gap(20),
-                //const EventsSearchInput(),
+                EventsSearchInput(
+                  parentTopicId: existingTopic?.id,
+                  callback: (List<EventData> val) {
+                    eventsForTopic.value = val;
+                  },
+                ),
                 const Gap(40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -200,7 +342,8 @@ class TopicScreen extends HookConsumerWidget {
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.resolveWith(
-                            (states) => Theme.of(context).colorScheme.primaryContainer),
+                            (states) =>
+                                Theme.of(context).colorScheme.primaryContainer),
                       ),
                       child: isLoading
                           ? const SizedBox(
@@ -222,6 +365,12 @@ class TopicScreen extends HookConsumerWidget {
                               ? ref.read(topicControllerProvider).addTopic(
                                     ref: ref,
                                     id: id,
+                                    bgColor: bgCurrentColor.value.value
+                                        .toRadixString(16)
+                                        .toUpperCase(),
+                                    fgColor: fgCurrentColor.value.value
+                                        .toRadixString(16)
+                                        .toUpperCase(),
                                     titleUk: ukTitleController.text,
                                     titleEn: enTitleController.text,
                                     startDate: startDateController.text,
@@ -232,6 +381,12 @@ class TopicScreen extends HookConsumerWidget {
                               : ref.read(topicControllerProvider).updateTopic(
                                     ref: ref,
                                     id: existingTopic.id,
+                                    bgColor: bgCurrentColor.value.value
+                                        .toRadixString(16)
+                                        .toUpperCase(),
+                                    fgColor: fgCurrentColor.value.value
+                                        .toRadixString(16)
+                                        .toUpperCase(),
                                     titleUk: ukTitleController.text,
                                     titleEn: enTitleController.text,
                                     startDate: startDateController.text,
@@ -240,13 +395,16 @@ class TopicScreen extends HookConsumerWidget {
                                     eventList: eventsForTopic.value,
                                   );
 
-                          // if (coverImageValue != null) {
-                          //   final topicToModify =
-                          //       await ref.read(topicControllerProvider).queryTopicWithId(topic.id);
-                          //   if (topicToModify != null) {
-                          //     ref.read(topicControllerProvider).uploadFile(coverImageValue, topic);
-                          //   }
-                          // }
+                          if (coverImage != null) {
+                            final queriedTopic = await ref
+                                .read(topicControllerProvider)
+                                .queryTopicWithId(existingTopic?.id ?? id);
+                            if (queriedTopic != null) {
+                              ref
+                                  .read(topicControllerProvider)
+                                  .uploadFile(coverImage, queriedTopic);
+                            }
+                          }
                           resetState(ref);
                           appRouter.go(ScreenPaths.home);
                         }
@@ -255,10 +413,12 @@ class TopicScreen extends HookConsumerWidget {
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.resolveWith(
-                            (states) => Theme.of(context).colorScheme.errorContainer),
+                            (states) =>
+                                Theme.of(context).colorScheme.errorContainer),
                       ),
                       onPressed: () async {
-                        await deleteTopic(context, ref, existingTopic!).then((confirm) {
+                        await deleteTopic(context, ref, existingTopic!)
+                            .then((confirm) {
                           if (confirm) appRouter.pop();
                         });
                       },

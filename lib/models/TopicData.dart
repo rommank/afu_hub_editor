@@ -36,15 +36,12 @@ class TopicData extends Model {
   final TemporalDate? _startDate;
   final TemporalDate? _endDate;
   final String? _bgImageKey;
-  final String? _bgImageUrl;
   final String? _leftImageKey;
-  final String? _leftImageUrl;
   final String? _rightImageKey;
-  final String? _rightImageUrl;
   final String? _topImageKey;
-  final String? _topImageUrl;
   final String? _bottomImageKey;
-  final String? _bottomImageUrl;
+  final String? _bgColor;
+  final String? _fgColor;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -112,40 +109,28 @@ class TopicData extends Model {
     return _bgImageKey;
   }
   
-  String? get bgImageUrl {
-    return _bgImageUrl;
-  }
-  
   String? get leftImageKey {
     return _leftImageKey;
-  }
-  
-  String? get leftImageUrl {
-    return _leftImageUrl;
   }
   
   String? get rightImageKey {
     return _rightImageKey;
   }
   
-  String? get rightImageUrl {
-    return _rightImageUrl;
-  }
-  
   String? get topImageKey {
     return _topImageKey;
-  }
-  
-  String? get topImageUrl {
-    return _topImageUrl;
   }
   
   String? get bottomImageKey {
     return _bottomImageKey;
   }
   
-  String? get bottomImageUrl {
-    return _bottomImageUrl;
+  String? get bgColor {
+    return _bgColor;
+  }
+  
+  String? get fgColor {
+    return _fgColor;
   }
   
   TemporalDateTime? get createdAt {
@@ -156,9 +141,9 @@ class TopicData extends Model {
     return _updatedAt;
   }
   
-  const TopicData._internal({required this.id, required title, sections, events, required startDate, required endDate, bgImageKey, bgImageUrl, leftImageKey, leftImageUrl, rightImageKey, rightImageUrl, topImageKey, topImageUrl, bottomImageKey, bottomImageUrl, createdAt, updatedAt}): _title = title, _sections = sections, _events = events, _startDate = startDate, _endDate = endDate, _bgImageKey = bgImageKey, _bgImageUrl = bgImageUrl, _leftImageKey = leftImageKey, _leftImageUrl = leftImageUrl, _rightImageKey = rightImageKey, _rightImageUrl = rightImageUrl, _topImageKey = topImageKey, _topImageUrl = topImageUrl, _bottomImageKey = bottomImageKey, _bottomImageUrl = bottomImageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
+  const TopicData._internal({required this.id, required title, sections, events, required startDate, required endDate, bgImageKey, leftImageKey, rightImageKey, topImageKey, bottomImageKey, bgColor, fgColor, createdAt, updatedAt}): _title = title, _sections = sections, _events = events, _startDate = startDate, _endDate = endDate, _bgImageKey = bgImageKey, _leftImageKey = leftImageKey, _rightImageKey = rightImageKey, _topImageKey = topImageKey, _bottomImageKey = bottomImageKey, _bgColor = bgColor, _fgColor = fgColor, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory TopicData({String? id, required LocalizedText title, List<SectionData>? sections, List<EventData>? events, required TemporalDate startDate, required TemporalDate endDate, String? bgImageKey, String? bgImageUrl, String? leftImageKey, String? leftImageUrl, String? rightImageKey, String? rightImageUrl, String? topImageKey, String? topImageUrl, String? bottomImageKey, String? bottomImageUrl}) {
+  factory TopicData({String? id, required LocalizedText title, List<SectionData>? sections, List<EventData>? events, required TemporalDate startDate, required TemporalDate endDate, String? bgImageKey, String? leftImageKey, String? rightImageKey, String? topImageKey, String? bottomImageKey, String? bgColor, String? fgColor}) {
     return TopicData._internal(
       id: id == null ? UUID.getUUID() : id,
       title: title,
@@ -167,15 +152,12 @@ class TopicData extends Model {
       startDate: startDate,
       endDate: endDate,
       bgImageKey: bgImageKey,
-      bgImageUrl: bgImageUrl,
       leftImageKey: leftImageKey,
-      leftImageUrl: leftImageUrl,
       rightImageKey: rightImageKey,
-      rightImageUrl: rightImageUrl,
       topImageKey: topImageKey,
-      topImageUrl: topImageUrl,
       bottomImageKey: bottomImageKey,
-      bottomImageUrl: bottomImageUrl);
+      bgColor: bgColor,
+      fgColor: fgColor);
   }
   
   bool equals(Object other) {
@@ -193,15 +175,12 @@ class TopicData extends Model {
       _startDate == other._startDate &&
       _endDate == other._endDate &&
       _bgImageKey == other._bgImageKey &&
-      _bgImageUrl == other._bgImageUrl &&
       _leftImageKey == other._leftImageKey &&
-      _leftImageUrl == other._leftImageUrl &&
       _rightImageKey == other._rightImageKey &&
-      _rightImageUrl == other._rightImageUrl &&
       _topImageKey == other._topImageKey &&
-      _topImageUrl == other._topImageUrl &&
       _bottomImageKey == other._bottomImageKey &&
-      _bottomImageUrl == other._bottomImageUrl;
+      _bgColor == other._bgColor &&
+      _fgColor == other._fgColor;
   }
   
   @override
@@ -217,15 +196,12 @@ class TopicData extends Model {
     buffer.write("startDate=" + (_startDate != null ? _startDate!.format() : "null") + ", ");
     buffer.write("endDate=" + (_endDate != null ? _endDate!.format() : "null") + ", ");
     buffer.write("bgImageKey=" + "$_bgImageKey" + ", ");
-    buffer.write("bgImageUrl=" + "$_bgImageUrl" + ", ");
     buffer.write("leftImageKey=" + "$_leftImageKey" + ", ");
-    buffer.write("leftImageUrl=" + "$_leftImageUrl" + ", ");
     buffer.write("rightImageKey=" + "$_rightImageKey" + ", ");
-    buffer.write("rightImageUrl=" + "$_rightImageUrl" + ", ");
     buffer.write("topImageKey=" + "$_topImageKey" + ", ");
-    buffer.write("topImageUrl=" + "$_topImageUrl" + ", ");
     buffer.write("bottomImageKey=" + "$_bottomImageKey" + ", ");
-    buffer.write("bottomImageUrl=" + "$_bottomImageUrl" + ", ");
+    buffer.write("bgColor=" + "$_bgColor" + ", ");
+    buffer.write("fgColor=" + "$_fgColor" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -233,7 +209,7 @@ class TopicData extends Model {
     return buffer.toString();
   }
   
-  TopicData copyWith({LocalizedText? title, List<SectionData>? sections, List<EventData>? events, TemporalDate? startDate, TemporalDate? endDate, String? bgImageKey, String? bgImageUrl, String? leftImageKey, String? leftImageUrl, String? rightImageKey, String? rightImageUrl, String? topImageKey, String? topImageUrl, String? bottomImageKey, String? bottomImageUrl}) {
+  TopicData copyWith({LocalizedText? title, List<SectionData>? sections, List<EventData>? events, TemporalDate? startDate, TemporalDate? endDate, String? bgImageKey, String? leftImageKey, String? rightImageKey, String? topImageKey, String? bottomImageKey, String? bgColor, String? fgColor}) {
     return TopicData._internal(
       id: id,
       title: title ?? this.title,
@@ -242,15 +218,12 @@ class TopicData extends Model {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       bgImageKey: bgImageKey ?? this.bgImageKey,
-      bgImageUrl: bgImageUrl ?? this.bgImageUrl,
       leftImageKey: leftImageKey ?? this.leftImageKey,
-      leftImageUrl: leftImageUrl ?? this.leftImageUrl,
       rightImageKey: rightImageKey ?? this.rightImageKey,
-      rightImageUrl: rightImageUrl ?? this.rightImageUrl,
       topImageKey: topImageKey ?? this.topImageKey,
-      topImageUrl: topImageUrl ?? this.topImageUrl,
       bottomImageKey: bottomImageKey ?? this.bottomImageKey,
-      bottomImageUrl: bottomImageUrl ?? this.bottomImageUrl);
+      bgColor: bgColor ?? this.bgColor,
+      fgColor: fgColor ?? this.fgColor);
   }
   
   TopicData.fromJson(Map<String, dynamic> json)  
@@ -273,24 +246,21 @@ class TopicData extends Model {
       _startDate = json['startDate'] != null ? TemporalDate.fromString(json['startDate']) : null,
       _endDate = json['endDate'] != null ? TemporalDate.fromString(json['endDate']) : null,
       _bgImageKey = json['bgImageKey'],
-      _bgImageUrl = json['bgImageUrl'],
       _leftImageKey = json['leftImageKey'],
-      _leftImageUrl = json['leftImageUrl'],
       _rightImageKey = json['rightImageKey'],
-      _rightImageUrl = json['rightImageUrl'],
       _topImageKey = json['topImageKey'],
-      _topImageUrl = json['topImageUrl'],
       _bottomImageKey = json['bottomImageKey'],
-      _bottomImageUrl = json['bottomImageUrl'],
+      _bgColor = json['bgColor'],
+      _fgColor = json['fgColor'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'title': _title?.toJson(), 'sections': _sections?.map((SectionData? e) => e?.toJson()).toList(), 'events': _events?.map((EventData? e) => e?.toJson()).toList(), 'startDate': _startDate?.format(), 'endDate': _endDate?.format(), 'bgImageKey': _bgImageKey, 'bgImageUrl': _bgImageUrl, 'leftImageKey': _leftImageKey, 'leftImageUrl': _leftImageUrl, 'rightImageKey': _rightImageKey, 'rightImageUrl': _rightImageUrl, 'topImageKey': _topImageKey, 'topImageUrl': _topImageUrl, 'bottomImageKey': _bottomImageKey, 'bottomImageUrl': _bottomImageUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'title': _title?.toJson(), 'sections': _sections?.map((SectionData? e) => e?.toJson()).toList(), 'events': _events?.map((EventData? e) => e?.toJson()).toList(), 'startDate': _startDate?.format(), 'endDate': _endDate?.format(), 'bgImageKey': _bgImageKey, 'leftImageKey': _leftImageKey, 'rightImageKey': _rightImageKey, 'topImageKey': _topImageKey, 'bottomImageKey': _bottomImageKey, 'bgColor': _bgColor, 'fgColor': _fgColor, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'title': _title, 'sections': _sections, 'events': _events, 'startDate': _startDate, 'endDate': _endDate, 'bgImageKey': _bgImageKey, 'bgImageUrl': _bgImageUrl, 'leftImageKey': _leftImageKey, 'leftImageUrl': _leftImageUrl, 'rightImageKey': _rightImageKey, 'rightImageUrl': _rightImageUrl, 'topImageKey': _topImageKey, 'topImageUrl': _topImageUrl, 'bottomImageKey': _bottomImageKey, 'bottomImageUrl': _bottomImageUrl, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'title': _title, 'sections': _sections, 'events': _events, 'startDate': _startDate, 'endDate': _endDate, 'bgImageKey': _bgImageKey, 'leftImageKey': _leftImageKey, 'rightImageKey': _rightImageKey, 'topImageKey': _topImageKey, 'bottomImageKey': _bottomImageKey, 'bgColor': _bgColor, 'fgColor': _fgColor, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryModelIdentifier<TopicDataModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<TopicDataModelIdentifier>();
@@ -305,15 +275,12 @@ class TopicData extends Model {
   static final QueryField STARTDATE = QueryField(fieldName: "startDate");
   static final QueryField ENDDATE = QueryField(fieldName: "endDate");
   static final QueryField BGIMAGEKEY = QueryField(fieldName: "bgImageKey");
-  static final QueryField BGIMAGEURL = QueryField(fieldName: "bgImageUrl");
   static final QueryField LEFTIMAGEKEY = QueryField(fieldName: "leftImageKey");
-  static final QueryField LEFTIMAGEURL = QueryField(fieldName: "leftImageUrl");
   static final QueryField RIGHTIMAGEKEY = QueryField(fieldName: "rightImageKey");
-  static final QueryField RIGHTIMAGEURL = QueryField(fieldName: "rightImageUrl");
   static final QueryField TOPIMAGEKEY = QueryField(fieldName: "topImageKey");
-  static final QueryField TOPIMAGEURL = QueryField(fieldName: "topImageUrl");
   static final QueryField BOTTOMIMAGEKEY = QueryField(fieldName: "bottomImageKey");
-  static final QueryField BOTTOMIMAGEURL = QueryField(fieldName: "bottomImageUrl");
+  static final QueryField BGCOLOR = QueryField(fieldName: "bgColor");
+  static final QueryField FGCOLOR = QueryField(fieldName: "fgColor");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "TopicData";
     modelSchemaDefinition.pluralName = "TopicData";
@@ -380,19 +347,7 @@ class TopicData extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: TopicData.BGIMAGEURL,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: TopicData.LEFTIMAGEKEY,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: TopicData.LEFTIMAGEURL,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
@@ -404,19 +359,7 @@ class TopicData extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: TopicData.RIGHTIMAGEURL,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: TopicData.TOPIMAGEKEY,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: TopicData.TOPIMAGEURL,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
@@ -428,7 +371,13 @@ class TopicData extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: TopicData.BOTTOMIMAGEURL,
+      key: TopicData.BGCOLOR,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: TopicData.FGCOLOR,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

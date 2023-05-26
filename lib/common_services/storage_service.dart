@@ -15,9 +15,7 @@ StorageService storageService(StorageServiceRef ref) {
 
 @riverpod
 Future<String> imageUrl(ImageUrlRef ref, {required String key}) {
-  return ref
-      .watch(storageServiceProvider)
-      .getDownloadUrl(key: key, accessLevel: StorageAccessLevel.guest);
+  return ref.watch(storageServiceProvider).getDownloadUrl(key: key);
 }
 
 class StorageService {
@@ -33,13 +31,11 @@ class StorageService {
 
   Future<String> getDownloadUrl({
     required String key,
-    required StorageAccessLevel accessLevel,
   }) async {
     try {
       final result = await Amplify.Storage.getUrl(
         key: key,
         options: StorageGetUrlOptions(
-          accessLevel: accessLevel,
           pluginOptions: S3GetUrlPluginOptions(
             validateObjectExistence: true,
             expiresIn: 1.days,
@@ -56,7 +52,8 @@ class StorageService {
   Future<String?> uploadFile(io.File file) async {
     final extension = p.extension(file.path);
     final key = UUID.getUUID() + extension;
-    final awsFile = AWSFile.fromStream(file.openRead(), size: await file.length());
+    final awsFile =
+        AWSFile.fromStream(file.openRead(), size: await file.length());
     try {
       await Amplify.Storage.uploadFile(
           localFile: awsFile,

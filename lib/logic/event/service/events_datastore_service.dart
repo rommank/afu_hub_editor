@@ -37,16 +37,16 @@ class EventsDataStoreService {
 
   Future<void> update(EventData event) async {
     try {
-      final eventWithId =
-          await Amplify.DataStore.query(EventData.classType, where: SectionData.ID.eq(event.id));
+      final eventWithId = await Amplify.DataStore.query(EventData.classType,
+          where: SectionData.ID.eq(event.id));
       final oldEvent = eventWithId.single;
       final newEvent = oldEvent.copyWith(
-          date: event.date,
-          title: event.title,
-          text: event.text,
-          topicId: event.topicId,
-          iconKey: event.iconKey,
-          iconUrl: event.iconUrl);
+        date: event.date,
+        title: event.title,
+        text: event.text,
+        topicId: event.topicId,
+        iconKey: event.iconKey,
+      );
 
       await Amplify.DataStore.save(newEvent);
     } on Exception catch (error) {
@@ -56,8 +56,8 @@ class EventsDataStoreService {
 
   Future<EventData?> queryById(String id) async {
     try {
-      final eventsWithId =
-          await Amplify.DataStore.query(EventData.classType, where: EventData.ID.eq(id));
+      final eventsWithId = await Amplify.DataStore.query(EventData.classType,
+          where: EventData.ID.eq(id));
       return eventsWithId.first;
     } on Exception catch (error) {
       safePrint(error);
@@ -67,8 +67,8 @@ class EventsDataStoreService {
 
   Future<List<EventData?>> queryByTopicId(String id) async {
     try {
-      final eventsWithId =
-          await Amplify.DataStore.query(EventData.classType, where: EventData.TOPICID.eq(id));
+      final eventsWithId = await Amplify.DataStore.query(EventData.classType,
+          where: EventData.TOPICID.eq(id));
       return eventsWithId;
     } on Exception catch (error) {
       safePrint(error);
@@ -77,7 +77,8 @@ class EventsDataStoreService {
   }
 
   Stream<EventData> listenToId(String id) {
-    return Amplify.DataStore.observeQuery(EventData.classType, where: EventData.ID.eq(id))
+    return Amplify.DataStore.observeQuery(EventData.classType,
+            where: EventData.ID.eq(id))
         .map((event) => event.items.toList().single)
         .handleError((error) {
       safePrint("Listen to event with id: stream error occurred");

@@ -1,3 +1,4 @@
+import 'package:afu_hub_editor/common_services/storage_service.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +17,18 @@ final containerHeightProvider = StateProvider<double>((ref) => 48);
 class CoverImageCard extends ConsumerWidget {
   const CoverImageCard({
     this.imageKey,
-    this.imageUrl,
     this.label,
     Key? key,
   }) : super(key: key);
 
-  final String? imageUrl;
   final String? imageKey;
+
   final String? label;
 
   Future<void> pickImageFromGallery(WidgetRef ref) async {
-    final pickedImage = await ref.read(imagePickerProvider).pickImage(source: ImageSource.gallery);
+    final pickedImage = await ref
+        .read(imagePickerProvider)
+        .pickImage(source: ImageSource.gallery);
     if (pickedImage == null) {
       safePrint('No image selected');
     } else {
@@ -37,7 +39,9 @@ class CoverImageCard extends ConsumerWidget {
   }
 
   Widget? pickImageWidget(
-      {io.File? pickedImage, String? existingImageUrl, required WidgetRef ref}) {
+      {io.File? pickedImage,
+      String? existingImageKey,
+      required WidgetRef ref}) {
     if (pickedImage != null) {
       Future(() {
         ref.read(containerHeightProvider.notifier).state = 150;
@@ -45,11 +49,20 @@ class CoverImageCard extends ConsumerWidget {
 
       return kIsWeb ? Image.network(pickedImage.path) : Image.file(pickedImage);
     }
-    if (existingImageUrl != null) {
+    if (existingImageKey != null) {
       Future(() {
         ref.read(containerHeightProvider.notifier).state = 150;
       });
-      return CachedNetworkImage(imageUrl: existingImageUrl, cacheKey: imageKey);
+      return FutureBuilder(
+          future: ref
+              .read(storageServiceProvider)
+              .getDownloadUrl(key: existingImageKey),
+          builder: (_, snapshot) {
+            if (snapshot.hasData) {
+              return CachedNetworkImage(imageUrl: snapshot.data!.toString());
+            }
+            return const Center(child: CircularProgressIndicator());
+          });
     }
 
     return null;
@@ -85,7 +98,7 @@ class CoverImageCard extends ConsumerWidget {
                   padding: const EdgeInsets.all(15),
                   color: Theme.of(context).colorScheme.secondaryContainer,
                   child: pickImageWidget(
-                      existingImageUrl: imageUrl,
+                      existingImageKey: imageKey,
                       pickedImage: ref.read(coverImageProvider),
                       ref: ref),
                 ),
@@ -102,11 +115,14 @@ class CoverImageCard extends ConsumerWidget {
                     children: [
                       Text(
                         label ?? $Strings.addCoverImage,
-                        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                       const Gap(8),
                       Icon(Icons.image_outlined,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant),
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant),
                     ],
                   ),
                 ),

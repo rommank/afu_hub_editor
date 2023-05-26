@@ -1,8 +1,10 @@
+import 'package:afu_hub_editor/common_services/storage_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../models/TopicData.dart';
+import '../../../router.dart';
 
 class TopicCard extends ConsumerWidget {
   const TopicCard({
@@ -18,7 +20,7 @@ class TopicCard extends ConsumerWidget {
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
         onTap: () {
-          context.pushNamed('topic', extra: topic);
+          context.push(ScreenPaths.topic, extra: topic);
         },
         child: Card(
           clipBehavior: Clip.antiAlias,
@@ -38,22 +40,37 @@ class TopicCard extends ConsumerWidget {
                         child: topic.bgImageKey != null
                             ? Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: CachedNetworkImage(
-                                  errorWidget: (context, url, dynamic error) =>
-                                      const Icon(Icons.error_outline_outlined),
-                                  imageUrl: topic.bgImageUrl.toString(),
-                                  cacheKey: topic.bgImageKey,
-                                  width: double.maxFinite,
-                                  alignment: Alignment.topCenter,
-                                  fit: BoxFit.scaleDown,
-                                ),
+                                child: FutureBuilder(
+                                    future: ref
+                                        .read(storageServiceProvider)
+                                        .getDownloadUrl(
+                                            key: topic.bgImageKey.toString()),
+                                    builder: (_, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return CachedNetworkImage(
+                                          errorWidget: (context, url,
+                                                  dynamic error) =>
+                                              const Icon(
+                                                  Icons.error_outline_outlined),
+                                          imageUrl: snapshot.data!.toString(),
+                                          cacheKey: topic.bgImageKey,
+                                          width: double.maxFinite,
+                                          alignment: Alignment.topCenter,
+                                          fit: BoxFit.scaleDown,
+                                        );
+                                      }
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    }),
                               )
                             : Padding(
                                 padding: const EdgeInsets.all(15),
                                 child: Image.asset(
                                   'assets/images/app-logo.png',
                                   fit: BoxFit.scaleDown,
-                                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer,
                                 ),
                               ),
                       ),

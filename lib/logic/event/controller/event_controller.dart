@@ -23,10 +23,9 @@ class EventController {
     final fileKey = await ref.read(storageServiceProvider).uploadFile(file);
 
     if (fileKey != null) {
-      final imageUrl = await ref
-          .read(storageServiceProvider)
-          .getDownloadUrl(key: fileKey, accessLevel: StorageAccessLevel.guest);
-      final updatedEvent = event.copyWith(iconKey: fileKey, iconUrl: imageUrl);
+      final imageUrl =
+          await ref.read(storageServiceProvider).getDownloadUrl(key: fileKey);
+      final updatedEvent = event.copyWith(iconKey: fileKey);
       await ref.read(eventsRepositoryProvider).update(updatedEvent);
       ref.read(storageServiceProvider).resetUploadProgress();
     }

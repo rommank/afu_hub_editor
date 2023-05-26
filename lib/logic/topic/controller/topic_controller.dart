@@ -28,10 +28,9 @@ class TopicController {
     final fileKey = await ref.read(storageServiceProvider).uploadFile(file);
 
     if (fileKey != null) {
-      final imageUrl = await ref
-          .read(storageServiceProvider)
-          .getDownloadUrl(key: fileKey, accessLevel: StorageAccessLevel.guest);
-      final updatedTopic = topic.copyWith(bgImageKey: fileKey, bgImageUrl: imageUrl);
+      final imageUrl =
+          await ref.read(storageServiceProvider).getDownloadUrl(key: fileKey);
+      final updatedTopic = topic.copyWith(bgImageKey: fileKey);
       await ref.read(topicsRepositoryProvider).update(updatedTopic);
       ref.read(storageServiceProvider).resetUploadProgress();
     }
@@ -51,9 +50,11 @@ class TopicController {
 
   Future<void> updateTopicIdForSections(
       {required String topicId, required List<SectionData> sections}) async {
-    final oldSectionsForTopic = await ref.read(sectionsRepositoryProvider).queryByTopicId(topicId);
+    final oldSectionsForTopic =
+        await ref.read(sectionsRepositoryProvider).queryByTopicId(topicId);
     final sectionsToUpdate = sections;
-    final sectionsToRelease = oldSectionsForTopic.toSet().difference(sections.toSet());
+    final sectionsToRelease =
+        oldSectionsForTopic.toSet().difference(sections.toSet());
 
     if (sectionsToUpdate.isNotEmpty) {
       for (var section in sectionsToUpdate) {
@@ -75,9 +76,11 @@ class TopicController {
 
   Future<void> updateTopicIdForEvents(
       {required String topicId, required List<EventData> events}) async {
-    final oldEventsForTopic = await ref.read(eventsRepositoryProvider).queryByTopicId(topicId);
+    final oldEventsForTopic =
+        await ref.read(eventsRepositoryProvider).queryByTopicId(topicId);
     final eventsToUpdate = events;
-    final eventsToRelease = oldEventsForTopic.toSet().difference(events.toSet());
+    final eventsToRelease =
+        oldEventsForTopic.toSet().difference(events.toSet());
 
     if (eventsToUpdate.isNotEmpty) {
       for (var event in eventsToUpdate) {
@@ -104,19 +107,25 @@ class TopicController {
     required String titleEn,
     required String startDate,
     required String endDate,
+    required String bgColor,
+    required String fgColor,
     List<SectionData>? sectionList,
     List<EventData>? eventList,
   }) async {
     DateTime tempStartDate = DateFormat($Strings.ukDateFormat).parse(startDate);
     DateTime tempEndDate = DateFormat($Strings.ukDateFormat).parse(endDate);
     final topic = TopicData(
+      bgColor: bgColor,
+      fgColor: fgColor,
       id: id,
       title: LocalizedText(uk: titleUk, en: titleEn),
-      startDate: TemporalDate(tempStartDate.copyWith(day: tempStartDate.day + 1)),
+      startDate:
+          TemporalDate(tempStartDate.copyWith(day: tempStartDate.day + 1)),
       endDate: TemporalDate(
         tempEndDate.copyWith(day: tempEndDate.day + 1),
       ),
     );
+
     await ref.read(topicsRepositoryProvider).update(topic);
 
     if (sectionList != null) {
@@ -134,6 +143,8 @@ class TopicController {
     required String titleEn,
     required String startDate,
     required String endDate,
+    required String bgColor,
+    required String fgColor,
     List<SectionData>? sectionList,
     List<EventData>? eventList,
   }) async {
@@ -141,8 +152,11 @@ class TopicController {
     DateTime tempEndDate = DateFormat($Strings.ukDateFormat).parse(endDate);
     final topic = TopicData(
       id: id,
+      bgColor: bgColor,
+      fgColor: fgColor,
       title: LocalizedText(uk: titleUk, en: titleEn),
-      startDate: TemporalDate(tempStartDate.copyWith(day: tempStartDate.day + 1)),
+      startDate:
+          TemporalDate(tempStartDate.copyWith(day: tempStartDate.day + 1)),
       endDate: TemporalDate(
         tempEndDate.copyWith(day: tempEndDate.day + 1),
       ),

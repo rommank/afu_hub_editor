@@ -1,5 +1,9 @@
 class $Strings {
   static const emptyTopicList = "Додайте першу тему💪";
+  static const fgColor = "Основний колір";
+  static const bgColor = "Фоновий колір";
+  static const toPick = "Вибрати";
+  static const pickColor = "Виберіть колір";
   static const emptySectionList = "Додайте першу секцію💪";
   static const emptyEventList = "Додайте першу подію💪";
   static const errorOccurred = "Виникла помилка";
@@ -63,8 +67,10 @@ class $Strings {
   static const newTopic = "Нова Тема";
   static const events = "Події";
   static const textFieldIsMandatory = "Це текстове поле є обов\'язковим";
-  static const endBeforeStartDateError = "Дата закінчення не має бути раніше ніж дати початку";
-  static const startBeforeStartDateError = "Дата початку не має бути пізніше ніж дата закінчення";
+  static const endBeforeStartDateError =
+      "Дата закінчення не має бути раніше ніж дати початку";
+  static const startBeforeStartDateError =
+      "Дата початку не має бути пізніше ніж дата закінчення";
   static const addTopicTooltip = "Додати тему";
   static const addSectionTooltip = "Додати секцію";
   static const addEventTooltip = "Додати подію";

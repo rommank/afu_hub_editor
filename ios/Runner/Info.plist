@@ -47,11 +47,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-    <key>NSCameraUsageDescription</key>
-	    <string>Будь ласка надайте доступ до вашої камери.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	    <string>Будь ласка надайте доступ до вашого мікрофону.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	    <string>Будь ласка надайте доступ до вашої фото галереї.</string>
+	<key>NSCameraUsageDescription</key>
+    <string>your usage description here</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Please give access to your photo library images.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>your usage description here</string>
 </dict>
 </plist>

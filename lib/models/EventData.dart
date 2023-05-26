@@ -34,7 +34,6 @@ class EventData extends Model {
   final LocalizedText? _text;
   final String? _topicId;
   final String? _iconKey;
-  final String? _iconUrl;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -89,10 +88,6 @@ class EventData extends Model {
     return _iconKey;
   }
   
-  String? get iconUrl {
-    return _iconUrl;
-  }
-  
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -101,17 +96,16 @@ class EventData extends Model {
     return _updatedAt;
   }
   
-  const EventData._internal({required this.id, required date, required title, text, topicId, iconKey, iconUrl, createdAt, updatedAt}): _date = date, _title = title, _text = text, _topicId = topicId, _iconKey = iconKey, _iconUrl = iconUrl, _createdAt = createdAt, _updatedAt = updatedAt;
+  const EventData._internal({required this.id, required date, required title, text, topicId, iconKey, createdAt, updatedAt}): _date = date, _title = title, _text = text, _topicId = topicId, _iconKey = iconKey, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory EventData({String? id, required TemporalDate date, required LocalizedText title, LocalizedText? text, String? topicId, String? iconKey, String? iconUrl}) {
+  factory EventData({String? id, required TemporalDate date, required LocalizedText title, LocalizedText? text, String? topicId, String? iconKey}) {
     return EventData._internal(
       id: id == null ? UUID.getUUID() : id,
       date: date,
       title: title,
       text: text,
       topicId: topicId,
-      iconKey: iconKey,
-      iconUrl: iconUrl);
+      iconKey: iconKey);
   }
   
   bool equals(Object other) {
@@ -127,8 +121,7 @@ class EventData extends Model {
       _title == other._title &&
       _text == other._text &&
       _topicId == other._topicId &&
-      _iconKey == other._iconKey &&
-      _iconUrl == other._iconUrl;
+      _iconKey == other._iconKey;
   }
   
   @override
@@ -145,7 +138,6 @@ class EventData extends Model {
     buffer.write("text=" + (_text != null ? _text!.toString() : "null") + ", ");
     buffer.write("topicId=" + "$_topicId" + ", ");
     buffer.write("iconKey=" + "$_iconKey" + ", ");
-    buffer.write("iconUrl=" + "$_iconUrl" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -153,15 +145,14 @@ class EventData extends Model {
     return buffer.toString();
   }
   
-  EventData copyWith({TemporalDate? date, LocalizedText? title, LocalizedText? text, String? topicId, String? iconKey, String? iconUrl}) {
+  EventData copyWith({TemporalDate? date, LocalizedText? title, LocalizedText? text, String? topicId, String? iconKey}) {
     return EventData._internal(
       id: id,
       date: date ?? this.date,
       title: title ?? this.title,
       text: text ?? this.text,
       topicId: topicId ?? this.topicId,
-      iconKey: iconKey ?? this.iconKey,
-      iconUrl: iconUrl ?? this.iconUrl);
+      iconKey: iconKey ?? this.iconKey);
   }
   
   EventData.fromJson(Map<String, dynamic> json)  
@@ -175,16 +166,15 @@ class EventData extends Model {
         : null,
       _topicId = json['topicId'],
       _iconKey = json['iconKey'],
-      _iconUrl = json['iconUrl'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'date': _date?.format(), 'title': _title?.toJson(), 'text': _text?.toJson(), 'topicId': _topicId, 'iconKey': _iconKey, 'iconUrl': _iconUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'date': _date?.format(), 'title': _title?.toJson(), 'text': _text?.toJson(), 'topicId': _topicId, 'iconKey': _iconKey, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'date': _date, 'title': _title, 'text': _text, 'topicId': _topicId, 'iconKey': _iconKey, 'iconUrl': _iconUrl, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'date': _date, 'title': _title, 'text': _text, 'topicId': _topicId, 'iconKey': _iconKey, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryModelIdentifier<EventDataModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<EventDataModelIdentifier>();
@@ -194,7 +184,6 @@ class EventData extends Model {
   static final QueryField TEXT = QueryField(fieldName: "text");
   static final QueryField TOPICID = QueryField(fieldName: "topicId");
   static final QueryField ICONKEY = QueryField(fieldName: "iconKey");
-  static final QueryField ICONURL = QueryField(fieldName: "iconUrl");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "EventData";
     modelSchemaDefinition.pluralName = "EventData";
@@ -252,12 +241,6 @@ class EventData extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: EventData.ICONKEY,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: EventData.ICONURL,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

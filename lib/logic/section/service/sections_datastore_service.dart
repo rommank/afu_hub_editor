@@ -4,7 +4,8 @@ import '../../../models/SectionData.dart';
 part 'sections_datastore_service.g.dart';
 
 @riverpod
-SectionsDataStoreService sectionsDataStoreService(SectionsDataStoreServiceRef ref) {
+SectionsDataStoreService sectionsDataStoreService(
+    SectionsDataStoreServiceRef ref) {
   return SectionsDataStoreService();
 }
 
@@ -17,8 +18,9 @@ class SectionsDataStoreService {
 
   Future<SectionData?> queryById(String id) async {
     try {
-      final sectionsWithId =
-          await Amplify.DataStore.query(SectionData.classType, where: SectionData.ID.eq(id));
+      final sectionsWithId = await Amplify.DataStore.query(
+          SectionData.classType,
+          where: SectionData.ID.eq(id));
       return sectionsWithId.first;
     } on Exception catch (error) {
       safePrint(error);
@@ -28,8 +30,9 @@ class SectionsDataStoreService {
 
   Future<List<SectionData?>> queryByTopicId(String id) async {
     try {
-      final sectionsWithId =
-          await Amplify.DataStore.query(SectionData.classType, where: SectionData.TOPICID.eq(id));
+      final sectionsWithId = await Amplify.DataStore.query(
+          SectionData.classType,
+          where: SectionData.TOPICID.eq(id));
       return sectionsWithId;
     } on Exception catch (error) {
       safePrint(error);
@@ -57,27 +60,25 @@ class SectionsDataStoreService {
 
   Future<void> update(SectionData section) async {
     try {
-      final sectionsWithId = await Amplify.DataStore.query(SectionData.classType,
+      final sectionsWithId = await Amplify.DataStore.query(
+          SectionData.classType,
           where: SectionData.ID.eq(section.id));
       final oldSection = sectionsWithId.first;
       final newSection = oldSection.copyWith(
-          title: section.title,
-          text1: section.text1,
-          text2: section.text2,
-          quote1: section.quote1,
-          callout1: section.callout1,
-          callout2: section.callout2,
-          photo2Key: section.photo2Key,
-          photo2Url: section.photo2Url,
-          photo3Key: section.photo3Key,
-          photo3Url: section.photo3Url,
-          iconKey: section.iconKey,
-          iconUrl: section.iconUrl,
-          topicId: section.topicId,
-          order: section.order,
-          termToExplain1: section.termToExplain1,
-          photo1Key: section.photo1Key,
-          photo1Url: section.photo1Url);
+        title: section.title,
+        text1: section.text1,
+        text2: section.text2,
+        quote1: section.quote1,
+        callout1: section.callout1,
+        callout2: section.callout2,
+        photo2Key: section.photo2Key,
+        photo3Key: section.photo3Key,
+        iconKey: section.iconKey,
+        topicId: section.topicId,
+        order: section.order,
+        termToExplain1: section.termToExplain1,
+        photo1Key: section.photo1Key,
+      );
 
       await Amplify.DataStore.save(newSection);
     } on Exception catch (error) {

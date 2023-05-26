@@ -20,16 +20,21 @@ class SectionsScreen extends HookConsumerWidget {
           ? const Center(
               child: Text($Strings.emptySectionList),
             )
-          : LayoutBuilder(builder: (_, constraints) {
-              return GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                padding: EdgeInsets.symmetric(
-                    horizontal: calculatePadding(constraints.maxWidth), vertical: 10),
-                children: sections.map((section) => SectionCard(section: section!)).toList(),
-              );
-            }),
+          : LayoutBuilder(
+              builder: (_, constraints) {
+                return GridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  padding: EdgeInsets.symmetric(
+                      horizontal: calculatePadding(constraints.maxWidth),
+                      vertical: 10),
+                  children: sections
+                      .map((section) => SectionCard(section: section!))
+                      .toList(),
+                );
+              },
+            ),
     );
   }
 }

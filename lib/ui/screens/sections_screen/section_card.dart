@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../models/SectionData.dart';
+import '../../../router.dart';
 
 class SectionCard extends ConsumerWidget {
   const SectionCard({
@@ -18,7 +19,7 @@ class SectionCard extends ConsumerWidget {
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
         onTap: () {
-          context.pushNamed('section', extra: section);
+          context.push(ScreenPaths.section, extra: section);
         },
         child: Card(
           clipBehavior: Clip.antiAlias,
@@ -41,7 +42,7 @@ class SectionCard extends ConsumerWidget {
                                 child: CachedNetworkImage(
                                   errorWidget: (context, url, dynamic error) =>
                                       const Icon(Icons.error_outline_outlined),
-                                  imageUrl: section.iconUrl.toString(),
+                                  imageUrl: 'section.iconUrl.toString()',
                                   cacheKey: section.iconKey,
                                   width: double.maxFinite,
                                   alignment: Alignment.topCenter,
@@ -53,7 +54,9 @@ class SectionCard extends ConsumerWidget {
                                 child: Image.asset(
                                   'assets/images/app-logo.png',
                                   fit: BoxFit.scaleDown,
-                                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer,
                                 ),
                               ),
                       ),

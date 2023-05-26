@@ -56,47 +56,46 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final index = useState(0);
     final List<String> titles = <String>[
       $Strings.topics,
       $Strings.sections,
       $Strings.events,
     ];
+
     final tabController = useTabController(initialLength: titles.length);
-    return DefaultTabController(
-      initialIndex: 0,
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          shadowColor: Theme.of(context).shadowColor,
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          bottom: TabBar(
-            controller: tabController,
-            tabs: _buildHomeTabs(titles),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: _signOutCurrentUser,
-            ),
-          ],
-        ),
-        body: TabBarView(
+    tabController.addListener(() => index.value = tabController.index);
+    return Scaffold(
+      appBar: AppBar(
+        shadowColor: Theme.of(context).shadowColor,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        bottom: TabBar(
           controller: tabController,
-          physics: kIsWeb ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-          children: const [
-            TopicsScreen(),
-            SectionsScreen(),
-            EventsScreen(),
-          ],
+          tabs: _buildHomeTabs(titles),
         ),
-        floatingActionButtonLocation:
-            kIsWeb ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.endFloat,
-        floatingActionButton: FloatingActionButton(
-          isExtended: kIsWeb,
-          onPressed: () => _addButtonPressed(tabController.index),
-          tooltip: _pickTooltip(tabController.index),
-          child: const Icon(Icons.add),
-        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _signOutCurrentUser,
+          ),
+        ],
+      ),
+      body: TabBarView(
+        controller: tabController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: const [
+          TopicsScreen(),
+          SectionsScreen(),
+          EventsScreen(),
+        ],
+      ),
+      floatingActionButtonLocation:
+          kIsWeb ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        isExtended: kIsWeb,
+        onPressed: () => _addButtonPressed(tabController.index),
+        tooltip: _pickTooltip(tabController.index),
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -24,8 +24,8 @@ class SectionController {
     if (fileKey != null) {
       final imageUrl = await ref
           .read(storageServiceProvider)
-          .getDownloadUrl(key: fileKey, accessLevel: StorageAccessLevel.guest);
-      final updatedSection = section.copyWith(iconKey: fileKey, iconUrl: imageUrl);
+          .getDownloadUrl(key: fileKey);
+      final updatedSection = section.copyWith(iconKey: fileKey);
       await ref.read(sectionsRepositoryProvider).update(updatedSection);
       ref.read(storageServiceProvider).resetUploadProgress();
     }
@@ -40,7 +40,7 @@ class SectionController {
     required String nameEn,
     required String text1Uk,
     required String text1En,
-    required String order,
+    required int order,
     required String topicId,
     String? id,
     String? quote1AuthorUk,
@@ -76,8 +76,16 @@ class SectionController {
                 meaning: LocalizedText(uk: term1MeaningUk, en: term1MeaningEn))
             : null,
         callout1: LocalizedText(uk: callout1Uk, en: callout1En),
-        order: 1);
+        order: order);
     await ref.read(sectionsRepositoryProvider).add(section);
+  }
+
+  Future<void> updateSectionOrder({
+    required SectionData section,
+    required int newOrder,
+  }) async {
+    final updatedSection = section.copyWith(order: newOrder);
+    await ref.read(sectionsRepositoryProvider).update(updatedSection);
   }
 
   Future<void> updateSection({

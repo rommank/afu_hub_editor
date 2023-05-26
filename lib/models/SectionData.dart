@@ -38,14 +38,10 @@ class SectionData extends Model {
   final String? _topicId;
   final TermToExplain? _termToExplain1;
   final String? _iconKey;
-  final String? _iconUrl;
   final LocalizedText? _callout2;
   final String? _photo1Key;
-  final String? _photo1Url;
   final String? _photo2Key;
-  final String? _photo2Url;
   final String? _photo3Key;
-  final String? _photo3Url;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -125,10 +121,6 @@ class SectionData extends Model {
     return _iconKey;
   }
   
-  String? get iconUrl {
-    return _iconUrl;
-  }
-  
   LocalizedText? get callout2 {
     return _callout2;
   }
@@ -137,24 +129,12 @@ class SectionData extends Model {
     return _photo1Key;
   }
   
-  String? get photo1Url {
-    return _photo1Url;
-  }
-  
   String? get photo2Key {
     return _photo2Key;
   }
   
-  String? get photo2Url {
-    return _photo2Url;
-  }
-  
   String? get photo3Key {
     return _photo3Key;
-  }
-  
-  String? get photo3Url {
-    return _photo3Url;
   }
   
   TemporalDateTime? get createdAt {
@@ -165,9 +145,9 @@ class SectionData extends Model {
     return _updatedAt;
   }
   
-  const SectionData._internal({required this.id, required title, required text1, text2, quote1, callout1, required order, topicId, termToExplain1, iconKey, iconUrl, callout2, photo1Key, photo1Url, photo2Key, photo2Url, photo3Key, photo3Url, createdAt, updatedAt}): _title = title, _text1 = text1, _text2 = text2, _quote1 = quote1, _callout1 = callout1, _order = order, _topicId = topicId, _termToExplain1 = termToExplain1, _iconKey = iconKey, _iconUrl = iconUrl, _callout2 = callout2, _photo1Key = photo1Key, _photo1Url = photo1Url, _photo2Key = photo2Key, _photo2Url = photo2Url, _photo3Key = photo3Key, _photo3Url = photo3Url, _createdAt = createdAt, _updatedAt = updatedAt;
+  const SectionData._internal({required this.id, required title, required text1, text2, quote1, callout1, required order, topicId, termToExplain1, iconKey, callout2, photo1Key, photo2Key, photo3Key, createdAt, updatedAt}): _title = title, _text1 = text1, _text2 = text2, _quote1 = quote1, _callout1 = callout1, _order = order, _topicId = topicId, _termToExplain1 = termToExplain1, _iconKey = iconKey, _callout2 = callout2, _photo1Key = photo1Key, _photo2Key = photo2Key, _photo3Key = photo3Key, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory SectionData({String? id, required LocalizedText title, required LocalizedText text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, required int order, String? topicId, TermToExplain? termToExplain1, String? iconKey, String? iconUrl, LocalizedText? callout2, String? photo1Key, String? photo1Url, String? photo2Key, String? photo2Url, String? photo3Key, String? photo3Url}) {
+  factory SectionData({String? id, required LocalizedText title, required LocalizedText text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, required int order, String? topicId, TermToExplain? termToExplain1, String? iconKey, LocalizedText? callout2, String? photo1Key, String? photo2Key, String? photo3Key}) {
     return SectionData._internal(
       id: id == null ? UUID.getUUID() : id,
       title: title,
@@ -179,14 +159,10 @@ class SectionData extends Model {
       topicId: topicId,
       termToExplain1: termToExplain1,
       iconKey: iconKey,
-      iconUrl: iconUrl,
       callout2: callout2,
       photo1Key: photo1Key,
-      photo1Url: photo1Url,
       photo2Key: photo2Key,
-      photo2Url: photo2Url,
-      photo3Key: photo3Key,
-      photo3Url: photo3Url);
+      photo3Key: photo3Key);
   }
   
   bool equals(Object other) {
@@ -207,14 +183,10 @@ class SectionData extends Model {
       _topicId == other._topicId &&
       _termToExplain1 == other._termToExplain1 &&
       _iconKey == other._iconKey &&
-      _iconUrl == other._iconUrl &&
       _callout2 == other._callout2 &&
       _photo1Key == other._photo1Key &&
-      _photo1Url == other._photo1Url &&
       _photo2Key == other._photo2Key &&
-      _photo2Url == other._photo2Url &&
-      _photo3Key == other._photo3Key &&
-      _photo3Url == other._photo3Url;
+      _photo3Key == other._photo3Key;
   }
   
   @override
@@ -235,14 +207,10 @@ class SectionData extends Model {
     buffer.write("topicId=" + "$_topicId" + ", ");
     buffer.write("termToExplain1=" + (_termToExplain1 != null ? _termToExplain1!.toString() : "null") + ", ");
     buffer.write("iconKey=" + "$_iconKey" + ", ");
-    buffer.write("iconUrl=" + "$_iconUrl" + ", ");
     buffer.write("callout2=" + (_callout2 != null ? _callout2!.toString() : "null") + ", ");
     buffer.write("photo1Key=" + "$_photo1Key" + ", ");
-    buffer.write("photo1Url=" + "$_photo1Url" + ", ");
     buffer.write("photo2Key=" + "$_photo2Key" + ", ");
-    buffer.write("photo2Url=" + "$_photo2Url" + ", ");
     buffer.write("photo3Key=" + "$_photo3Key" + ", ");
-    buffer.write("photo3Url=" + "$_photo3Url" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -250,7 +218,7 @@ class SectionData extends Model {
     return buffer.toString();
   }
   
-  SectionData copyWith({LocalizedText? title, LocalizedText? text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, int? order, String? topicId, TermToExplain? termToExplain1, String? iconKey, String? iconUrl, LocalizedText? callout2, String? photo1Key, String? photo1Url, String? photo2Key, String? photo2Url, String? photo3Key, String? photo3Url}) {
+  SectionData copyWith({LocalizedText? title, LocalizedText? text1, LocalizedText? text2, Quote? quote1, LocalizedText? callout1, int? order, String? topicId, TermToExplain? termToExplain1, String? iconKey, LocalizedText? callout2, String? photo1Key, String? photo2Key, String? photo3Key}) {
     return SectionData._internal(
       id: id,
       title: title ?? this.title,
@@ -262,14 +230,10 @@ class SectionData extends Model {
       topicId: topicId ?? this.topicId,
       termToExplain1: termToExplain1 ?? this.termToExplain1,
       iconKey: iconKey ?? this.iconKey,
-      iconUrl: iconUrl ?? this.iconUrl,
       callout2: callout2 ?? this.callout2,
       photo1Key: photo1Key ?? this.photo1Key,
-      photo1Url: photo1Url ?? this.photo1Url,
       photo2Key: photo2Key ?? this.photo2Key,
-      photo2Url: photo2Url ?? this.photo2Url,
-      photo3Key: photo3Key ?? this.photo3Key,
-      photo3Url: photo3Url ?? this.photo3Url);
+      photo3Key: photo3Key ?? this.photo3Key);
   }
   
   SectionData.fromJson(Map<String, dynamic> json)  
@@ -295,25 +259,21 @@ class SectionData extends Model {
         ? TermToExplain.fromJson(new Map<String, dynamic>.from(json['termToExplain1']['serializedData']))
         : null,
       _iconKey = json['iconKey'],
-      _iconUrl = json['iconUrl'],
       _callout2 = json['callout2']?['serializedData'] != null
         ? LocalizedText.fromJson(new Map<String, dynamic>.from(json['callout2']['serializedData']))
         : null,
       _photo1Key = json['photo1Key'],
-      _photo1Url = json['photo1Url'],
       _photo2Key = json['photo2Key'],
-      _photo2Url = json['photo2Url'],
       _photo3Key = json['photo3Key'],
-      _photo3Url = json['photo3Url'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'title': _title?.toJson(), 'text1': _text1?.toJson(), 'text2': _text2?.toJson(), 'quote1': _quote1?.toJson(), 'callout1': _callout1?.toJson(), 'order': _order, 'topicId': _topicId, 'termToExplain1': _termToExplain1?.toJson(), 'iconKey': _iconKey, 'iconUrl': _iconUrl, 'callout2': _callout2?.toJson(), 'photo1Key': _photo1Key, 'photo1Url': _photo1Url, 'photo2Key': _photo2Key, 'photo2Url': _photo2Url, 'photo3Key': _photo3Key, 'photo3Url': _photo3Url, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'title': _title?.toJson(), 'text1': _text1?.toJson(), 'text2': _text2?.toJson(), 'quote1': _quote1?.toJson(), 'callout1': _callout1?.toJson(), 'order': _order, 'topicId': _topicId, 'termToExplain1': _termToExplain1?.toJson(), 'iconKey': _iconKey, 'callout2': _callout2?.toJson(), 'photo1Key': _photo1Key, 'photo2Key': _photo2Key, 'photo3Key': _photo3Key, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'title': _title, 'text1': _text1, 'text2': _text2, 'quote1': _quote1, 'callout1': _callout1, 'order': _order, 'topicId': _topicId, 'termToExplain1': _termToExplain1, 'iconKey': _iconKey, 'iconUrl': _iconUrl, 'callout2': _callout2, 'photo1Key': _photo1Key, 'photo1Url': _photo1Url, 'photo2Key': _photo2Key, 'photo2Url': _photo2Url, 'photo3Key': _photo3Key, 'photo3Url': _photo3Url, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'title': _title, 'text1': _text1, 'text2': _text2, 'quote1': _quote1, 'callout1': _callout1, 'order': _order, 'topicId': _topicId, 'termToExplain1': _termToExplain1, 'iconKey': _iconKey, 'callout2': _callout2, 'photo1Key': _photo1Key, 'photo2Key': _photo2Key, 'photo3Key': _photo3Key, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryModelIdentifier<SectionDataModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<SectionDataModelIdentifier>();
@@ -327,14 +287,10 @@ class SectionData extends Model {
   static final QueryField TOPICID = QueryField(fieldName: "topicId");
   static final QueryField TERMTOEXPLAIN1 = QueryField(fieldName: "termToExplain1");
   static final QueryField ICONKEY = QueryField(fieldName: "iconKey");
-  static final QueryField ICONURL = QueryField(fieldName: "iconUrl");
   static final QueryField CALLOUT2 = QueryField(fieldName: "callout2");
   static final QueryField PHOTO1KEY = QueryField(fieldName: "photo1Key");
-  static final QueryField PHOTO1URL = QueryField(fieldName: "photo1Url");
   static final QueryField PHOTO2KEY = QueryField(fieldName: "photo2Key");
-  static final QueryField PHOTO2URL = QueryField(fieldName: "photo2Url");
   static final QueryField PHOTO3KEY = QueryField(fieldName: "photo3Key");
-  static final QueryField PHOTO3URL = QueryField(fieldName: "photo3Url");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "SectionData";
     modelSchemaDefinition.pluralName = "SectionData";
@@ -420,12 +376,6 @@ class SectionData extends Model {
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.ICONURL,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'callout2',
       isRequired: false,
@@ -439,31 +389,13 @@ class SectionData extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.PHOTO1URL,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: SectionData.PHOTO2KEY,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.PHOTO2URL,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: SectionData.PHOTO3KEY,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SectionData.PHOTO3URL,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

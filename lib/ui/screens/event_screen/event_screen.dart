@@ -37,7 +37,8 @@ class EventScreen extends HookConsumerWidget {
     ref.read(coverImageProvider.notifier).clear();
   }
 
-  Future<bool> deleteEvent(BuildContext context, WidgetRef ref, EventData event) async {
+  Future<bool> deleteEvent(
+      BuildContext context, WidgetRef ref, EventData event) async {
     var value = await showDialog<bool>(
         context: context,
         builder: (context) {
@@ -52,12 +53,16 @@ class EventScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final event = (goRouterState?.extra != null) ? goRouterState!.extra as EventData : null;
+    final event = (goRouterState?.extra != null)
+        ? goRouterState!.extra as EventData
+        : null;
     final ukTitleController = useTextEditingController(text: event?.title.uk);
     final enTitleController = useTextEditingController(text: event?.title.en);
-    String? formattedEventDate =
-        event != null ? DateFormat($Strings.ukDateFormat).format(event.date.getDateTime()) : null;
-    final eventDateController = useTextEditingController(text: formattedEventDate);
+    String? formattedEventDate = event != null
+        ? DateFormat($Strings.ukDateFormat).format(event.date.getDateTime())
+        : null;
+    final eventDateController =
+        useTextEditingController(text: formattedEventDate);
 
     final coverImage = ref.watch(coverImageProvider);
     final isLoading = ref.watch(loadingStateProvider);
@@ -123,13 +128,13 @@ class EventScreen extends HookConsumerWidget {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formGlobalKey,
         child: Container(
-          padding: const EdgeInsets.only(left: 15, top: 20, right: 15, bottom: 0),
+          padding:
+              const EdgeInsets.only(left: 15, top: 20, right: 15, bottom: 0),
           width: double.infinity,
           child: Column(
             children: [
               CoverImageCard(
                 imageKey: event?.iconKey,
-                imageUrl: event?.iconUrl,
               ),
               const Gap(30),
               TopicSearchInput(
@@ -172,7 +177,8 @@ class EventScreen extends HookConsumerWidget {
                 },
                 onTap: () => showCalendar(eventDateController, context,
                         helpText: $Strings.pickStartDate.toUpperCase())
-                    .then((value) => FocusScope.of(context).requestFocus(FocusNode())),
+                    .then((value) =>
+                        FocusScope.of(context).requestFocus(FocusNode())),
               ),
               const Gap(20),
               Row(
@@ -181,11 +187,14 @@ class EventScreen extends HookConsumerWidget {
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Theme.of(context).colorScheme.primaryContainer),
+                          (states) =>
+                              Theme.of(context).colorScheme.primaryContainer),
                     ),
                     child: isLoading
                         ? const SizedBox(
-                            height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 3))
                         : Icon(
                             Icons.check,
                             color: Theme.of(context).colorScheme.onSurface,
@@ -206,7 +215,9 @@ class EventScreen extends HookConsumerWidget {
                                   titleEn: enTitleController.text,
                                   topicId: parentTopic!.id,
                                 )
-                            : await ref.read(eventControllerProvider).updateEvent(
+                            : await ref
+                                .read(eventControllerProvider)
+                                .updateEvent(
                                   id: event.id,
                                   date: eventDateController.text,
                                   titleUk: ukTitleController.text,
@@ -219,7 +230,9 @@ class EventScreen extends HookConsumerWidget {
                               .read(eventControllerProvider)
                               .queryEventWithId(event?.id ?? id);
                           if (queriedEvent != null) {
-                            ref.read(eventControllerProvider).uploadFile(coverImage, queriedEvent);
+                            ref
+                                .read(eventControllerProvider)
+                                .uploadFile(coverImage, queriedEvent);
                           }
                         }
 
@@ -233,8 +246,11 @@ class EventScreen extends HookConsumerWidget {
                           padding: const EdgeInsets.only(left: 60.0),
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.resolveWith(
-                                  (states) => Theme.of(context).colorScheme.errorContainer),
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith((states) =>
+                                      Theme.of(context)
+                                          .colorScheme
+                                          .errorContainer),
                             ),
                             onPressed: () async {
                               deleteEvent(context, ref, event).then((confirm) {

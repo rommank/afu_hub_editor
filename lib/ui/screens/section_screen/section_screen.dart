@@ -42,7 +42,8 @@ class SectionScreen extends HookConsumerWidget {
     ref.read(coverImageProvider.notifier).clear();
   }
 
-  Future<bool> deleteSection(BuildContext context, WidgetRef ref, SectionData section) async {
+  Future<bool> deleteSection(
+      BuildContext context, WidgetRef ref, SectionData section) async {
     var value = await showDialog<bool>(
         context: context,
         builder: (context) {
@@ -57,16 +58,22 @@ class SectionScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final section = (goRouterState?.extra != null) ? goRouterState!.extra as SectionData : null;
+    final section = (goRouterState?.extra != null)
+        ? goRouterState!.extra as SectionData
+        : null;
 
     final ukTitleController = useTextEditingController(text: section?.title.uk);
     final enTitleController = useTextEditingController(text: section?.title.en);
     final ukText1Controller = useTextEditingController(text: section?.text1.uk);
     final enText1Controller = useTextEditingController(text: section?.text1.en);
-    final quote1UkAuthorController = useTextEditingController(text: section?.quote1?.author?.uk);
-    final quote1UkTextController = useTextEditingController(text: section?.quote1?.text?.uk);
-    final quote1EnAuthorController = useTextEditingController(text: section?.quote1?.author?.en);
-    final quote1EnTextController = useTextEditingController(text: section?.quote1?.text?.en);
+    final quote1UkAuthorController =
+        useTextEditingController(text: section?.quote1?.author?.uk);
+    final quote1UkTextController =
+        useTextEditingController(text: section?.quote1?.text?.uk);
+    final quote1EnAuthorController =
+        useTextEditingController(text: section?.quote1?.author?.en);
+    final quote1EnTextController =
+        useTextEditingController(text: section?.quote1?.text?.en);
     final term1TermUkTextController =
         useTextEditingController(text: section?.termToExplain1?.term?.uk);
     final term1TermEnTextController =
@@ -75,8 +82,10 @@ class SectionScreen extends HookConsumerWidget {
         useTextEditingController(text: section?.termToExplain1?.meaning?.uk);
     final term1TextEnTextController =
         useTextEditingController(text: section?.termToExplain1?.meaning?.en);
-    final callout1UkTextController = useTextEditingController(text: section?.callout1?.uk);
-    final callout1EnTextController = useTextEditingController(text: section?.callout1?.en);
+    final callout1UkTextController =
+        useTextEditingController(text: section?.callout1?.uk);
+    final callout1EnTextController =
+        useTextEditingController(text: section?.callout1?.en);
 
     final isLoading = ref.watch(loadingStateProvider);
 
@@ -165,7 +174,8 @@ class SectionScreen extends HookConsumerWidget {
     final coverImage = ref.watch(coverImageProvider);
 
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(horizontalPadding, 25, horizontalPadding, 25),
+      padding:
+          EdgeInsets.fromLTRB(horizontalPadding, 25, horizontalPadding, 25),
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formGlobalKey,
@@ -202,7 +212,8 @@ class SectionScreen extends HookConsumerWidget {
                 DraggableCard(
                   key: const ValueKey('text1'),
                   children: [
-                    Text($Strings.text1, style: Theme.of(context).textTheme.bodyLarge),
+                    Text($Strings.text1,
+                        style: Theme.of(context).textTheme.bodyLarge),
                     const Gap(15),
                     buildCustomTextFormField(
                       context: context,
@@ -270,7 +281,8 @@ class SectionScreen extends HookConsumerWidget {
                       key: callout1FormGlobalKey,
                       child: Column(
                         children: [
-                          Text($Strings.callout1, style: Theme.of(context).textTheme.bodyLarge),
+                          Text($Strings.callout1,
+                              style: Theme.of(context).textTheme.bodyLarge),
                           const Gap(15),
                           buildCustomTextFormField(
                             context: context,
@@ -318,11 +330,14 @@ class SectionScreen extends HookConsumerWidget {
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Theme.of(context).colorScheme.primaryContainer),
+                        (states) =>
+                            Theme.of(context).colorScheme.primaryContainer),
                   ),
                   child: isLoading
                       ? const SizedBox(
-                          height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 3))
                       : Icon(
                           Icons.check,
                           color: Theme.of(context).colorScheme.onSurface,
@@ -330,9 +345,12 @@ class SectionScreen extends HookConsumerWidget {
                   onPressed: () async {
                     final parentTopic = ref.read(topicForEventProvider);
                     final currentState = formGlobalKey.currentState;
-                    final quoteFormCurrentState = quote1FormGlobalKey.currentState;
-                    final termFormCurrentState = term1FormGlobalKey.currentState;
-                    final callout1FormCurrentState = callout1FormGlobalKey.currentState;
+                    final quoteFormCurrentState =
+                        quote1FormGlobalKey.currentState;
+                    final termFormCurrentState =
+                        term1FormGlobalKey.currentState;
+                    final callout1FormCurrentState =
+                        callout1FormGlobalKey.currentState;
 
                     if (currentState == null ||
                         quoteFormCurrentState == null ||
@@ -347,7 +365,9 @@ class SectionScreen extends HookConsumerWidget {
                       ref.read(loadingStateProvider.notifier).state = true;
 
                       (section == null)
-                          ? await ref.read(sectionControllerProvider).addSection(
+                          ? await ref
+                              .read(sectionControllerProvider)
+                              .addSection(
                                 id: id,
                                 nameUk: ukTitleController.text,
                                 nameEn: enTitleController.text,
@@ -359,11 +379,13 @@ class SectionScreen extends HookConsumerWidget {
                                 quote1TextEn: quote1EnTextController.text,
                                 term1TermUk: term1TermUkTextController.text,
                                 term1TermEn: term1TermEnTextController.text,
-                                term1MeaningUk: term1MeaningUkTextController.text,
-                                term1MeaningEn: term1MeaningEnTextController.text,
+                                term1MeaningUk:
+                                    term1MeaningUkTextController.text,
+                                term1MeaningEn:
+                                    term1MeaningEnTextController.text,
                                 callout1Uk: ukCallout1Controller.text,
                                 callout1En: enCallout1Controller.text,
-                                order: '1',
+                                order: 1,
                                 topicId: parentTopic!.id,
                               )
                           : ref.read(sectionControllerProvider).updateSection(
@@ -378,8 +400,10 @@ class SectionScreen extends HookConsumerWidget {
                                 quote1TextEn: quote1EnTextController.text,
                                 term1TermUk: term1TermUkTextController.text,
                                 term1TermEn: term1TermEnTextController.text,
-                                term1MeaningUk: term1MeaningUkTextController.text,
-                                term1MeaningEn: term1MeaningEnTextController.text,
+                                term1MeaningUk:
+                                    term1MeaningUkTextController.text,
+                                term1MeaningEn:
+                                    term1MeaningEnTextController.text,
                                 callout1Uk: ukCallout1Controller.text,
                                 callout1En: enCallout1Controller.text,
                                 order: '1',
@@ -408,7 +432,9 @@ class SectionScreen extends HookConsumerWidget {
                         child: ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => Theme.of(context).colorScheme.errorContainer),
+                                (states) => Theme.of(context)
+                                    .colorScheme
+                                    .errorContainer),
                           ),
                           onPressed: () async {
                             deleteSection(context, ref, section).then(
